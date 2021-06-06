@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
@@ -22,15 +23,21 @@ import com.example.navigationdrawerpractica.Fragments.MainFragment;
 import com.example.navigationdrawerpractica.Fragments.PaymentFragment;
 import com.example.navigationdrawerpractica.Fragments.PersonasFragment;
 import com.example.navigationdrawerpractica.Fragments.StatisticFragment;
+import com.example.navigationdrawerpractica.Fragments.ValidateMailFragment;
 import com.example.navigationdrawerpractica.R;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, iComunicaFragments{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, iComunicaFragments,
+        androidx.fragment.app.FragmentManager.OnBackStackChangedListener {
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;
     NavigationView navigationView;
+
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private boolean mToolBarNavigationListenerIsRegistered = false;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -58,30 +65,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container_fragment,new PersonasFragment());
         fragmentTransaction.commit();
-
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         //para cerrar automaticamente el menu
         drawerLayout.closeDrawer(GravityCompat.START);
-        if(menuItem.getItemId() == R.id.home){
+        if(menuItem.getItemId() == R.id.access_register){
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_fragment,new AccessMenuFragment());
             fragmentTransaction.commit();
         }
-        if(menuItem.getItemId() == R.id.personas){
+        if(menuItem.getItemId() == R.id.nav_home){
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_fragment,new PersonasFragment());
             fragmentTransaction.commit();
         }
-
         if(menuItem.getItemId() == R.id.account){
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new AccountFragment());
+            fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.payment){
@@ -134,7 +141,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //***Luego pasar a programar al fragmentdetalle
     }
 
+    public void loginAction(View view) {
+        // Do something in response to button click
+        String var = "prueba";
+    }
 
+    public void validateAction(View view) {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
+        fragmentTransaction.commit();
+    }
 
+    private void displayHomeUpOrHamburger()
+    {
+        boolean upbtn = getSupportFragmentManager().getBackStackEntryCount() > 0;
 
+        if(upbtn) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            //remove hamburger
+            mDrawerToggle.setDrawerIndicatorEnabled(false);
+            //need listener for up btn
+            if (!mToolBarNavigationListenerIsRegistered) {
+                mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                                                                        getSupportFragmentManager().popBackStackImmediate();
+                                                                    }
+                                                                }
+                );
+                mToolBarNavigationListenerIsRegistered = true;
+            } else {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mDrawerToggle.setDrawerIndicatorEnabled(true);
+                mDrawerToggle.setToolbarNavigationClickListener(null);
+                mToolBarNavigationListenerIsRegistered = false;
+            }
+        }
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        displayHomeUpOrHamburger();
+    }
 }

@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="password"
-        android:inputType="textPersonName" />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/bLogin"
@@ -30,7 +30,8 @@
         android:layout_marginTop="5dp"
         android:background="#4CAF50"
         android:text="@string/login"
-        android:textColor="#fff" />
+        android:textColor="#fff"
+        android:onClick="loginAction"/>
 
     <Button
         android:id="@+id/bRegister"
@@ -39,5 +40,7 @@
         android:layout_marginTop="5dp"
         android:background="#0A0B0B"
         android:text="@string/register"
-        android:textColor="#fff" />
+        android:textColor="#fff"
+        android:onClick="validateAction"/>
+
 </LinearLayout>
