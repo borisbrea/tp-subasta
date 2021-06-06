@@ -31,7 +31,7 @@
         android:background="#4CAF50"
         android:text="@string/login"
         android:textColor="#fff"
-        android:onClick="loginAction"/>
+        android:onClick="getArticulo"/>
 
     <Button
         android:id="@+id/bRegister"

@@ -17,18 +17,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
+import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.Persona;
+import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.BidFragment;
 import com.example.navigationdrawerpractica.Fragments.DetallePersonaFragment;
+import com.example.navigationdrawerpractica.Fragments.GeneratePasswordFragment;
 import com.example.navigationdrawerpractica.Fragments.MainFragment;
 import com.example.navigationdrawerpractica.Fragments.PaymentFragment;
 import com.example.navigationdrawerpractica.Fragments.PersonasFragment;
 import com.example.navigationdrawerpractica.Fragments.StatisticFragment;
 import com.example.navigationdrawerpractica.Fragments.ValidateMailFragment;
 import com.example.navigationdrawerpractica.R;
+import com.example.navigationdrawerpractica.Service.RetrofitApiService;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, iComunicaFragments,
         androidx.fragment.app.FragmentManager.OnBackStackChangedListener {
@@ -46,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FragmentTransaction fragmentTransaction;
     //variable del fragment detalle
     DetallePersonaFragment detallePersonaFragment;
+
+    //Conexión a la Api
+    private RetrofitApiService apiService = RetrofitClient.getApiService();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container_fragment,new PersonasFragment());
         fragmentTransaction.commit();
+
+        validate("caetano@gmail.com");
+
     }
 
 
@@ -171,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
+            fragmentTransaction.replace(R.id.container_fragment,new GeneratePasswordFragment());
             fragmentTransaction.commit();
         } else{
             AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
@@ -224,4 +242,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackStackChanged() {
         displayHomeUpOrHamburger();
     }
+
+    public void validate(String email){
+        email = "";
+        apiService = RetrofitClient.getApiService();
+        apiService.validate().enqueue(new Callback<PersonaPrueba>() {
+            @Override
+            public void onResponse(Call<PersonaPrueba> call, Response<PersonaPrueba> response) {
+                PersonaPrueba articulo = response.body();
+
+                String prueba = "";
+                //tvResponse.setText(articulo.toString());
+            }
+
+            @Override
+            public void onFailure(Call<PersonaPrueba> call, Throwable t) {
+
+                String prueba = "";
+                //tvResponse.setText(t.getMessage());
+            }
+        });
+    }
+
+    private void validates(String email){
+        email = "caetao@gmail.com";
+        apiService.validates(email).enqueue(new Callback<List<PersonaPrueba>>() {
+            @Override
+            public void onResponse(Call<List<PersonaPrueba>> call, Response<List<PersonaPrueba>> response) {
+                List<PersonaPrueba> articuloList = response.body();
+
+                String prueba = "";
+                //tvResponse.setText(articuloList.size() + "\n\n" + articuloList.get(3).toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<PersonaPrueba>> call, Throwable t) {
+
+                String prueba = "";
+
+                //tvResponse.setText(t.getMessage());
+            }
+        });
+    }
+
 }
