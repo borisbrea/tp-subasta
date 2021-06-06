@@ -25,6 +25,7 @@
             android:layout_marginTop="5dp"
             android:background="#4CAF50"
             android:text="@string/validate"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:onClick="validateUserAction"/>
     </LinearLayout>
 </LinearLayout>

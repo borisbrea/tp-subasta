@@ -2,6 +2,7 @@ package com.example.navigationdrawerpractica.Interfaces;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -9,10 +10,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
@@ -152,6 +155,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
         fragmentTransaction.commit();
+    }
+
+    public void validateUserAction(View view){
+
+        // res = llamo a servicio de caetano
+
+        boolean response = false;
+
+        TextView title = (TextView) findViewById(R.id.vmUsername);
+
+        title.getText();
+
+        if(response){
+            drawerLayout.closeDrawer(GravityCompat.START);
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
+            fragmentTransaction.commit();
+        } else{
+            AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+            alerta.setMessage("Usuario inexistente")
+                    .setIcon(R.drawable.icon_alert)
+                    .setCancelable(true)
+                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+            AlertDialog titulo = alerta.create();
+            titulo.setTitle("Mensaje de alerta");
+            titulo.show();
+        }
+
+
+
     }
 
     private void displayHomeUpOrHamburger()
