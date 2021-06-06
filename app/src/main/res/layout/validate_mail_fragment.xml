@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".Fragments.RegisterFragment"
     android:orientation="vertical"
-    android:padding="10dp"
     android:gravity="center">
-
-    <EditText
-        android:id="@+id/validateEmail"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:textAlignment="center"
-        android:text="@string/input_email"/>
-
-    <Button
-        android:id="@+id/bLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="#4CAF50"
-        android:text="@string/validate"
-        android:textColor="#fff" />
-
+        android:orientation="vertical"
+        android:padding="10dp">
+        <EditText
+            android:id="@+id/vmUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/input_name"
+            android:inputType="textPersonName" />
+        <Button
+            android:id="@+id/bValidate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="#4CAF50"
+            android:text="@string/validate"
+            android:textColor="#fff" />
+    </LinearLayout>
 </LinearLayout>
