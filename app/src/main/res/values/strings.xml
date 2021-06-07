@@ -23,7 +23,12 @@
     <string name="user">Usuario</string>
     <string name="clave">Clave</string>
     <string name="email">Email</string>
+    <string name="name">Nombre</string>
+    <string name="dni">Documento</string>
+    <string name="address">Dirección</string>
+    <string name="phone">Teléfono</string>
     <string name="verification">Código de verificación</string>
+
 
     <string name="input_name">Ingresar nombre</string>
     <string name="input_email">Ingresar email</string>

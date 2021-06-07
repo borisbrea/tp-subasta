@@ -6,13 +6,19 @@
     tools:context=".Fragments.RegisterFragment"
     android:orientation="vertical"
     android:gravity="center">
-
     <LinearLayout
         android:layout_width="300dp"
-        android:padding="10dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/email"
+            android:textSize="14sp"
+            android:textStyle="bold"></TextView>
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
@@ -21,6 +27,13 @@
             android:hint="@string/input_email"
             android:inputType="textPersonName" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/name"
+            android:textSize="14sp"
+            android:textStyle="bold"></TextView>
         <EditText
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
@@ -29,6 +42,13 @@
             android:hint="@string/input_name"
             android:inputType="textPersonName" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/dni"
+            android:textSize="14sp"
+            android:textStyle="bold"></TextView>
         <EditText
             android:id="@+id/etDni"
             android:layout_width="match_parent"
@@ -37,6 +57,13 @@
             android:hint="@string/input_dni"
             android:inputType="textPersonName" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/address"
+            android:textSize="14sp"
+            android:textStyle="bold"></TextView>
         <EditText
             android:id="@+id/etAddress"
             android:layout_width="match_parent"
@@ -45,6 +72,13 @@
             android:hint="@string/input_address"
             android:inputType="textPersonName" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/phone"
+            android:textSize="14sp"
+            android:textStyle="bold"></TextView>
         <EditText
             android:id="@+id/etPhone"
             android:layout_width="match_parent"
@@ -53,23 +87,19 @@
             android:hint="@string/input_phone"
             android:inputType="textPersonName" />
 
-        <!-- <EditText
-            android:id="@+id/etPassword"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="password"
-            android:inputType="textPersonName" />
-          -->
+            android:layout_marginTop="25dp"
+            android:textSize="14sp"
+            android:textStyle="bold"></TextView>
         <Button
             android:id="@+id/bLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="#4CAF50"
+            android:background="#703DFB"
             android:text="@string/register"
             android:textColor="#fff" />
-
     </LinearLayout>
-
 </LinearLayout>
