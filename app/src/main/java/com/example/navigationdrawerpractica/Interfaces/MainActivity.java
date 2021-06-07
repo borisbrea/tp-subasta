@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void validateUserAction(View view){
 
-        showValidatePasswordFragment();
+        showGeneratePasswordFragment();
 
         /*TextView email = (TextView) findViewById(R.id.vmUsername);
         int validateResponse = validate(email.getText().toString());
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alerta.setMessage(message)
                 .setIcon(R.drawable.icon_alert)
                 .setCancelable(true)
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                .setPositiveButton(Utils.BTN_ACCEPT, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         titulo.show();
     }
 
-    public void showValidatePasswordFragment(){
+    public void showGeneratePasswordFragment(){
         drawerLayout.closeDrawer(GravityCompat.START);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();

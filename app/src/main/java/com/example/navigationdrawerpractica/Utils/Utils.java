@@ -8,5 +8,7 @@ public class Utils {
     public final static String ALERT_ERROR_404 = "Usuario inexistente";
     public final static String ALERT_ERROR_DEFAULT = "Error de sistema, comuniquese con el administrador";
 
+    public final static String BTN_ACCEPT = "Aceptar";
+
 
 }
