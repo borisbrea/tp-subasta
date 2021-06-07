@@ -33,6 +33,7 @@ import com.example.navigationdrawerpractica.Fragments.StatisticFragment;
 import com.example.navigationdrawerpractica.Fragments.ValidateMailFragment;
 import com.example.navigationdrawerpractica.R;
 import com.example.navigationdrawerpractica.Service.RetrofitApiService;
+import com.example.navigationdrawerpractica.Utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Conexión a la Api
     private RetrofitApiService apiService = RetrofitClient.getApiService();
 
+    public static int responseValidate = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String var = "prueba";
     }
 
-    public void validateAction(View view) {
+    public void showValidateFragment(View view) {
         drawerLayout.closeDrawer(GravityCompat.START);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -177,38 +179,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void validateUserAction(View view){
 
-        // res = llamo a servicio de caetano
+        showValidatePasswordFragment();
 
-        boolean response = false;
+        /*TextView email = (TextView) findViewById(R.id.vmUsername);
+        int validateResponse = validate(email.getText().toString());
 
-        TextView title = (TextView) findViewById(R.id.vmUsername);
-
-        title.getText();
-
-        if(response){
-            drawerLayout.closeDrawer(GravityCompat.START);
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new GeneratePasswordFragment());
-            fragmentTransaction.commit();
-        } else{
-            AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
-            alerta.setMessage("Usuario inexistente")
-                    .setIcon(R.drawable.icon_alert)
-                    .setCancelable(true)
-                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    });
-            AlertDialog titulo = alerta.create();
-            titulo.setTitle("Mensaje de alerta");
-            titulo.show();
-        }
-
-
-
+        switch (validateResponse){
+            case 200: showValidatePasswordFragment();
+                break;
+            case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
+                break;
+            case 404: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_404);
+                break;
+            default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
+        }*/
     }
 
     private void displayHomeUpOrHamburger()
@@ -243,25 +227,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         displayHomeUpOrHamburger();
     }
 
-    public void validate(String email){
-        email = "";
+    public int validate(String email){
+
         apiService = RetrofitClient.getApiService();
-        apiService.validate().enqueue(new Callback<PersonaPrueba>() {
+        apiService.validate(email).enqueue(new Callback<PersonaPrueba>() {
             @Override
             public void onResponse(Call<PersonaPrueba> call, Response<PersonaPrueba> response) {
-                PersonaPrueba articulo = response.body();
-
-                String prueba = "";
-                //tvResponse.setText(articulo.toString());
+                responseValidate = response.code();
             }
 
             @Override
             public void onFailure(Call<PersonaPrueba> call, Throwable t) {
-
-                String prueba = "";
-                //tvResponse.setText(t.getMessage());
+                responseValidate = 440;
             }
         });
+
+        return responseValidate;
     }
 
     private void validates(String email){
@@ -283,6 +264,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //tvResponse.setText(t.getMessage());
             }
         });
+    }
+
+    public void simpleDialogAlert(String title, String message){
+        AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+        alerta.setMessage(message)
+                .setIcon(R.drawable.icon_alert)
+                .setCancelable(true)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+        AlertDialog titulo = alerta.create();
+        titulo.setTitle(title);
+        titulo.show();
+    }
+
+    public void showValidatePasswordFragment(){
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,new GeneratePasswordFragment());
+        fragmentTransaction.commit();
     }
 
 }

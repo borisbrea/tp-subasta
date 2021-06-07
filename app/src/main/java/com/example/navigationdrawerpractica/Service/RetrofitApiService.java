@@ -15,7 +15,7 @@ import retrofit2.http.Query;
 public interface RetrofitApiService {
 
     @GET("users/validate")
-    Call<PersonaPrueba> validate();
+    Call<PersonaPrueba> validate(@Query(encoded = true, value = "email") @NonNull String email);
     @GET("users/validate")
     Call<List<PersonaPrueba>> validates(@Query(encoded = true, value = "email") @NonNull String email);
 

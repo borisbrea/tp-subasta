@@ -31,7 +31,7 @@
         android:background="#4CAF50"
         android:text="@string/login"
         android:textColor="#fff"
-        android:onClick="getArticulo"/>
+     />
 
     <Button
         android:id="@+id/bRegister"
@@ -41,6 +41,6 @@
         android:background="#0A0B0B"
         android:text="@string/register"
         android:textColor="#fff"
-        android:onClick="validateAction"/>
+        android:onClick="showValidateFragment"/>
 
 </LinearLayout>
