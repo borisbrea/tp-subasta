@@ -17,6 +17,8 @@
 
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
+    <string name="validate_user">Validar usuario</string>
+
 
     <string name="username">Username</string>
     <string name="password">Password</string>

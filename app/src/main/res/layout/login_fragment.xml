@@ -8,7 +8,7 @@
     android:gravity="center">
 
     <EditText
-        android:id="@+id/etUsername"
+        android:id="@+id/lgUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -16,7 +16,7 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/lgPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -31,6 +31,7 @@
         android:background="#4CAF50"
         android:text="@string/login"
         android:textColor="#fff"
+        android:onClick="loginAction"
      />
 
     <Button
@@ -39,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:background="#0A0B0B"
-        android:text="@string/register"
+        android:text="@string/validate_user"
         android:textColor="#fff"
         android:onClick="showValidateFragment"/>
 

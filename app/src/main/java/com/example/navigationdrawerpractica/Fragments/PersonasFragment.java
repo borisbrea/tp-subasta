@@ -17,7 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterPersonas;
+import com.example.navigationdrawerpractica.Adaptadores.AdapterSubastas;
+import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Persona;
+import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.Interfaces.iComunicaFragments;
 import com.example.navigationdrawerpractica.R;
 
@@ -27,8 +30,58 @@ public class PersonasFragment extends Fragment {
 
     //private OnFragmentInteractionListener mListener;
 
+    GenericDao dao = new GenericDao();
 
-    AdapterPersonas adapterPersonas;
+    AdapterSubastas adapterSubastas;
+    RecyclerView recyclerViewSubastas;
+    ArrayList<Subasta> listaSubastas;
+
+    EditText txtnombre;
+
+    //Crear referencias para poder realizar la comunicacion entre el fragment detalle
+    Activity actividad;
+    iComunicaFragments interfaceComunicaFragments;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.personas_fragment,container,false);
+        txtnombre = view.findViewById(R.id.txtnombre);
+
+        recyclerViewSubastas = view.findViewById(R.id.recyclerView);
+        listaSubastas = new ArrayList<>();
+        cargarLista();
+        mostrarData();
+        return view;
+    }
+
+    public void cargarLista(){
+
+        listaSubastas.addAll(dao.getSubastas());
+
+    }
+
+    private void mostrarData(){
+        recyclerViewSubastas.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapterSubastas = new AdapterSubastas(getContext(), listaSubastas);
+        recyclerViewSubastas.setAdapter(adapterSubastas);
+
+        /*adapterSubastas.setOnclickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nombre = listaPersonas.get(recyclerViewPersonas.getChildAdapterPosition(view)).getNombre();
+                txtnombre.setText(nombre);
+                Toast.makeText(getContext(), "Seleccionó: "+listaPersonas.get(recyclerViewPersonas.getChildAdapterPosition(view)).getNombre(), Toast.LENGTH_SHORT).show();
+                //enviar mediante la interface el objeto seleccionado al detalle
+                //se envia el objeto completo
+                //se utiliza la interface como puente para enviar el objeto seleccionado
+                interfaceComunicaFragments.enviarPersona(listaPersonas.get(recyclerViewPersonas.getChildAdapterPosition(view)));
+                //luego en el mainactivity se hace la implementacion de la interface para implementar el metodo enviarpersona
+            }
+        });*/
+    }
+
+    /*AdapterPersonas adapterPersonas;
     RecyclerView recyclerViewPersonas;
     ArrayList<Persona> listaPersonas;
 
@@ -92,13 +145,13 @@ public class PersonasFragment extends Fragment {
             //esto es necesario para establecer la comunicacion entre la lista y el detalle
         }
 
-       /* if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
-    }
+       //if (context instanceof OnFragmentInteractionListener) {
+       //     mListener = (OnFragmentInteractionListener) context;
+       // } else {
+       //     throw new RuntimeException(context.toString()
+       //             + " must implement OnFragmentInteractionListener");
+       // }
+    }*/
 
     @Override
     public void onDetach() {

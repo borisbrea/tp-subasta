@@ -15,9 +15,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
+import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
@@ -42,8 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, iComunicaFragments,
-        androidx.fragment.app.FragmentManager.OnBackStackChangedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, iComunicaFragments {
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Conexión a la Api
     private RetrofitApiService apiService = RetrofitClient.getApiService();
-
     public static int responseValidate = 0;
+    public GenericDao dao = new GenericDao();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.add(R.id.container_fragment,new PersonasFragment());
         fragmentTransaction.commit();
 
-        validate("caetano@gmail.com");
-
+        managerMenuOption(false);
     }
 
 
@@ -164,10 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //***Luego pasar a programar al fragmentdetalle
     }
 
-    public void loginAction(View view) {
-        // Do something in response to button click
-        String var = "prueba";
-    }
+
 
     public void showValidateFragment(View view) {
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -176,56 +173,73 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
         fragmentTransaction.commit();
     }
+//------------------------------------ ACTIONS ---------------------------------------
+    public void loginAction(View view) {
+
+        String usuario = ((TextView) findViewById(R.id.lgUsername)).getText().toString();
+        String clave   = ((TextView) findViewById(R.id.lgPassword)).getText().toString();
+
+        int responseLogin = 200;
+
+        //int responseLogin = dao.login(usuario, clave);
+
+        switch(responseLogin){
+            case 200: managerMenuOption(true); showMainMenuFragment();
+                break;
+            case 400:simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_LOGIN_400);
+                break;
+            default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
+                break;
+        }
+
+    }
 
     public void validateUserAction(View view){
 
-        showGeneratePasswordFragment();
+        //showGeneratePasswordFragment();
 
-        /*TextView email = (TextView) findViewById(R.id.vmUsername);
-        int validateResponse = validate(email.getText().toString());
+        TextView email = (TextView) findViewById(R.id.vmUsername);
+        //int validateResponse = validate(email.getText().toString());
+        //int validateResponse = dao.validate(email.getText().toString());
+
+        int validateResponse = 200;
 
         switch (validateResponse){
-            case 200: showValidatePasswordFragment();
+            case   0:
+                break;
+            case 200: showGeneratePasswordFragment();
                 break;
             case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
                 break;
             case 404: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_404);
                 break;
             default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
-        }*/
-    }
-
-    private void displayHomeUpOrHamburger()
-    {
-        boolean upbtn = getSupportFragmentManager().getBackStackEntryCount() > 0;
-
-        if(upbtn) {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            //remove hamburger
-            mDrawerToggle.setDrawerIndicatorEnabled(false);
-            //need listener for up btn
-            if (!mToolBarNavigationListenerIsRegistered) {
-                mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(View view) {
-                                                                        getSupportFragmentManager().popBackStackImmediate();
-                                                                    }
-                                                                }
-                );
-                mToolBarNavigationListenerIsRegistered = true;
-            } else {
-                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                mDrawerToggle.setDrawerIndicatorEnabled(true);
-                mDrawerToggle.setToolbarNavigationClickListener(null);
-                mToolBarNavigationListenerIsRegistered = false;
-            }
         }
     }
 
-    @Override
-    public void onBackStackChanged() {
-        displayHomeUpOrHamburger();
+    public void generatePasswordAction(View view){
+
+        String code     = ((TextView) findViewById(R.id.etVerificacion)).getText().toString();
+        String password = ((TextView) findViewById(R.id.etClave)).getText().toString();
+
+        //int generatePasswordResponse = dao.generatePassword(code.toString(), password);
+
+        int generatePasswordResponse = 200;
+
+        switch (generatePasswordResponse){
+            case   0:
+                break;
+            case 200: registerPasswordDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_CONFIRM_CREATE_PASSWORD, 200);
+                break;
+            case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
+                break;
+            case 404: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_404);
+                break;
+            default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
+        }
     }
+
+    // ---------------------------------  DAO  -------------------------------------------
 
     public int validate(String email){
 
@@ -266,6 +280,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    //---------------------------------------------------------------------------------------
+
     public void simpleDialogAlert(String title, String message){
         AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
         alerta.setMessage(message)
@@ -282,12 +298,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         titulo.show();
     }
 
+    public void registerPasswordDialogAlert(String title, String message, int code){
+        AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+        alerta.setMessage(message)
+                .setIcon(R.drawable.icon_alert)
+                .setCancelable(true);
+                if(code == 200){
+                    alerta.setPositiveButton(Utils.BTN_ACCEPT, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            showMainMenuFragment();
+                        }
+                    });
+                }
+                if(code == 201){
+                    alerta.setPositiveButton(Utils.BTN_ACCEPT, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                }
+
+        AlertDialog titulo = alerta.create();
+        titulo.setTitle(title);
+        titulo.show();
+    }
+
+
     public void showGeneratePasswordFragment(){
         drawerLayout.closeDrawer(GravityCompat.START);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new GeneratePasswordFragment());
         fragmentTransaction.commit();
+    }
+
+    public void showMainMenuFragment(){
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,new PersonasFragment());
+        fragmentTransaction.commit();
+    }
+
+    public void managerMenuOption(boolean option){
+
+        NavigationView navigationView = findViewById(R.id.navigationView);
+
+        navigationView.getMenu().findItem(R.id.account).setVisible(option);
+        navigationView.getMenu().findItem(R.id.payment).setVisible(option);
+        navigationView.getMenu().findItem(R.id.article).setVisible(option);
+        navigationView.getMenu().findItem(R.id.bid).setVisible(option);
+        navigationView.getMenu().findItem(R.id.statistic).setVisible(option);
     }
 
 }
