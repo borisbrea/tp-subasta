@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
+import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.BidFragment;
@@ -164,7 +166,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //***Luego pasar a programar al fragmentdetalle
     }
 
+    @Override
+    public void enviarSubasta(Subasta subasta) {
+        //gracias a hbaer implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
+        //o mejor dicho este metodo.
+        //Aqui se realiza toda la logica necesaria para poder realizar el envio
+        detallePersonaFragment = new DetallePersonaFragment();
+        //objeto bundle para transportar la informacion
+        Bundle bundleEnvio = new Bundle();
+        //se manda el objeto que le esta llegando:
+        bundleEnvio.putSerializable("objeto",subasta);
+        detallePersonaFragment.setArguments(bundleEnvio);
 
+        //Cargar fragment en el activity
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment, detallePersonaFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+        /*
+         getSupportFragmentManager().beginTransaction()
+                 .replace(R.id.container_fragment, detallePersonaFragment)
+                 .addToBackStack(null).commit();
+        */
+        //***Luego pasar a programar al fragmentdetalle
+    }
 
     public void showValidateFragment(View view) {
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -176,21 +203,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //------------------------------------ ACTIONS ---------------------------------------
     public void loginAction(View view) {
 
-        String usuario = ((TextView) findViewById(R.id.lgUsername)).getText().toString();
-        String clave   = ((TextView) findViewById(R.id.lgPassword)).getText().toString();
+        String email      = ((TextView) findViewById(R.id.lgUsername)).getText().toString();
+        String password   = ((TextView) findViewById(R.id.lgPassword)).getText().toString();
 
-        int responseLogin = 200;
+        //int responseLogin = 200;
 
-        //int responseLogin = dao.login(usuario, clave);
+         login(email, password);
 
-        switch(responseLogin){
+        /*switch(responseLogin){
+            case  0:
+                break;
             case 200: managerMenuOption(true); showMainMenuFragment();
                 break;
             case 400:simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_LOGIN_400);
                 break;
             default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
                 break;
-        }
+        }*/
 
     }
 
@@ -198,13 +227,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //showGeneratePasswordFragment();
 
+//        int validateResponse = 200;
+
         TextView email = (TextView) findViewById(R.id.vmUsername);
-        //int validateResponse = validate(email.getText().toString());
+         validate(email.getText().toString());
         //int validateResponse = dao.validate(email.getText().toString());
 
-        int validateResponse = 200;
 
-        switch (validateResponse){
+
+       /* switch (validateResponse){
             case   0:
                 break;
             case 200: showGeneratePasswordFragment();
@@ -214,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 404: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_404);
                 break;
             default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
-        }
+        }*/
     }
 
     public void generatePasswordAction(View view){
@@ -241,13 +272,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // ---------------------------------  DAO  -------------------------------------------
 
-    public int validate(String email){
+    public void validate(String email){
+         responseValidate = 0;
 
         apiService = RetrofitClient.getApiService();
         apiService.validate(email).enqueue(new Callback<PersonaPrueba>() {
             @Override
             public void onResponse(Call<PersonaPrueba> call, Response<PersonaPrueba> response) {
                 responseValidate = response.code();
+
+                switch (responseValidate){
+                    case   0:
+                        break;
+                    case 200: showGeneratePasswordFragment();
+                        break;
+                    case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
+                        break;
+                    case 404: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_404);
+                        break;
+                    default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
+                }
+
             }
 
             @Override
@@ -256,7 +301,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        return responseValidate;
+       // return responseValidate;
+
+       /* RetrofitApiService taskService = RetrofitClient.createService(RetrofitApiService.class);
+        Call<PersonaPrueba> call = taskService.validate(email);
+
+        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        //StrictMode.setThreadPolicy(policy);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response<PersonaPrueba> response = call.execute();
+                    responseValidate = response.code();
+                } catch (Exception e){
+                    String str = e.getMessage();
+                }
+            }
+        });
+        thread.start();
+
+        return 0;*/
+       // Call<List<Task>> call = taskService.getTasks(); List<Task>> tasks = call.execute().body();
+
     }
 
     private void validates(String email){
@@ -276,6 +344,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String prueba = "";
 
                 //tvResponse.setText(t.getMessage());
+            }
+        });
+    }
+
+    public void login(String email, String clave){
+        responseValidate = 0;
+
+        apiService = RetrofitClient.getApiService();
+        apiService.login(email, clave).enqueue(new Callback<PersonaPrueba>() {
+            @Override
+            public void onResponse(Call<PersonaPrueba> call, Response<PersonaPrueba> response) {
+                responseValidate = response.code();
+
+                switch(responseValidate){
+                    case  0:
+                        break;
+                    case 200: managerMenuOption(true); showMainMenuFragment();
+                        break;
+                    case 400:simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_LOGIN_400);
+                        break;
+                    default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PersonaPrueba> call, Throwable t) {
+                responseValidate = 440;
             }
         });
     }

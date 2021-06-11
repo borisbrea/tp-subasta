@@ -25,6 +25,7 @@ import com.example.navigationdrawerpractica.Interfaces.iComunicaFragments;
 import com.example.navigationdrawerpractica.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PersonasFragment extends Fragment {
 
@@ -56,9 +57,9 @@ public class PersonasFragment extends Fragment {
     }
 
     public void cargarLista(){
-
-        listaSubastas.addAll(dao.getSubastas());
-
+        List<Subasta> subastas = new ArrayList<>();
+        dao.getSubastas(subastas);
+        listaSubastas.addAll(subastas);
     }
 
     private void mostrarData(){
@@ -66,19 +67,40 @@ public class PersonasFragment extends Fragment {
         adapterSubastas = new AdapterSubastas(getContext(), listaSubastas);
         recyclerViewSubastas.setAdapter(adapterSubastas);
 
-        /*adapterSubastas.setOnclickListener(new View.OnClickListener() {
+        adapterSubastas.setOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nombre = listaPersonas.get(recyclerViewPersonas.getChildAdapterPosition(view)).getNombre();
+                String nombre = String.valueOf(listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)).getId());
                 txtnombre.setText(nombre);
-                Toast.makeText(getContext(), "Seleccionó: "+listaPersonas.get(recyclerViewPersonas.getChildAdapterPosition(view)).getNombre(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Seleccionó: "+listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)).getId(), Toast.LENGTH_SHORT).show();
                 //enviar mediante la interface el objeto seleccionado al detalle
                 //se envia el objeto completo
                 //se utiliza la interface como puente para enviar el objeto seleccionado
-                interfaceComunicaFragments.enviarPersona(listaPersonas.get(recyclerViewPersonas.getChildAdapterPosition(view)));
+                interfaceComunicaFragments.enviarSubasta(listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)));
                 //luego en el mainactivity se hace la implementacion de la interface para implementar el metodo enviarpersona
             }
-        });*/
+        });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //esto es necesario para establecer la comunicacion entre la lista y el detalle
+        //si el contexto que le esta llegando es una instancia de un activity:
+        if(context instanceof Activity){
+            //voy a decirle a mi actividad que sea igual a dicho contesto. castin correspondiente:
+            this.actividad= (Activity) context;
+            ////que la interface icomunicafragments sea igual ese contexto de la actividad:
+            interfaceComunicaFragments= (iComunicaFragments) this.actividad;
+            //esto es necesario para establecer la comunicacion entre la lista y el detalle
+        }
+
+        //if (context instanceof OnFragmentInteractionListener) {
+        //     mListener = (OnFragmentInteractionListener) context;
+        // } else {
+        //     throw new RuntimeException(context.toString()
+        //             + " must implement OnFragmentInteractionListener");
+        // }
     }
 
     /*AdapterPersonas adapterPersonas;

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
+import com.example.navigationdrawerpractica.Entidades.Subasta;
 
 import java.util.List;
 
@@ -20,11 +21,12 @@ public interface RetrofitApiService {
     @GET("users/validate")
     Call<List<PersonaPrueba>> validates(@Query(encoded = true, value = "email") @NonNull String email);
 
-    @GET("users/validate")
-    Call<PersonaPrueba> login(@Query(encoded = true, value = "usuario") @NonNull String usuario, @Query(encoded = true, value = "clave")  @NonNull String clave);
+    @GET("users/login")
+    Call<PersonaPrueba> login(@Query(encoded = true, value = "email") @NonNull String email, @Query(encoded = true, value = "password")  @NonNull String password);
 
     @POST("/users/code")
     Call<PersonaPrueba> generatePassword(@Query(encoded = true, value = "code") @NonNull String code, @Query(encoded = true, value = "password")  @NonNull String password);
 
-
+    @GET("/home")
+    Call<List<Subasta>> getSubastas();
 }

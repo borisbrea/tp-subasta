@@ -46,8 +46,9 @@ public class AdapterSubastas extends RecyclerView.Adapter<AdapterSubastas.ViewHo
         String fecha     = model.get(position).getFecha().toString();
         String categoria = model.get(position).getCategoria();
         //int    imageid = model.get(position).getImagenid();
-        holder.nombres.setText("Subasta:" + nombres);
-        holder.fechancimiento.setText("Fecha: " + fecha);
+        holder.nombres.setText        ("Subasta:" + nombres);
+        holder.fechancimiento.setText ("Fecha: " + fecha);
+        holder.categoria.setText      ("Categoría: " + categoria);
         holder.imagen.setImageResource(R.drawable.martillo_small);
     }
 
@@ -65,15 +66,16 @@ public class AdapterSubastas extends RecyclerView.Adapter<AdapterSubastas.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView nombres, fechancimiento;
+        TextView nombres, fechancimiento, categoria;
         ImageView imagen;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
-            nombres = itemView.findViewById(R.id.nombres);
+            nombres        = itemView.findViewById(R.id.nombres);
             fechancimiento = itemView.findViewById(R.id.fechanacimiento);
-            imagen = itemView.findViewById(R.id.imagen_persona);
+            categoria      = itemView.findViewById(R.id.categoria);
+            imagen         = itemView.findViewById(R.id.imagen_persona);
         }
 
     }

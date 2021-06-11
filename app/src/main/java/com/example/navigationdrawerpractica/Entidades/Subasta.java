@@ -1,8 +1,9 @@
 package com.example.navigationdrawerpractica.Entidades;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Subasta {
+public class Subasta implements Serializable {
 
     int     id;
     String  fecha;

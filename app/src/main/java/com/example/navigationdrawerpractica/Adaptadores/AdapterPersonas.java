@@ -42,14 +42,13 @@ public class AdapterPersonas extends RecyclerView.Adapter<AdapterPersonas.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String nombres = model.get(position).getNombre();
+        String nombres         = model.get(position).getNombre();
         String fechanacimiento = model.get(position).getFechanacimiento();
-        int imageid = model.get(position).getImagenid();
+        int    imageid         = model.get(position).getImagenid();
         holder.nombres.setText(nombres);
         holder.fechancimiento.setText(fechanacimiento);
         holder.imagen.setImageResource(imageid);
     }
-
 
     @Override
     public int getItemCount() {
@@ -70,9 +69,9 @@ public class AdapterPersonas extends RecyclerView.Adapter<AdapterPersonas.ViewHo
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
-            nombres = itemView.findViewById(R.id.nombres);
+            nombres        = itemView.findViewById(R.id.nombres);
             fechancimiento = itemView.findViewById(R.id.fechanacimiento);
-            imagen = itemView.findViewById(R.id.imagen_persona);
+            imagen         = itemView.findViewById(R.id.imagen_persona);
         }
 
     }

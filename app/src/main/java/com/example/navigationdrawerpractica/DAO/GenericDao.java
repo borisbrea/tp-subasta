@@ -41,10 +41,10 @@ public class GenericDao {
         return responseValidate;
     }
 
-    public int login(String usuario, String clave){
+    public int login(String email, String clave){
 
         apiService = RetrofitClient.getApiService();
-        apiService.login(usuario, clave).enqueue(new Callback<PersonaPrueba>() {
+        apiService.login(email, clave).enqueue(new Callback<PersonaPrueba>() {
             @Override
             public void onResponse(Call<PersonaPrueba> call, Response<PersonaPrueba> response) {
                 responseValidate = response.code();
@@ -76,13 +76,26 @@ public class GenericDao {
         return responseValidate;
     }
 
-    public List<Subasta> getSubastas(){
+    /*public void getSubastas(List<Subasta> subastas){
 
-        List<Subasta> subastas = new ArrayList<>();
         subastas.add(new Subasta(1, "8/09/1990", "Oro"));
         subastas.add(new Subasta(2, "8/09/1990", "Plata"));
 
-        return subastas;
-    }
+        apiService = RetrofitClient.getApiService();
+        apiService.getSubastas(code, password).enqueue(new Callback<Subasta>() {
+            @Override
+            public void onResponse(Call<List<Subasta>> call, Response<List<Subasta>> response) {
+                responseValidate = response.code();
+                subastas.add(response)
+            }
+
+            @Override
+            public void onFailure(Call<PersonaPrueba> call, Throwable t) {
+                responseValidate = 440;
+            }
+        });
+
+
+    }*/
 
 }

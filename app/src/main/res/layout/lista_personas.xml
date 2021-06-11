@@ -43,5 +43,15 @@
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp">
     </TextView>
+
+        <TextView
+            android:id="@+id/categoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fechanacimiento"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/imagen_persona"
+            android:text="categoría" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

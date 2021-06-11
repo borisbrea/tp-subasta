@@ -42,6 +42,30 @@
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+    </TextView>
+    <TextView
+        android:text="Categoría:"
+        android:paddingLeft="10dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     </TextView>
+    <TextView
+        android:id="@+id/categoria_detalle"
+        android:text="Goku"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/access" />
 </LinearLayout>
