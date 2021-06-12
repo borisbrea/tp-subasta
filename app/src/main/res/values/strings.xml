@@ -19,6 +19,7 @@
     <string name="cancel">Cancelar</string>
     <string name="access">Acceder</string>
     <string name="validate_user">Validar usuario</string>
+    <string name="agregar_nuevo">Agregar nuevo</string>
 
 
     <string name="username">Username</string>

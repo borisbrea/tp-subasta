@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
+import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.add(R.id.container_fragment,new PersonasFragment());
         fragmentTransaction.commit();
 
-        managerMenuOption(false);
+        managerMenuOption(true);
     }
 
 
@@ -184,6 +185,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.container_fragment, detallePersonaFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+
+        /*
+         getSupportFragmentManager().beginTransaction()
+                 .replace(R.id.container_fragment, detallePersonaFragment)
+                 .addToBackStack(null).commit();
+        */
+        //***Luego pasar a programar al fragmentdetalle
+    }
+
+    @Override
+    public void enviarMetodoPago(MetodoPago metodoPago) {
+        //gracias a hbaer implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
+        //o mejor dicho este metodo.
+        //Aqui se realiza toda la logica necesaria para poder realizar el envio
+       /* detallePersonaFragment = new DetallePersonaFragment();
+        //objeto bundle para transportar la informacion
+        Bundle bundleEnvio = new Bundle();
+        //se manda el objeto que le esta llegando:
+        bundleEnvio.putSerializable("objeto",subasta);
+        detallePersonaFragment.setArguments(bundleEnvio);
+
+        //Cargar fragment en el activity
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment, detallePersonaFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();*/
 
         /*
          getSupportFragmentManager().beginTransaction()

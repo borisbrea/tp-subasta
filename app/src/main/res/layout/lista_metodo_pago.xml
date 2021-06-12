@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/imagen_metodo_pago"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/gohan_cara1">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/tv_nombre_lmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@id/imagen_metodo_pago"
+            android:layout_toRightOf="@id/imagen_metodo_pago"
+            android:text="Nombre de Tarjeta"
+            android:textSize="18sp"
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:id="@+id/tv_numero_lmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_nombre_lmp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@id/imagen_metodo_pago"
+            android:layout_toRightOf="@id/imagen_metodo_pago"
+            android:text="10-203035-8"></TextView>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
