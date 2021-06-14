@@ -14,10 +14,12 @@
     <string name="login">Login</string>
     <string name="register">Registrarse</string>
     <string name="generate">Generar</string>
+    <string name="validate">Validar</string>
 
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="access">Acceder</string>
+    <string name="save">Guardar</string>
     <string name="validate_user">Validar usuario</string>
     <string name="agregar_nuevo">Agregar nuevo</string>
 
@@ -32,6 +34,8 @@
     <string name="address">Dirección</string>
     <string name="phone">Teléfono</string>
     <string name="verification">Código de verificación</string>
+    <string name="card_number">Número de Tarjeta</string>
+    <string name="account_number">Número de Cuenta</string>
 
 
     <string name="input_name">Ingresar nombre</string>
@@ -43,7 +47,9 @@
     <string name="input_re_clave">Reingrese clave</string>
     <string name="input_verification">Ingresar verificación</string>
 
-    <string name="validate">Validar</string>
+    <string name="my_data">Mis Datos</string>
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

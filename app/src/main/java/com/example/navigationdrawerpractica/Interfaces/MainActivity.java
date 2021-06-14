@@ -28,6 +28,7 @@ import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
+import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
 import com.example.navigationdrawerpractica.Fragments.BidFragment;
 import com.example.navigationdrawerpractica.Fragments.DetallePersonaFragment;
 import com.example.navigationdrawerpractica.Fragments.GeneratePasswordFragment;
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(menuItem.getItemId() == R.id.account){
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
+            fragmentTransaction.replace(R.id.container_fragment,new AccountFragment());
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.payment){
@@ -464,6 +465,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new PersonasFragment());
+        fragmentTransaction.commit();
+    }
+
+    public void showAddPaymentFragment(View view){
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,new AddPaymentFragment());
         fragmentTransaction.commit();
     }
 
