@@ -1,6 +1,7 @@
 package com.example.navigationdrawerpractica.DAO;
 
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
+import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
@@ -121,5 +122,26 @@ public class GenericDao {
 
     }
 
+    public void getArticulos(List<Articulo> articulos){
+
+        articulos.add(new Articulo("1", "15/06/1990", "Y", "Playstation 4", "Consola de videojuegos de la compañia Sony Interactive Etertaiment", "Hideo Kojima", "Boris Brea", "Pendiente de Venta"));
+        articulos.add(new Articulo("2", "15/06/1990", "Y", "Casco VR", "Casco de realidad virtual para la consola PS4", "Yoshitaka Amano", "Boris Brea", "Pendiente de Subastar"));
+
+        /*apiService = RetrofitClient.getApiService();
+        apiService.getSubastas(code, password).enqueue(new Callback<Subasta>() {
+            @Override
+            public void onResponse(Call<List<Subasta>> call, Response<List<Subasta>> response) {
+                responseValidate = response.code();
+                subastas.add(response)
+            }
+
+            @Override
+            public void onFailure(Call<PersonaPrueba> call, Throwable t) {
+                responseValidate = 440;
+            }
+        });
+       */
+
+    }
 
 }

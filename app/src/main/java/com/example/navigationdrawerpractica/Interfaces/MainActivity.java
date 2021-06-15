@@ -17,8 +17,10 @@ import android.os.StrictMode;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
@@ -29,6 +31,7 @@ import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
+import com.example.navigationdrawerpractica.Fragments.ArticleFragment;
 import com.example.navigationdrawerpractica.Fragments.BidFragment;
 import com.example.navigationdrawerpractica.Fragments.DetallePersonaFragment;
 import com.example.navigationdrawerpractica.Fragments.GeneratePasswordFragment;
@@ -42,6 +45,7 @@ import com.example.navigationdrawerpractica.Service.RetrofitApiService;
 import com.example.navigationdrawerpractica.Utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -58,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mToolBarNavigationListenerIsRegistered = false;
+
+    private TableLayout tableLayout;
+    private TextView name, lastName;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -124,6 +131,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.replace(R.id.container_fragment,new PaymentFragment());
             fragmentTransaction.commit();
         }
+        if(menuItem.getItemId() == R.id.article){
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_fragment,new ArticleFragment());
+            fragmentTransaction.commit();
+        }
         if(menuItem.getItemId() == R.id.bid){
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
@@ -168,6 +181,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //***Luego pasar a programar al fragmentdetalle
     }
 
+    private ArrayList<String[]> getClientes(){
+        ArrayList<String[]> rows = new ArrayList<>();
+
+        rows.add(new String[]{"1","Boris", "Brea"});
+        rows.add(new String[]{"2","Ezequiel", "Viacava"});
+        rows.add(new String[]{"3","Emanuel", "Odstrcil"});
+
+        return rows;
+    }
+
     @Override
     public void enviarSubasta(Subasta subasta) {
         //gracias a hbaer implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
@@ -197,6 +220,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void enviarMetodoPago(MetodoPago metodoPago) {
+        //gracias a hbaer implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
+        //o mejor dicho este metodo.
+        //Aqui se realiza toda la logica necesaria para poder realizar el envio
+       /* detallePersonaFragment = new DetallePersonaFragment();
+        //objeto bundle para transportar la informacion
+        Bundle bundleEnvio = new Bundle();
+        //se manda el objeto que le esta llegando:
+        bundleEnvio.putSerializable("objeto",subasta);
+        detallePersonaFragment.setArguments(bundleEnvio);
+
+        //Cargar fragment en el activity
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment, detallePersonaFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();*/
+
+        /*
+         getSupportFragmentManager().beginTransaction()
+                 .replace(R.id.container_fragment, detallePersonaFragment)
+                 .addToBackStack(null).commit();
+        */
+        //***Luego pasar a programar al fragmentdetalle
+    }
+
+    @Override
+    public void enviarArticulo(Articulo articulo) {
         //gracias a hbaer implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
         //o mejor dicho este metodo.
         //Aqui se realiza toda la logica necesaria para poder realizar el envio

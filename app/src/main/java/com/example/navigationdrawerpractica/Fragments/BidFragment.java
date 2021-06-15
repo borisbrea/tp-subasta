@@ -1,5 +1,6 @@
 package com.example.navigationdrawerpractica.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +8,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
+import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
 import com.example.navigationdrawerpractica.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +24,9 @@ import com.example.navigationdrawerpractica.R;
  * create an instance of this fragment.
  */
 public class BidFragment extends Fragment {
+
+    private TableLayout tableLayout;
+    private TextView name, lastName;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,16 +62,37 @@ public class BidFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        }*/
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.bid_fragment, container, false);
+        String[] header = {"Fecha", "Artículo", "Monto", "Resultado"};
+
+
+        View view = inflater.inflate(R.layout.bid_fragment,container,false);
+        tableLayout = (TableLayout) view.findViewById(R.id.table);
+
+        AdapterPujasTable adapterPujasTable = new AdapterPujasTable(tableLayout, getActivity().getApplicationContext());
+        adapterPujasTable.addHeader(header);
+        adapterPujasTable.addData(getClientes());
+        adapterPujasTable.backGroundHeader(Color.BLUE);
+
+        return view;
+    }
+
+    private ArrayList<String[]> getClientes(){
+        ArrayList<String[]> rows = new ArrayList<>();
+
+        rows.add(new String[]{"12/6/2021","Cuadro",       "$1550", "Ganó"});
+        rows.add(new String[]{"13/6/2021","Rolex",        "$2000", "Perdió"});
+        rows.add(new String[]{"14/6/2021","Enciclopedia", "$8000", "Ganó"});
+
+        return rows;
     }
 }
