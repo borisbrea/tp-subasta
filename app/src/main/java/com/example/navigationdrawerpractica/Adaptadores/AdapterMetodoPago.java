@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,9 +21,7 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
 
     LayoutInflater inflater;
     ArrayList<MetodoPago> model;
-
     private View.OnClickListener listener;
-
     public AdapterMetodoPago(Context context, ArrayList<MetodoPago> model){
         this.inflater = LayoutInflater.from(context);
         this.model = model;
@@ -45,15 +44,14 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
         String nombres    = model.get(position).getMetodo();
         String numero = "";
         if (nombres.contains("Cuenta"))
-             numero     = model.get(position).getNumeroCuentaCorriente();
+            numero     = model.get(position).getNumeroCuentaCorriente();
         else
-             numero     = model.get(position).getNumeroTarjeta();
+            numero     = model.get(position).getNumeroTarjeta();
 //        int    imageid    = model.get(position).getImagenid();
-
         holder.nombres.setText(nombres);
         holder.numero.setText(numero);
         if (nombres.contains("VISA"))
-         holder.imagen.setImageResource(R.drawable.visa_logo);
+            holder.imagen.setImageResource(R.drawable.visa_logo);
         if (nombres.contains("MASTER"))
             holder.imagen.setImageResource(R.drawable.mastercard_logo);
         if (nombres.contains("Cuenta"))
@@ -75,14 +73,26 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView nombres, numero;
         ImageView imagen;
-
+        public RelativeLayout viewF, viewB;
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
-
             nombres  = itemView.findViewById(R.id.tv_nombre_lmp);
             numero   = itemView.findViewById(R.id.tv_numero_lmp);
-            imagen   = itemView.findViewById(R.id.imagen_metodo_pago);
+            imagen   = itemView.findViewById(R.id.img_metodoPago);
+            viewF    = itemView.findViewById(R.id.rl);
+            viewB    = itemView.findViewById(R.id.view_background);
         }
 
     }
+
+    public void removeItem(int position){
+        model.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(MetodoPago item, int position){
+        model.add(position,item);
+        notifyItemInserted(position);
+    }
+
 }

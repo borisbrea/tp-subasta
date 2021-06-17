@@ -9,6 +9,7 @@ import com.example.navigationdrawerpractica.Entidades.Subasta;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -29,4 +30,7 @@ public interface RetrofitApiService {
 
     @GET("/home")
     Call<List<Subasta>> getSubastas();
+
+    @DELETE("/home")
+    Call<PersonaPrueba> deletePaymentMethod(@Query(encoded = true, value = "id") @NonNull String idItemSelected);
 }

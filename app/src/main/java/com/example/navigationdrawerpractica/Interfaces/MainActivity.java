@@ -32,6 +32,7 @@ import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
 import com.example.navigationdrawerpractica.Fragments.ArticleFragment;
+import com.example.navigationdrawerpractica.Fragments.AuctionFragment;
 import com.example.navigationdrawerpractica.Fragments.BidFragment;
 import com.example.navigationdrawerpractica.Fragments.DetallePersonaFragment;
 import com.example.navigationdrawerpractica.Fragments.GeneratePasswordFragment;
@@ -524,6 +525,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new AddPaymentFragment());
+        fragmentTransaction.commit();
+    }
+
+    public void showAuctionFragment(View view){
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,new AuctionFragment());
         fragmentTransaction.commit();
     }
 

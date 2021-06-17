@@ -144,4 +144,18 @@ public class GenericDao {
 
     }
 
+    public void deletePaymentMethod(String idItemSelected) {
+        apiService = RetrofitClient.getApiService();
+        apiService.deletePaymentMethod(idItemSelected).enqueue(new Callback<PersonaPrueba>() {
+            @Override
+            public void onResponse(Call<PersonaPrueba> call, Response<PersonaPrueba> response) {
+                responseValidate = response.code();
+            }
+
+            @Override
+            public void onFailure(Call<PersonaPrueba> call, Throwable t) {
+                responseValidate = 440;
+            }
+        });
+    }
 }
