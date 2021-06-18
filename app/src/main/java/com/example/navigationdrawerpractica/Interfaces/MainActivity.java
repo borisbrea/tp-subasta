@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -23,12 +24,14 @@ import android.widget.TextView;
 import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
 import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
+import com.example.navigationdrawerpractica.DAO.GeneratePasswordIntent;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
@@ -49,6 +52,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,27 +60,26 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, iComunicaFragments {
 
-    DrawerLayout drawerLayout;
+    DrawerLayout          drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
-    Toolbar toolbar;
-    NavigationView navigationView;
+    Toolbar               toolbar;
+    NavigationView        navigationView;
 
-    private DrawerLayout drawer;
+    private DrawerLayout          drawer;
     private ActionBarDrawerToggle mDrawerToggle;
-    private boolean mToolBarNavigationListenerIsRegistered = false;
+    private boolean               mToolBarNavigationListenerIsRegistered = false;
 
-    private TableLayout tableLayout;
-    private TextView name, lastName;
+    private TableLayout           tableLayout;
+    private TextView              name, lastName;
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    //variable del fragment detalle
-    DetallePersonaFragment detallePersonaFragment;
+    FragmentManager               fragmentManager;
+    FragmentTransaction           fragmentTransaction;
+    DetallePersonaFragment        detallePersonaFragment;
 
     //Conexión a la Api
-    private RetrofitApiService apiService = RetrofitClient.getApiService();
-    public static int responseValidate = 0;
-    public GenericDao dao = new GenericDao();
+    private RetrofitApiService    apiService = RetrofitClient.getApiService();
+    public static int             responseValidate = 0;
+    public GenericDao             dao = new GenericDao();
 
     private String global_email = "";
 
@@ -331,22 +334,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }*/
     }
 
-    public void generatePasswordAction(View view){
+    public void generatePasswordAction(View view) throws ExecutionException, InterruptedException {
 
         String code     = ((TextView) findViewById(R.id.etVerificacion)).getText().toString();
         String password = ((TextView) findViewById(R.id.etClave)).getText().toString();
         String email    = ((TextView) findViewById(R.id.tv_email_gpf)).getText().toString();
 
-        //int generatePasswordResponse = dao.generatePassword(code.toString(), password, email);
+        Response response = new GeneratePasswordDao().execute(email, password, code).get();
 
-        int generatePasswordResponse = 200;
-
-        new GeneratePasswordDao().execute(email, password, code);
-
-        switch (generatePasswordResponse){
+        switch (response.code()){
             case   0:
                 break;
-            case 200: registerPasswordDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_CONFIRM_CREATE_PASSWORD, 200);
+            case 201: registerPasswordDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_CONFIRM_CREATE_PASSWORD, 200);
                 break;
             case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
                 break;
