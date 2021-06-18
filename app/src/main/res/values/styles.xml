@@ -13,4 +13,17 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="xml">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">#B1B0B0</item>
+        <item name="android:ems">10</item>
+        <item name="android:inputType">textPersonName</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">20dp</item>
+    </style>
 </resources>

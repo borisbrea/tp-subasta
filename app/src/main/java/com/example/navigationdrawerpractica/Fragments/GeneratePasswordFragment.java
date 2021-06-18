@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
+import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.R;
 
 /**
@@ -39,6 +42,10 @@ public class GeneratePasswordFragment extends Fragment {
      * @return A new instance of fragment GeneratePasswordFragment.
      */
     // TODO: Rename and change types and number of parameters
+
+
+    TextView email_gpf;
+
     public static GeneratePasswordFragment newInstance(String param1, String param2) {
         GeneratePasswordFragment fragment = new GeneratePasswordFragment();
         Bundle args = new Bundle();
@@ -58,9 +65,18 @@ public class GeneratePasswordFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.generate_password_fragment, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.generate_password_fragment, container, false);
+        email_gpf = view.findViewById(R.id.tv_email_gpf);
+
+        Bundle objeto = getArguments();
+        String email = null;
+        if (objeto != null){
+            email = (String) objeto.getSerializable("objeto");
+            email_gpf.setText(email);
+        }
+
+        return view;
     }
 }

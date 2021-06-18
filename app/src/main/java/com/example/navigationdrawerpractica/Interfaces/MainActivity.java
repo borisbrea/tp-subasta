@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
+import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RetrofitApiService apiService = RetrofitClient.getApiService();
     public static int responseValidate = 0;
     public GenericDao dao = new GenericDao();
+
+    private String global_email = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         detallePersonaFragment.setArguments(bundleEnvio);
 
         //Cargar fragment en el activity
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment, detallePersonaFragment);
         fragmentTransaction.addToBackStack(null);
@@ -332,10 +335,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String code     = ((TextView) findViewById(R.id.etVerificacion)).getText().toString();
         String password = ((TextView) findViewById(R.id.etClave)).getText().toString();
+        String email    = ((TextView) findViewById(R.id.tv_email_gpf)).getText().toString();
 
-        //int generatePasswordResponse = dao.generatePassword(code.toString(), password);
+        //int generatePasswordResponse = dao.generatePassword(code.toString(), password, email);
 
         int generatePasswordResponse = 200;
+
+        new GeneratePasswordDao().execute(email, password, code);
 
         switch (generatePasswordResponse){
             case   0:
@@ -353,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // ---------------------------------  DAO  -------------------------------------------
 
     public void validate(String email){
-         responseValidate = 0;
+         global_email = email;
 
         apiService = RetrofitClient.getApiService();
         apiService.validate(email).enqueue(new Callback<PersonaPrueba>() {
@@ -364,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (responseValidate){
                     case   0:
                         break;
-                    case 200: showGeneratePasswordFragment();
+                    case 200: showGeneratePasswordFragment(global_email);
                         break;
                     case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
                         break;
@@ -502,11 +508,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void showGeneratePasswordFragment(){
+    public void showGeneratePasswordFragment(String email){
+
+        Bundle bundleEnvio = new Bundle();
+        bundleEnvio.putSerializable("objeto", email);
+
+        GeneratePasswordFragment generatePasswordFragment = new GeneratePasswordFragment();
+                                 generatePasswordFragment.setArguments(bundleEnvio);
+
         drawerLayout.closeDrawer(GravityCompat.START);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_fragment,new GeneratePasswordFragment());
+        fragmentTransaction.replace(R.id.container_fragment,generatePasswordFragment);
         fragmentTransaction.commit();
     }
 

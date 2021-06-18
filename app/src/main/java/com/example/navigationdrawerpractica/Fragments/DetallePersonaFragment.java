@@ -47,7 +47,7 @@ public class DetallePersonaFragment extends Fragment {
         imagen    = view.findViewById(R.id.imagen_detalleid);
         //Crear bundle para recibir el objeto enviado por parametro.
         Bundle objetoSubasta = getArguments();
-        Subasta subasta = null;;
+        Subasta subasta = null;
         //validacion para verificar si existen argumentos para mostrar
         if(objetoSubasta !=null){
             subasta = (Subasta) objetoSubasta.getSerializable("objeto");

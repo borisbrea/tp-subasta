@@ -5,6 +5,7 @@ import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
 import com.example.navigationdrawerpractica.Service.RetrofitApiService;
 
 import java.util.ArrayList;
@@ -61,16 +62,19 @@ public class GenericDao {
         return responseValidate;
     }
 
-    public int generatePassword(String code, String password){
+    public int generatePassword(String code, String password, String email){
+
+        GeneratePasswordRequest request = new GeneratePasswordRequest(email, password,code );
+
         apiService = RetrofitClient.getApiService();
-        apiService.generatePassword(code, password).enqueue(new Callback<PersonaPrueba>() {
+        apiService.generatePassword(request).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<PersonaPrueba> call, Response<PersonaPrueba> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 responseValidate = response.code();
             }
 
             @Override
-            public void onFailure(Call<PersonaPrueba> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 responseValidate = 440;
             }
         });
