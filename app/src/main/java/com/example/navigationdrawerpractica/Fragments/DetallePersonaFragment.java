@@ -53,7 +53,7 @@ public class DetallePersonaFragment extends Fragment {
             subasta = (Subasta) objetoSubasta.getSerializable("objeto");
             imagen.setImageResource(R.drawable.martillo_small);
             nombre.setText(String.valueOf(subasta.getId()));
-            categoria.setText(subasta.getCategoria());
+            categoria.setText(subasta.getCategory());
         }
         return view;
     }

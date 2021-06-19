@@ -10,8 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.home.Auction;
+import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.R;
 
 import java.util.ArrayList;
@@ -19,11 +22,12 @@ import java.util.ArrayList;
 public class AdapterSubastas extends RecyclerView.Adapter<AdapterSubastas.ViewHolder> implements View.OnClickListener{
 
     LayoutInflater inflater;
-    ArrayList<Subasta> model;
+    ArrayList<AuctionHome> model;
+    View viewClass;
 
     private View.OnClickListener listener;
 
-    public AdapterSubastas(Context context, ArrayList<Subasta> model){
+    public AdapterSubastas(Context context, ArrayList<AuctionHome> model){
         this.inflater = LayoutInflater.from(context);
         this.model = model;
     }
@@ -33,6 +37,7 @@ public class AdapterSubastas extends RecyclerView.Adapter<AdapterSubastas.ViewHo
     public AdapterSubastas.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.lista_personas, parent, false);
         view.setOnClickListener(this);
+        viewClass = inflater.inflate(R.layout.lista_personas, parent, false);
         return new AdapterSubastas.ViewHolder(view);
     }
 
@@ -42,14 +47,17 @@ public class AdapterSubastas extends RecyclerView.Adapter<AdapterSubastas.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull AdapterSubastas.ViewHolder holder, int position) {
-        String nombres   = String.valueOf(model.get(position).getId());
-        String fecha     = model.get(position).getFecha().toString();
-        String categoria = model.get(position).getCategoria();
+        String nombre    = String.valueOf(model.get(position).getTitle());
+        String fecha     = model.get(position).getStatus()   != null? model.get(position).getStatus():"";
+        String categoria = model.get(position).getCategory() != null? model.get(position).getCategory(): "";
         //int    imageid = model.get(position).getImagenid();
-        holder.nombres.setText        ("Subasta:" + nombres);
-        holder.fechancimiento.setText ("Fecha: " + fecha);
+        holder.nombres.setText        (nombre);
+        holder.fechancimiento.setText ("Fecha: "  + fecha);
         holder.categoria.setText      ("Categoría: " + categoria);
-        holder.imagen.setImageResource(R.drawable.martillo_small);
+
+        Glide.with(viewClass).load(model.get(position).getImage()).into(holder.imagen);
+
+        //holder.imagen.setImageResource(R.drawable.martillo_small);
     }
 
 

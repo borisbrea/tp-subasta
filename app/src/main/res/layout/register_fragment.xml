@@ -20,7 +20,7 @@
             android:textSize="14sp"
             android:textStyle="bold"></TextView>
         <EditText
-            android:id="@+id/etEmail"
+            android:id="@+id/et_email_rf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -35,7 +35,7 @@
             android:textSize="14sp"
             android:textStyle="bold"></TextView>
         <EditText
-            android:id="@+id/etUsername"
+            android:id="@+id/et_name_rf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -50,7 +50,7 @@
             android:textSize="14sp"
             android:textStyle="bold"></TextView>
         <EditText
-            android:id="@+id/etDni"
+            android:id="@+id/et_document_rf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -65,7 +65,7 @@
             android:textSize="14sp"
             android:textStyle="bold"></TextView>
         <EditText
-            android:id="@+id/etAddress"
+            android:id="@+id/et_address_rf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -80,7 +80,7 @@
             android:textSize="14sp"
             android:textStyle="bold"></TextView>
         <EditText
-            android:id="@+id/etPhone"
+            android:id="@+id/et_phone_rf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -100,6 +100,7 @@
             android:layout_marginTop="5dp"
             android:background="#703DFB"
             android:text="@string/register"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:onClick="registerAction"/>
     </LinearLayout>
 </LinearLayout>

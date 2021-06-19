@@ -4,31 +4,29 @@ import android.os.AsyncTask;
 
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.RegisterRequest;
 import com.example.navigationdrawerpractica.Service.RetrofitApiService;
 
 import java.io.IOException;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GeneratePasswordDao extends AsyncTask<String, Void, Response> {
+public class RegisterDao extends AsyncTask<String, Void, Response> {
 
     private RetrofitApiService apiService = RetrofitClient.getApiService();
 
     @Override
     protected Response doInBackground(String... strings) {
+        RegisterRequest request = new RegisterRequest(0,strings[2],strings[1],strings[1], strings[1], strings[0], strings[3], strings[4]);
 
-         GeneratePasswordRequest request = new GeneratePasswordRequest(strings[0], strings[1],strings[2]);
+        Response<Void> response = null;
 
-         Response<Void> response = null;
-
-            apiService = RetrofitClient.getApiService();
-            try {
-                response = apiService.generatePassword(request).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        apiService = RetrofitClient.getApiService();
+        try {
+            response = apiService.generatePassword(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return response;
     }

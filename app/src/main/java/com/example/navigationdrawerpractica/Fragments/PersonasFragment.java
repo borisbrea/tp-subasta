@@ -18,16 +18,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterPersonas;
 import com.example.navigationdrawerpractica.Adaptadores.AdapterSubastas;
+import com.example.navigationdrawerpractica.DAO.AuctionHomeDao;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.home.Auction;
+import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
+import com.example.navigationdrawerpractica.Entidades.home.Home;
 import com.example.navigationdrawerpractica.Interfaces.iComunicaFragments;
 import com.example.navigationdrawerpractica.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class PersonasFragment extends Fragment {
+import retrofit2.Response;
+
+public class PersonasFragment<Glide> extends Fragment {
 
     //private OnFragmentInteractionListener mListener;
 
@@ -36,6 +43,7 @@ public class PersonasFragment extends Fragment {
     AdapterSubastas adapterSubastas;
     RecyclerView recyclerViewSubastas;
     ArrayList<Subasta> listaSubastas;
+    ArrayList<AuctionHome> auctionsList;
 
     EditText txtnombre;
 
@@ -51,6 +59,7 @@ public class PersonasFragment extends Fragment {
 
         recyclerViewSubastas = view.findViewById(R.id.recyclerView);
         listaSubastas = new ArrayList<>();
+        auctionsList  = new ArrayList<>();
         cargarLista();
         mostrarData();
         return view;
@@ -58,25 +67,38 @@ public class PersonasFragment extends Fragment {
 
     public void cargarLista(){
         List<Subasta> subastas = new ArrayList<>();
-        dao.getSubastas(subastas);
-        listaSubastas.addAll(subastas);
+
+        List<AuctionHome> auctions = new ArrayList<>();
+
+        try {
+            Response response = new AuctionHomeDao().execute().get();
+            auctions.addAll(((Home) response.body()).getAuctions());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        /*dao.getSubastas(subastas);
+        listaSubastas.addAll(subastas);*/
+        auctionsList.addAll(auctions);
     }
 
     private void mostrarData(){
         recyclerViewSubastas.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterSubastas = new AdapterSubastas(getContext(), listaSubastas);
+        adapterSubastas = new AdapterSubastas(getContext(), auctionsList);
         recyclerViewSubastas.setAdapter(adapterSubastas);
 
         adapterSubastas.setOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nombre = String.valueOf(listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)).getId());
-                txtnombre.setText(nombre);
-                Toast.makeText(getContext(), "Seleccionó: "+listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)).getId(), Toast.LENGTH_SHORT).show();
+                //String nombre = String.valueOf(listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)).getId());
+                //txtnombre.setText(nombre);
+                //Toast.makeText(getContext(), "Seleccionó: "+listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)).getId(), Toast.LENGTH_SHORT).show();
                 //enviar mediante la interface el objeto seleccionado al detalle
                 //se envia el objeto completo
                 //se utiliza la interface como puente para enviar el objeto seleccionado
-                interfaceComunicaFragments.enviarSubasta(listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)));
+                //interfaceComunicaFragments.enviarSubasta(listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)));
                 //luego en el mainactivity se hace la implementacion de la interface para implementar el metodo enviarpersona
             }
         });

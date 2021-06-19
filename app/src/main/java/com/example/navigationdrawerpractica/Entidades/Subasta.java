@@ -6,20 +6,25 @@ import java.util.Date;
 public class Subasta implements Serializable {
 
     int     id;
+    String  title;
+    String  status;
+    String  category;
+    String  image;
+
     String  fecha;
-    String  estado;
     String  subastador;
     String  ubicacion;
     int     capacidadAsistentes;
     boolean tieneDeposito;
     boolean seguridadPropia;
-    String  categoria;
 
 
-    public Subasta(int id, String fecha, String categoria) {
+    public Subasta() {}
+
+    public Subasta(int id, String fecha, String category) {
         this.id = id;
         this.fecha = fecha;
-        this.categoria = categoria;
+        this.category = category;
     }
 
     public int getId() {
@@ -36,14 +41,6 @@ public class Subasta implements Serializable {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     public String getSubastador() {
@@ -86,11 +83,35 @@ public class Subasta implements Serializable {
         this.seguridadPropia = seguridadPropia;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getTitle() {
+        return title;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

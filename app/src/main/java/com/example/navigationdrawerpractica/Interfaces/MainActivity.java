@@ -11,27 +11,23 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
 import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
-import com.example.navigationdrawerpractica.DAO.GeneratePasswordIntent;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
+import com.example.navigationdrawerpractica.DAO.RegisterDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
-import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
@@ -40,7 +36,6 @@ import com.example.navigationdrawerpractica.Fragments.AuctionFragment;
 import com.example.navigationdrawerpractica.Fragments.BidFragment;
 import com.example.navigationdrawerpractica.Fragments.DetallePersonaFragment;
 import com.example.navigationdrawerpractica.Fragments.GeneratePasswordFragment;
-import com.example.navigationdrawerpractica.Fragments.MainFragment;
 import com.example.navigationdrawerpractica.Fragments.PaymentFragment;
 import com.example.navigationdrawerpractica.Fragments.PersonasFragment;
 import com.example.navigationdrawerpractica.Fragments.StatisticFragment;
@@ -346,6 +341,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case   0:
                 break;
             case 201: registerPasswordDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_CONFIRM_CREATE_PASSWORD, 200);
+                break;
+            case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
+                break;
+            case 404: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_404);
+                break;
+            default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
+        }
+    }
+
+    public void registerAction(View view) throws ExecutionException, InterruptedException {
+
+        String email     = ((TextView) findViewById(R.id.et_email_rf)).getText().toString();
+        String nombre    = ((TextView) findViewById(R.id.et_name_rf)).getText().toString();
+        String documento = ((TextView) findViewById(R.id.et_document_rf)).getText().toString();
+        String direccion = ((TextView) findViewById(R.id.et_address_rf)).getText().toString();
+        String telefono  = ((TextView) findViewById(R.id.et_phone_rf)).getText().toString();
+
+
+        if (email.matches("")) {
+            ((TextView) findViewById(R.id.et_email_rf)).setError("El campo email no puede estar vacío");
+            return;
+        }
+
+        if (nombre.matches("")) {
+            ((TextView) findViewById(R.id.et_name_rf)).setError("El campo nombre no puede estar vacío");
+            return;
+        }
+
+        if (documento.matches("")) {
+            ((TextView) findViewById(R.id.et_document_rf)).setError("El campo documento no puede estar vacío");
+            return;
+        }
+
+        if (direccion.matches("")) {
+            ((TextView) findViewById(R.id.et_address_rf)).setError("El campo dirección no puede estar vacío");
+            return;
+        }
+
+        if (telefono.matches("")) {
+            ((TextView) findViewById(R.id.et_phone_rf)).setError("El campo teléfono no puede estar vacío");
+            return;
+        }
+
+        Response response = new RegisterDao().execute(email, nombre, documento, direccion, telefono).get();
+
+        switch (response.code()){
+            case   0:
+                break;
+            case 201: registerPasswordDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_CONFIRM_REGISTER, 200);
                 break;
             case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
                 break;

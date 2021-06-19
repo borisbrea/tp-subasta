@@ -5,7 +5,9 @@ import androidx.annotation.NonNull;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.home.Home;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.RegisterRequest;
 
 import java.util.List;
 
@@ -32,8 +34,12 @@ public interface RetrofitApiService {
     @Headers({"Content-Type: application/json"})
     Call<Void> generatePassword(@Body GeneratePasswordRequest request);
 
+    @POST("/users")
+    @Headers({"Content-Type: application/json"})
+    Call<Void> generatePassword(@Body RegisterRequest request);
+
     @GET("/home")
-    Call<List<Subasta>> getSubastas();
+    Call<Home> getSubastas();
 
     @DELETE("/home")
     Call<PersonaPrueba> deletePaymentMethod(@Query(encoded = true, value = "id") @NonNull String idItemSelected);
