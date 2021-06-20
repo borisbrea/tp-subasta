@@ -17,7 +17,9 @@ import com.example.navigationdrawerpractica.Entidades.home.Auction;
 import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.R;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AdapterSubastas extends RecyclerView.Adapter<AdapterSubastas.ViewHolder> implements View.OnClickListener{
 
@@ -48,7 +50,7 @@ public class AdapterSubastas extends RecyclerView.Adapter<AdapterSubastas.ViewHo
     @Override
     public void onBindViewHolder(@NonNull AdapterSubastas.ViewHolder holder, int position) {
         String nombre    = String.valueOf(model.get(position).getTitle());
-        String fecha     = model.get(position).getStatus()   != null? model.get(position).getStatus():"";
+        String fecha     = model.get(position).getDate()   != null? model.get(position).getDate():"";
         String categoria = model.get(position).getCategory() != null? model.get(position).getCategory(): "";
         //int    imageid = model.get(position).getImagenid();
         holder.nombres.setText        (nombre);
@@ -87,4 +89,17 @@ public class AdapterSubastas extends RecyclerView.Adapter<AdapterSubastas.ViewHo
         }
 
     }
+
+   /* public String convertDateFormat(Date date){
+        String stringDate = (android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss a", date)).toString();
+
+        String anio = ;
+        String mes;
+        String dia;
+        String hora;
+
+        String formatDate = "";
+
+        return dia + "/" + mes + "/" + anio ;
+    }*/
 }

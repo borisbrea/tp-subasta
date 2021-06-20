@@ -1,9 +1,12 @@
 package com.example.navigationdrawerpractica.Entidades.home;
 
+import java.util.Date;
+
 public class AuctionHome {
 
     	private int    id;
     	private String title;
+    	private String date;
     	private String category;
     	private String status;
         private String image;
@@ -11,12 +14,13 @@ public class AuctionHome {
     public AuctionHome() {
     }
 
-    public AuctionHome(int id, String title, String category, String status, String image) {
-        this.id = id;
-        this.title = title;
+    public AuctionHome(int id, String title, String date, String category, String status, String image) {
+        this.id       = id;
+        this.title    = title;
+        this.date     = date;
         this.category = category;
-        this.status = status;
-        this.image = image;
+        this.status   = status;
+        this.image    = image;
     }
 
     public int getId() {
@@ -33,6 +37,14 @@ public class AuctionHome {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getCategory() {
