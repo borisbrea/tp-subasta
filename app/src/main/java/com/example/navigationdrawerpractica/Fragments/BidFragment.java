@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
 import com.example.navigationdrawerpractica.R;
+import com.example.navigationdrawerpractica.Utils.Utils;
 
 import java.util.ArrayList;
 
@@ -71,7 +72,9 @@ public class BidFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        getActivity().setTitle(Utils.TITLE_MIS_PUJAS);
+
         String[] header = {"Fecha", "Artículo", "Monto", "Resultado"};
 
 

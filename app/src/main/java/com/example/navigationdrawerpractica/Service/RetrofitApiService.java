@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.home.Auction;
 import com.example.navigationdrawerpractica.Entidades.home.Home;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.RegisterRequest;
@@ -19,6 +20,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface RetrofitApiService {
 
@@ -40,6 +42,9 @@ public interface RetrofitApiService {
 
     @GET("/home")
     Call<Home> getSubastas();
+
+    @GET
+    Call<Auction> getAuction(@Url String fullUrl);
 
     @DELETE("/home")
     Call<PersonaPrueba> deletePaymentMethod(@Query(encoded = true, value = "id") @NonNull String idItemSelected);

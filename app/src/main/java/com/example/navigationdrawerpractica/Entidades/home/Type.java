@@ -1,6 +1,8 @@
 package com.example.navigationdrawerpractica.Entidades.home;
 
-public class Type {
+import java.io.Serializable;
+
+public class Type implements Serializable {
 
     private String name;
 

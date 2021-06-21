@@ -1,6 +1,8 @@
 package com.example.navigationdrawerpractica.Entidades.home;
 
-public class Auction {
+import java.io.Serializable;
+
+public class Auction implements Serializable {
 
     private int           id;
     private String        title;

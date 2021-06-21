@@ -11,7 +11,8 @@
         android:textStyle="bold"
         android:paddingBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_title_df">
 
     </TextView>
 
@@ -26,42 +27,110 @@
     </ImageView>
 
     <TextView
-        android:text="Nombre:"
+        android:text="@string/date"
         android:paddingLeft="10dp"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </TextView>
-    <TextView
-        android:id="@+id/nombre_detalle"
-        android:text="Goku"
         android:gravity="center"
+        android:background="@color/colorAccent"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_date_df"
+        android:text="Goku"
+        android:gravity="left"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:layout_marginLeft="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </TextView>
+        android:layout_height="wrap_content"/>
     <TextView
-        android:text="Categoría:"
+        android:text="@string/category"
         android:paddingLeft="10dp"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:gravity="center"
+        android:background="@color/colorAccent"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </TextView>
+        android:layout_height="wrap_content"/>
     <TextView
-        android:id="@+id/categoria_detalle"
+        android:id="@+id/tv_category_df"
         android:text="Goku"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:text="@string/auctioneer"
+        android:paddingLeft="10dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@color/colorAccent"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_auctioneer_df"
+        android:text="Goku"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:text="@string/items_amount"
+        android:paddingLeft="10dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_items_amount_df"
+        android:text="Goku"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:text="@string/description"
+        android:paddingLeft="10dp"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:background="@color/colorAccent"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_description_df"
+        android:text="Goku"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_blank_df"
+        android:text=""
         android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </TextView>
+        android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/button"

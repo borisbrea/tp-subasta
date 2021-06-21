@@ -37,6 +37,12 @@
     <string name="card_number">Número de Tarjeta</string>
     <string name="account_number">Número de Cuenta</string>
 
+    <string name="date">        Fecha</string>
+    <string name="category">    Categoría</string>
+    <string name="auctioneer">  Subastador</string>
+    <string name="items_amount">Cantidad de Artículos</string>
+    <string name="description"> Descripción</string>
+
 
     <string name="input_name">Ingresar nombre</string>
     <string name="input_email">Ingresar email</string>

@@ -93,6 +93,9 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.payment_fragment,container,false);
+
+        getActivity().setTitle(Utils.TITLE_METODO_PAGO);
+
         txtnombre = view.findViewById(R.id.txtnombre);
         recyclerViewMetodoPago = view.findViewById(R.id.recyclerView_pf);
         layout = view.findViewById(R.id.layout_items_mp);

@@ -98,7 +98,7 @@ public class PersonasFragment<Glide> extends Fragment {
                 //enviar mediante la interface el objeto seleccionado al detalle
                 //se envia el objeto completo
                 //se utiliza la interface como puente para enviar el objeto seleccionado
-                //interfaceComunicaFragments.enviarSubasta(listaSubastas.get(recyclerViewSubastas.getChildAdapterPosition(view)));
+                interfaceComunicaFragments.enviarSubasta(auctionsList.get(recyclerViewSubastas.getChildAdapterPosition(view)));
                 //luego en el mainactivity se hace la implementacion de la interface para implementar el metodo enviarpersona
             }
         });

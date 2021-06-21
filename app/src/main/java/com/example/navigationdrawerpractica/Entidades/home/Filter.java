@@ -1,8 +1,9 @@
 package com.example.navigationdrawerpractica.Entidades.home;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Filter {
+public class Filter implements Serializable {
 
     private String     name;
     private List<Type> types;

@@ -15,9 +15,7 @@
         android:id="@+id/imagen_persona"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/gohan_cara1">
-
-    </ImageView>
+        android:src="@drawable/gohan_cara1"/>
 
     <TextView
         android:id="@+id/nombres"

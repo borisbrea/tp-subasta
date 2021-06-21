@@ -2,9 +2,10 @@ package com.example.navigationdrawerpractica.Entidades.home;
 
 import com.example.navigationdrawerpractica.Entidades.Subasta;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Home {
+public class Home implements Serializable {
 
     private Menu              menu;
     private List<Filter>      filters;

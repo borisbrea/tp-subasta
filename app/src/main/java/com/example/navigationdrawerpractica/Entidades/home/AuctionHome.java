@@ -1,8 +1,9 @@
 package com.example.navigationdrawerpractica.Entidades.home;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AuctionHome {
+public class AuctionHome implements Serializable {
 
     	private int    id;
     	private String title;

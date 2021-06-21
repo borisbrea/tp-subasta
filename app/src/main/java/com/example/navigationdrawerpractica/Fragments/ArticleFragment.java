@@ -20,6 +20,7 @@ import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Interfaces.iComunicaFragments;
 import com.example.navigationdrawerpractica.R;
+import com.example.navigationdrawerpractica.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,8 +89,10 @@ public class ArticleFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.article_fragment,container,false);
-        txtnombre = view.findViewById(R.id.txtnombre);
 
+        getActivity().setTitle(Utils.TITLE_MIS_ARTICULOS);
+
+        txtnombre = view.findViewById(R.id.txtnombre);
         recyclerViewArticulos = view.findViewById(R.id.recyclerView_af);
         listaArticulos = new ArrayList<>();
         cargarLista();

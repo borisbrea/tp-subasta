@@ -28,5 +28,13 @@ public class Utils {
     public final static String BTN_ACCEPT = "Aceptar";
     public final static String BTN_CANCEL = "Cancelar";
 
+    public final static String TITLE_MI_CUENTA        = "Mis Cuenta";
+    public final static String TITLE_METODO_PAGO      = "Métodos de Pago";
+    public final static String TITLE_MIS_PUJAS        = "Mis Pujas";
+    public final static String TITLE_MIS_ESTADISTICAS = "Mis Estadísticas";
+    public final static String TITLE_MIS_ARTICULOS    = "Mis Artículos";
+
+    public final static String OBLIGATORY_FIELD       = "Campo obligatorio.";
+
 
 }

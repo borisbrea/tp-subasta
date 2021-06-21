@@ -28,6 +28,7 @@ import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
@@ -194,8 +195,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void enviarSubasta(Subasta subasta) {
-        //gracias a hbaer implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
+    public void enviarSubasta(AuctionHome subasta) {
+        //gracias a haber implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
         //o mejor dicho este metodo.
         //Aqui se realiza toda la logica necesaria para poder realizar el envio
         detallePersonaFragment = new DetallePersonaFragment();
@@ -287,7 +288,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String email      = ((TextView) findViewById(R.id.lgUsername)).getText().toString();
         String password   = ((TextView) findViewById(R.id.lgPassword)).getText().toString();
 
-        //int responseLogin = 200;
+        if (email.matches("")) {
+            ((TextView) findViewById(R.id.lgUsername)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
+
+        if (password.matches("")) {
+            ((TextView) findViewById(R.id.lgPassword)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
 
          login(email, password);
 
@@ -306,15 +315,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void validateUserAction(View view){
 
-        //showGeneratePasswordFragment();
-
-//        int validateResponse = 200;
-
         TextView email = (TextView) findViewById(R.id.vmUsername);
+
+        if ((email.getText().toString()).matches("")) {
+            ((TextView) findViewById(R.id.vmUsername)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
+
          validate(email.getText().toString());
         //int validateResponse = dao.validate(email.getText().toString());
-
-
 
        /* switch (validateResponse){
             case   0:
@@ -331,9 +340,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void generatePasswordAction(View view) throws ExecutionException, InterruptedException {
 
-        String code     = ((TextView) findViewById(R.id.etVerificacion)).getText().toString();
-        String password = ((TextView) findViewById(R.id.etClave)).getText().toString();
-        String email    = ((TextView) findViewById(R.id.tv_email_gpf)).getText().toString();
+        String password  = ((TextView) findViewById(R.id.etClave)).getText().toString();
+        String password2 = ((TextView) findViewById(R.id.etClave2)).getText().toString();
+        String code      = ((TextView) findViewById(R.id.etVerificacion)).getText().toString();
+        String email     = ((TextView) findViewById(R.id.tv_email_gpf)).getText().toString();
+
+        if (password.matches("")) {
+            ((TextView) findViewById(R.id.etClave)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
+
+        if (password2.matches("")) {
+            ((TextView) findViewById(R.id.etClave2)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
+
+        if (password.equals(password2)) {
+            ((TextView) findViewById(R.id.etClave2)).setError("Las claves ingresadas no coinciden");
+            return;
+        }
+
+        if (code.matches("")) {
+            ((TextView) findViewById(R.id.etClave2)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
 
         Response response = new GeneratePasswordDao().execute(email, password, code).get();
 
@@ -360,27 +390,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         if (email.matches("")) {
-            ((TextView) findViewById(R.id.et_email_rf)).setError("El campo email no puede estar vacío");
+            ((TextView) findViewById(R.id.et_email_rf)).setError(Utils.OBLIGATORY_FIELD);
             return;
         }
 
         if (nombre.matches("")) {
-            ((TextView) findViewById(R.id.et_name_rf)).setError("El campo nombre no puede estar vacío");
+            ((TextView) findViewById(R.id.et_name_rf)).setError(Utils.OBLIGATORY_FIELD);
             return;
         }
 
         if (documento.matches("")) {
-            ((TextView) findViewById(R.id.et_document_rf)).setError("El campo documento no puede estar vacío");
+            ((TextView) findViewById(R.id.et_document_rf)).setError(Utils.OBLIGATORY_FIELD);
             return;
         }
 
         if (direccion.matches("")) {
-            ((TextView) findViewById(R.id.et_address_rf)).setError("El campo dirección no puede estar vacío");
+            ((TextView) findViewById(R.id.et_address_rf)).setError(Utils.OBLIGATORY_FIELD);
             return;
         }
 
         if (telefono.matches("")) {
-            ((TextView) findViewById(R.id.et_phone_rf)).setError("El campo teléfono no puede estar vacío");
+            ((TextView) findViewById(R.id.et_phone_rf)).setError(Utils.OBLIGATORY_FIELD);
             return;
         }
 

@@ -1,6 +1,8 @@
 package com.example.navigationdrawerpractica.Entidades.home;
 
-public class Menu {
+import java.io.Serializable;
+
+public class Menu implements Serializable {
 
     private String type;
     private String description;
