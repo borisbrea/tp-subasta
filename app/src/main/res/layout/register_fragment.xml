@@ -46,6 +46,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:text="@string/surname"
+            android:textSize="14sp"
+            android:textStyle="bold"></TextView>
+        <EditText
+            android:id="@+id/et_surname_rf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/input_name"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:text="@string/dni"
             android:textSize="14sp"
             android:textStyle="bold"></TextView>

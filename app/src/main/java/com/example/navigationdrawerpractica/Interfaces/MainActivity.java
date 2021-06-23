@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RetrofitApiService    apiService = RetrofitClient.getApiService();
     public static int             responseValidate = 0;
     public GenericDao             dao = new GenericDao();
+    public int indiceSubasta   = 0;
 
     private String global_email = "";
 
@@ -355,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-        if (password.equals(password2)) {
+        if (!password.equals(password2)) {
             ((TextView) findViewById(R.id.etClave2)).setError("Las claves ingresadas no coinciden");
             return;
         }
@@ -384,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String email     = ((TextView) findViewById(R.id.et_email_rf)).getText().toString();
         String nombre    = ((TextView) findViewById(R.id.et_name_rf)).getText().toString();
+        String apellido  = ((TextView) findViewById(R.id.et_surname_rf)).getText().toString();
         String documento = ((TextView) findViewById(R.id.et_document_rf)).getText().toString();
         String direccion = ((TextView) findViewById(R.id.et_address_rf)).getText().toString();
         String telefono  = ((TextView) findViewById(R.id.et_phone_rf)).getText().toString();
@@ -396,6 +399,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (nombre.matches("")) {
             ((TextView) findViewById(R.id.et_name_rf)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
+
+        if (apellido.matches("")) {
+            ((TextView) findViewById(R.id.et_surname_rf)).setError(Utils.OBLIGATORY_FIELD);
             return;
         }
 
@@ -414,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-        Response response = new RegisterDao().execute(email, nombre, documento, direccion, telefono).get();
+        Response response = new RegisterDao().execute(email, nombre, documento, direccion, telefono, apellido).get();
 
         switch (response.code()){
             case   0:
@@ -519,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch(responseValidate){
                     case  0:
                         break;
-                    case 200: managerMenuOption(true); showMainMenuFragment();
+                    case 200: managerMenuOption(true); managerHeader(response); showMainMenuFragment();
                         break;
                     case 400:simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_LOGIN_400);
                         break;
@@ -632,6 +640,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.article).setVisible(option);
         navigationView.getMenu().findItem(R.id.bid).setVisible(option);
         navigationView.getMenu().findItem(R.id.statistic).setVisible(option);
+    }
+
+    public void managerHeader(Response response){
+
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        PersonaPrueba user = (PersonaPrueba)response.body();
+
+        TextView username = navigationView.getHeaderView(0).findViewById(R.id.tv_username_hf);
+                 username.setText(user.getFirstName() + " " + user.getLastName());
+        TextView email    = navigationView.getHeaderView(0).findViewById(R.id.tv_email_hf);
+                 email.setText(user.getEmail());
+        ImageView photo   = navigationView.getHeaderView(0).findViewById(R.id.iv_photo_hf);
+                  photo.setImageResource(R.drawable.gohan_small);
+
     }
 
 }

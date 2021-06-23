@@ -30,6 +30,7 @@
     <string name="clave">Clave</string>
     <string name="email">Email</string>
     <string name="name">Nombre</string>
+    <string name="surname">Apellido</string>
     <string name="dni">Documento</string>
     <string name="address">Dirección</string>
     <string name="phone">Teléfono</string>

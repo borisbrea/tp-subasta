@@ -2,9 +2,11 @@ package com.example.navigationdrawerpractica.Service;
 
 import androidx.annotation.NonNull;
 
+import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.Entidades.home.Auction;
 import com.example.navigationdrawerpractica.Entidades.home.Home;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
@@ -38,13 +40,16 @@ public interface RetrofitApiService {
 
     @POST("/users")
     @Headers({"Content-Type: application/json"})
-    Call<Void> generatePassword(@Body RegisterRequest request);
+    Call<Void> registerUser(@Body RegisterRequest request);
 
     @GET("/home")
     Call<Home> getSubastas();
 
     @GET
     Call<Auction> getAuction(@Url String fullUrl);
+
+    @GET
+    Call<SubastaConArticulos> getAuctionWithItems(@Url String fullUrl);
 
     @DELETE("/home")
     Call<PersonaPrueba> deletePaymentMethod(@Query(encoded = true, value = "id") @NonNull String idItemSelected);

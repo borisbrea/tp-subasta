@@ -1,5 +1,6 @@
 package com.example.navigationdrawerpractica.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,13 +8,22 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
+import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
+import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.R;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
+
+import java.util.concurrent.ExecutionException;
+
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +46,8 @@ public class AuctionFragment extends Fragment {
             "Gohan", "Goku", "Goten", "Vegueta", "Picoro"
     };
 
-
+    private TextView estado, descripcion, duenio, precioBase, tituloArticulo;
+    private Button   btnPujar;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -79,20 +90,77 @@ public class AuctionFragment extends Fragment {
         // Inflate the layout for this fragment
        View view = inflater.inflate(R.layout.auction_fragment, container, false);
 
-        CarouselView carouselView = view.findViewById(R.id.auction_carousel);
-        carouselView.setPageCount(mImages.length);
-        carouselView.setImageListener(new ImageListener() {
-            @Override
-            public void setImageForPosition(int position, ImageView imageView) {
-                imageView.setImageResource(mImages[position]);
+       tituloArticulo   = view.findViewById(R.id.tv_item_title_af);
+       estado           = view.findViewById(R.id.tv_state_af);
+       descripcion      = view.findViewById(R.id.tv_description_af);
+       duenio           = view.findViewById(R.id.tv_duenio_af);
+       precioBase       = view.findViewById(R.id.tv_precio_base_af);
+       btnPujar         = view.findViewById(R.id.btn_pujar_af);
+
+        try {
+            Response response = new AuctionWithItemsDao().execute(5).get();
+
+            SubastaConArticulos subastaCompleta = (SubastaConArticulos) response.body();
+
+            if(subastaCompleta!= null){
+
+                CarouselView carouselView = view.findViewById(R.id.auction_carousel);
+                carouselView.setPageCount(mImages.length);
+                carouselView.setImageListener(new ImageListener() {
+                    @Override
+                    public void setImageForPosition(int position, ImageView imageView) {
+                        imageView.setImageResource(mImages[position]);
+                    }
+                });
+                carouselView.setImageClickListener(new ImageClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        Toast.makeText(getContext(), mImagesTitle[position], Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                estado.setText(subastaCompleta.getArticles().get(0).getStatus());
+
+                if(subastaCompleta.getArticles().get(0).getStatus().equals("Subastandose")){
+                    estado.setTextColor(Color.GREEN);
+                }
+
+                tituloArticulo. setText(subastaCompleta.getArticles().get(0).getTitle());
+                descripcion.    setText(subastaCompleta.getArticles().get(0).getDescription());
+                duenio.         setText(subastaCompleta.getArticles().get(0).getOwner());
+                precioBase.     setText(subastaCompleta.getArticles().get(0).getBasePrice());
+
+                if(subastaCompleta.getArticles().get(0).isCanBid())
+                    btnPujar.setEnabled(true);
+                else
+                    btnPujar.setEnabled(false);
+
             }
-        });
-        carouselView.setImageClickListener(new ImageClickListener() {
-            @Override
-            public void onClick(int position) {
-                Toast.makeText(getContext(), mImagesTitle[position], Toast.LENGTH_SHORT).show();
-            }
-        });
+
+            /*CarouselView carouselView = view.findViewById(R.id.auction_carousel);
+            carouselView.setPageCount(mImages.length);
+            carouselView.setImageListener(new ImageListener() {
+                @Override
+                public void setImageForPosition(int position, ImageView imageView) {
+                    imageView.setImageResource(mImages[position]);
+                }
+            });
+            carouselView.setImageClickListener(new ImageClickListener() {
+                @Override
+                public void onClick(int position) {
+                    Toast.makeText(getContext(), mImagesTitle[position], Toast.LENGTH_SHORT).show();
+                }
+            });*/
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+
 
         return view;
     }

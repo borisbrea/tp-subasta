@@ -17,13 +17,13 @@ public class RegisterDao extends AsyncTask<String, Void, Response> {
 
     @Override
     protected Response doInBackground(String... strings) {
-        RegisterRequest request = new RegisterRequest(0,strings[2],strings[1],strings[1], strings[1], strings[0], strings[3], strings[4]);
+        RegisterRequest request = new RegisterRequest(0,strings[2],strings[1] + " " + strings[5],strings[1], strings[5], strings[0], strings[3], strings[4]);
 
         Response<Void> response = null;
 
         apiService = RetrofitClient.getApiService();
         try {
-            response = apiService.generatePassword(request).execute();
+            response = apiService.registerUser(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
