@@ -3,7 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="55dp">
-
     <TextView
         android:text="Detalle Persona"
         android:gravity="center"
@@ -13,129 +12,146 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_title_df">
-
     </TextView>
-
     <ImageView
         android:id="@+id/imagen_detalleid"
-        android:layout_width="200dp"
+        android:layout_width="fill_parent"
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:src="@drawable/ic_launcher_background"
         >
-
     </ImageView>
-
-    <TextView
-        android:text="@string/date"
-        android:paddingLeft="10dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tv_date_df"
-        android:text="Goku"
-        android:gravity="left"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="@string/category"
-        android:paddingLeft="10dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tv_category_df"
-        android:text="Goku"
-        android:gravity="left"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="@string/auctioneer"
-        android:paddingLeft="10dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tv_auctioneer_df"
-        android:text="Goku"
-        android:gravity="left"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="@string/items_amount"
-        android:paddingLeft="10dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tv_items_amount_df"
-        android:text="Goku"
-        android:gravity="left"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="@string/description"
-        android:paddingLeft="10dp"
-        android:textSize="24sp"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tv_description_df"
-        android:text="Goku"
-        android:gravity="left"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tv_blank_df"
-        android:text=""
-        android:gravity="center"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/access"
-        android:onClick="showAuctionFragment"/>
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="15dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#009688"
+            android:gravity="center"
+            android:text="@string/date"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_date_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="Goku"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#009688"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:textColor="@color/white"
+            android:text="@string/category"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_category_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="Goku"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="#009688"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="@string/auctioneer"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_auctioneer_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="Goku"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#009688"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/white"
+            android:text="@string/items_amount"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_items_amount_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="Goku"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#009688"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:text="@string/description"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_description_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="Goku"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_id_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text=""
+            android:visibility="gone"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#703DFB"
+            android:onClick="showAuctionFragment"
+            android:textColor="#E6E4EA"
+            android:text="@string/access" />
+    </LinearLayout>
 </LinearLayout>

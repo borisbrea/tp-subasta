@@ -26,6 +26,7 @@ import retrofit2.Response;
 
 public class DetallePersonaFragment extends Fragment {
 
+    TextView  idSubasta;
     TextView  title;
     TextView  date;
     TextView  category;
@@ -58,6 +59,7 @@ public class DetallePersonaFragment extends Fragment {
         View view = inflater.inflate(R.layout.detalle_persona_fragment,container,false);
         Auction auction = new Auction();
 
+        idSubasta   = view.findViewById(R.id.tv_id_df);
         title       = view.findViewById(R.id.tv_title_df);
         date        = view.findViewById(R.id.tv_date_df);
         category    = view.findViewById(R.id.tv_category_df);
@@ -78,6 +80,7 @@ public class DetallePersonaFragment extends Fragment {
         }
 
         if(auction !=null){
+            idSubasta.setText      (String.valueOf(auction.getId()));
             title.setText          (auction.getTitle());
             date.setText           (auction.getDetail().getStartDate());
             category.setText       (auction.getDetail().getCategory());

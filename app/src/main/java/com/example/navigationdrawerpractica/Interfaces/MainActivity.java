@@ -624,10 +624,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void showAuctionFragment(View view){
 
+        TextView id = findViewById(R.id.tv_id_df);
+        AuctionFragment auctionFragment = new AuctionFragment();
+
+        Bundle bundleEnvio = new Bundle();
+        bundleEnvio.putSerializable("idSubasta",(String) id.getText());
+        auctionFragment.setArguments(bundleEnvio);
+
         drawerLayout.closeDrawer(GravityCompat.START);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_fragment,new AuctionFragment());
+        fragmentTransaction.replace(R.id.container_fragment,auctionFragment);
         fragmentTransaction.commit();
     }
 

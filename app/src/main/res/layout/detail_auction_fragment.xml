@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.RegisterFragment"
+    android:orientation="vertical"
+    android:gravity="center">
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Descripcion Completa:"
+            android:textSize="20dp"
+            android:textStyle="bold"></TextView>
+        <EditText
+            android:id="@+id/et_email_rf"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="textPersonName"
+            android:background="@drawable/textview_border"/>
+
+        <Button
+            android:id="@+id/bLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Cerrar"
+            android:background="#703DFB"
+            android:textColor="#fff"
+            android:onClick="registerAction"/>
+    </LinearLayout>
+</LinearLayout>

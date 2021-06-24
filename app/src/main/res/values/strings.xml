@@ -46,6 +46,7 @@
 
 
     <string name="input_name">Ingresar nombre</string>
+    <string name="input_surname">Ingresar apellido</string>
     <string name="input_email">Ingresar email</string>
     <string name="input_dni">Ingresar documento</string>
     <string name="input_address">Ingresar dirección</string>

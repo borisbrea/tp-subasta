@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
 import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
@@ -42,8 +43,19 @@ public class AuctionFragment extends Fragment {
             R.drawable.picoro_cara5
     };
 
-    private String[] mImagesTitle = new String[] {
+    private String[] sampleImages = new String[]{
+            "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg",
+            "https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_1.jpg",
+            "https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_2.jpg"
+    };
+
+
+    /*private String[] mImagesTitle = new String[] {
             "Gohan", "Goku", "Goten", "Vegueta", "Picoro"
+    };*/
+
+    private String[] mImagesTitle = new String[] {
+            "Gohan", "Goku", "Goten"
     };
 
     private TextView estado, descripcion, duenio, precioBase, tituloArticulo;
@@ -85,9 +97,7 @@ public class AuctionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        View view = inflater.inflate(R.layout.auction_fragment, container, false);
 
        tituloArticulo   = view.findViewById(R.id.tv_item_title_af);
@@ -97,19 +107,29 @@ public class AuctionFragment extends Fragment {
        precioBase       = view.findViewById(R.id.tv_precio_base_af);
        btnPujar         = view.findViewById(R.id.btn_pujar_af);
 
+        Bundle objeto = getArguments();
+        String idSubasta = "";
+        if (objeto != null){
+            idSubasta = (String) objeto.getSerializable("idSubasta");
+        }
+
         try {
-            Response response = new AuctionWithItemsDao().execute(5).get();
+            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(idSubasta)).get();
 
             SubastaConArticulos subastaCompleta = (SubastaConArticulos) response.body();
 
             if(subastaCompleta!= null){
 
                 CarouselView carouselView = view.findViewById(R.id.auction_carousel);
-                carouselView.setPageCount(mImages.length);
+                carouselView.setPageCount(subastaCompleta.getArticles().get(0).getPictures().size());
                 carouselView.setImageListener(new ImageListener() {
                     @Override
                     public void setImageForPosition(int position, ImageView imageView) {
-                        imageView.setImageResource(mImages[position]);
+                        //imageView.setImageResource(mImages[position]);
+                        if(position < subastaCompleta.getArticles().get(0).getPictures().size())
+                            Glide.with(view).load(subastaCompleta.getArticles().get(0).getPictures().get(position).getUrl()).into(imageView);
+                        //Glide.with(view).load(sampleImages[position]).into(imageView);
+
                     }
                 });
                 carouselView.setImageClickListener(new ImageClickListener() {
