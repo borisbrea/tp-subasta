@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
 import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
+import com.example.navigationdrawerpractica.DAO.PutPaymentMethodAccountDao;
+import com.example.navigationdrawerpractica.DAO.PutPaymentMethodCreditCardDao;
 import com.example.navigationdrawerpractica.DAO.RegisterDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
@@ -30,6 +33,8 @@ import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.AccountRequest;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.CreditCardRequest;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
@@ -437,6 +442,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void registerPaymentMethodAction(View view) throws ExecutionException, InterruptedException {
+
+        String tipo      = ((Spinner) findViewById(R.id.spinner1)).getSelectedItem().toString();
+
+        if(tipo.contains("Métodos")){
+            //((Spinner) findViewById(R.id.spinner1)) setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
+
+        Response response = null;
+
+        if(tipo.contains("Tarjeta")){
+
+            tipo = "bank";
+            String compania  = ((Spinner) findViewById(R.id.spinner2)).getSelectedItem().toString();
+            String numero  = ((TextView) findViewById(R.id.et_numero_tarjeta_apf)).getText().toString();
+
+            CreditCardRequest creditCardRequest = new CreditCardRequest(tipo, compania, numero);
+
+            response = new PutPaymentMethodCreditCardDao().execute(creditCardRequest).get();
+
+        } else {
+
+            tipo = "bank_account";
+            String compania  = ((Spinner) findViewById(R.id.spinner3)).getSelectedItem().toString();
+            String numero  = ((TextView) findViewById(R.id.et_numero_cuenta_apf)).getText().toString();
+
+            AccountRequest accountRequest = new AccountRequest(tipo, compania, numero);
+
+            response = new PutPaymentMethodAccountDao().execute(accountRequest).get();
+
+        }
+
+        switch (response.code()){
+            case   0:
+                break;
+            case 201: registerPasswordDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_CONFIRM_REGISTER, 200);
+                break;
+            case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
+                break;
+            case 404: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_404);
+                break;
+            default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
+        }
+    }
+
     // ---------------------------------  DAO  -------------------------------------------
 
     public void validate(String email){
@@ -659,7 +710,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView email    = navigationView.getHeaderView(0).findViewById(R.id.tv_email_hf);
                  email.setText(user.getEmail());
         ImageView photo   = navigationView.getHeaderView(0).findViewById(R.id.iv_photo_hf);
-                  photo.setImageResource(R.drawable.gohan_small);
+                  photo.setImageResource(R.drawable.perfil_caetano);
 
     }
 

@@ -48,8 +48,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.283" />
 
-
-
         <EditText
             android:id="@+id/et_numero_tarjeta_apf"
             android:layout_width="wrap_content"
@@ -87,12 +85,13 @@
             app:layout_constraintTop_toTopOf="@+id/textView3" />
 
         <Button
-            android:id="@+id/bLogin"
+            android:id="@+id/btn_agregar_apf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="#703DFB"
             android:text="@string/register"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:onClick="registerPaymentMethodAction"/>
     </LinearLayout>
 </LinearLayout>

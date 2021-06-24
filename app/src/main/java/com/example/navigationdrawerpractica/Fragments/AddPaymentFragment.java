@@ -79,8 +79,8 @@ public class AddPaymentFragment extends Fragment {
 
 
         List<String> tipos = new ArrayList<String>();
-        tipos.add("VISA");
-        tipos.add("MASTER CARD");
+        tipos.add("Visa");
+        tipos.add("Master Card");
 
         List<String> bancos = new ArrayList<String>();
         bancos.add("Seleccione un Banco");

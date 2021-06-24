@@ -135,7 +135,7 @@ public class AuctionFragment extends Fragment {
                 carouselView.setImageClickListener(new ImageClickListener() {
                     @Override
                     public void onClick(int position) {
-                        Toast.makeText(getContext(), mImagesTitle[position], Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), mImagesTitle[position], Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -177,10 +177,6 @@ public class AuctionFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-
-
 
         return view;
     }

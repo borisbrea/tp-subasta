@@ -106,8 +106,8 @@ public class GenericDao {
 
     public void getMetodosPago(List<MetodoPago> metodosPago){
 
-        metodosPago.add(new MetodoPago("1", "Tarjeta VISA", "Nacional", "5432 7654 9876", "", "", true));
-        metodosPago.add(new MetodoPago("2", "Cuenta Corriente", "Internacional", "", "Galicia", "9872341673", true));
+        metodosPago.add(new MetodoPago(1, "credit_card", "Visa", "Tarjeta Visa", "XXXX XXXX XXXX 1234"));
+        metodosPago.add(new MetodoPago(2, "bank_account", "Santander", "Cuenta Corriente Santander", "11224433551234"));
 
         /*apiService = RetrofitClient.getApiService();
         apiService.getSubastas(code, password).enqueue(new Callback<Subasta>() {

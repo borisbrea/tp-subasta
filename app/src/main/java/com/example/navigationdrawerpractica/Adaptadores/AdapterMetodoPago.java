@@ -41,21 +41,23 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
 
     @Override
     public void onBindViewHolder(@NonNull AdapterMetodoPago.ViewHolder holder, int position) {
-        String nombres    = model.get(position).getMetodo();
-        String numero = "";
-        if (nombres.contains("Cuenta"))
-            numero     = model.get(position).getNumeroCuentaCorriente();
-        else
-            numero     = model.get(position).getNumeroTarjeta();
-//        int    imageid    = model.get(position).getImagenid();
-        holder.nombres.setText(nombres);
+        String type    = model.get(position).getType();
+        String numero  = model.get(position).getNumber();
+        String company = model.get(position).getCompany();
+
+        holder.nombres.setText(model.get(position).getName());
         holder.numero.setText(numero);
-        if (nombres.contains("VISA"))
+        if (company.contains("Visa"))
             holder.imagen.setImageResource(R.drawable.visa_logo);
-        if (nombres.contains("MASTER"))
+        if (company.contains("Master"))
             holder.imagen.setImageResource(R.drawable.mastercard_logo);
-        if (nombres.contains("Cuenta"))
+        if (company.contains("Santander"))
+            holder.imagen.setImageResource(R.drawable.profile);
+        if (company.contains("Galicia"))
             holder.imagen.setImageResource(R.drawable.cuenta_corriente_logo);
+        if (company.contains("BBVA"))
+            holder.imagen.setImageResource(R.drawable.bbva_logo);
+
     }
 
     @Override

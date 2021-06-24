@@ -21,8 +21,11 @@ import android.widget.Toast;
 import com.example.navigationdrawerpractica.Adaptadores.AdapterMetodoPago;
 import com.example.navigationdrawerpractica.Adaptadores.AdapterSubastas;
 import com.example.navigationdrawerpractica.Callbacks.MyItemTouchHelperCallback;
+import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
+import com.example.navigationdrawerpractica.DAO.getPaymentMethodsDao;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ResponseGetPaymentMethods;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.Interfaces.CallbackItemtouch;
 import com.example.navigationdrawerpractica.Interfaces.MainActivity;
@@ -33,6 +36,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,7 +113,22 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
 
     public void cargarLista(){
         List<MetodoPago> metodosPago = new ArrayList<>();
-        dao.getMetodosPago(metodosPago);
+
+        try {
+            Response response = new getPaymentMethodsDao().execute(Integer.valueOf("1")).get();
+
+            if(response != null){
+                ResponseGetPaymentMethods responseBody = (ResponseGetPaymentMethods) response.body();
+                metodosPago = responseBody.getPaymentMethods();
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //dao.getMetodosPago(metodosPago);
         listaMetodoPago.addAll(metodosPago);
     }
 
@@ -142,13 +163,12 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int position) {
-        String metodo = listaMetodoPago.get(viewHolder.getAdapterPosition()).getMetodo();
+        String metodo = listaMetodoPago.get(viewHolder.getAdapterPosition()).getType();
         //backup del item que se elimina para luego hacer cancelar
         final MetodoPago deletedItem = listaMetodoPago.get(viewHolder.getAdapterPosition());
         final int deletedIndex = viewHolder.getAdapterPosition();
 
-
-        String idItemSelected = deletedItem.getId();
+        String idItemSelected = String.valueOf(deletedItem.getId());
 
         deletePaymentMethodDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_DELETE_PAYMENT_MESSAGE,idItemSelected, position);
 

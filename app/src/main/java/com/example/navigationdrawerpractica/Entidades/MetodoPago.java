@@ -4,81 +4,60 @@ import java.io.Serializable;
 
 public class MetodoPago implements Serializable {
 
-    private String  id;
-    private String  metodo;
-    private String  tipo;
-    private String  numeroTarjeta;
-    private String  nombreBanco;
-    private String  numeroCuentaCorriente;
-    private boolean validado;
+    private int  id;
+    private String  type;
+    private String  company;
+    private String  name;
+    private String  number;
 
     public MetodoPago() {
     }
 
-    public MetodoPago(String id, String metodo, String tipo, String numeroTarjeta, String nombreBanco, String numeroCuentaCorriente, boolean validado) {
+    public MetodoPago(int id, String type, String company, String name, String number) {
         this.id = id;
-        this.metodo = metodo;
-        this.tipo = tipo;
-        this.numeroTarjeta = numeroTarjeta;
-        this.nombreBanco = nombreBanco;
-        this.numeroCuentaCorriente = numeroCuentaCorriente;
-        this.validado = validado;
+        this.type = type;
+        this.company = company;
+        this.name = name;
+        this.number = number;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getMetodo() {
-        return metodo;
+    public String getType() {
+        return type;
     }
 
-    public void setMetodo(String metodo) {
-        this.metodo = metodo;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getCompany() {
+        return company;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
-    public String getNumeroTarjeta() {
-        return numeroTarjeta;
+    public String getName() {
+        return name;
     }
 
-    public void setNumeroTarjeta(String numeroTarjeta) {
-        this.numeroTarjeta = numeroTarjeta;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getNombreBanco() {
-        return nombreBanco;
+    public String getNumber() {
+        return number;
     }
 
-    public void setNombreBanco(String nombreBanco) {
-        this.nombreBanco = nombreBanco;
+    public void setNumber(String number) {
+        this.number = number;
     }
-
-    public String getNumeroCuentaCorriente() {
-        return numeroCuentaCorriente;
-    }
-
-    public void setNumeroCuentaCorriente(String numeroCuentaCorriente) {
-        this.numeroCuentaCorriente = numeroCuentaCorriente;
-    }
-
-    public boolean isValidado() {
-        return validado;
-    }
-
-    public void setValidado(boolean validado) {
-        this.validado = validado;
-    }
-
 }

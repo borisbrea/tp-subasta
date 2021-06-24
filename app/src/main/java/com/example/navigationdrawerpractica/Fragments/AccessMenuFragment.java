@@ -105,7 +105,7 @@ public class AccessMenuFragment extends Fragment {
 
     private void setUpViewPager(ViewPager viewPager){
         SectionPagerAdapter adapter = new SectionPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new LoginFragment(), "Login");
+        adapter.addFragment(new LoginFragment(),    "Login");
         adapter.addFragment(new RegisterFragment(), "Registrarse");
         viewPager.setAdapter(adapter);
     }
