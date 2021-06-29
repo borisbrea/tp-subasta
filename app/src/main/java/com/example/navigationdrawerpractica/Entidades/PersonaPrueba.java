@@ -4,15 +4,44 @@ import java.io.Serializable;
 
 public class PersonaPrueba implements Serializable {
 
-    private String dni;
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String email;
-    private String phone;
+    private Integer userId;
+    private String  dni;
+    private String  firstName;
+    private String  lastName;
+    private String  address;
+    private String  email;
+    private String  phone;
     private Integer code;
     private String password;
+
+    public PersonaPrueba(Integer userId, String dni, String firstName, String lastName, String address, String email, String phone, Integer code, String password, String status) {
+        this.userId = userId;
+        this.dni = dni;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.code = code;
+        this.password = password;
+        this.status = status;
+    }
+
     private String status;
+
+
+    public PersonaPrueba() {
+    }
+
+
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getDni() {
         return dni;

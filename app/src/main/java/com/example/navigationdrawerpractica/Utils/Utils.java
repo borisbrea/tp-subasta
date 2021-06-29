@@ -9,7 +9,8 @@ import com.example.navigationdrawerpractica.R;
 
 public class Utils {
 
-    public final static String ALERT_MESSAGE = "Mensaje de Alerta";
+    public final static String ALERT_MESSAGE        = "Mensaje de Alerta";
+    public final static String CONFIRMATION_MESSAGE = "Mensaje de Confirmación";
 
     public final static String ALERT_ERROR_400 = "Solicitud inválida";
     public final static String ALERT_ERROR_404 = "Usuario inexistente";
@@ -21,6 +22,7 @@ public class Utils {
 
     public final static String ALERT_CONFIRM_CREATE_PASSWORD   = "Clave generada exitosamente";
     public final static String ALERT_CONFIRM_REGISTER          = "Su usuario ha sido registrado exitosamente. Revise su mail para finalizar el proceso.";
+    public final static String ALERT_CONFIRM_PAYMENT_METHOD    = "Su nuevo medio de pago ha sido registrado exitosamente.";
     public final static String ALERT_ERROR_CREATE_PASSWORD_500 = "Su clave y confirmación deben ser iguales";
 
     public final static String ALERT_ERROR_DEFAULT = "Error de sistema, comuniquese con el administrador";

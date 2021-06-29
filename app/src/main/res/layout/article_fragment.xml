@@ -20,12 +20,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:textSize="14sp"
-        android:textStyle="bold"></TextView>
+        android:textStyle="bold"/>
+
     <Button
         android:id="@+id/btn_agregar_af"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
+        android:gravity="center"
         android:layout_height="wrap_content"
-        android:text="@string/agregar_nuevo"
-        android:onClick="showAddPaymentFragment"/>
+        android:background="#703DFB"
+        android:onClick="showAddPaymentFragment"
+        android:textColor="#E6E4EA"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="138dp"
+        android:layout_marginLeft="55dp"
+        android:text="@string/agregar_nuevo"/>
 
 </LinearLayout>

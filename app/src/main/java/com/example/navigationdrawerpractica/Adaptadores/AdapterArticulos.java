@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.R;
@@ -20,6 +21,7 @@ public class AdapterArticulos extends RecyclerView.Adapter<AdapterArticulos.View
 
     LayoutInflater inflater;
     ArrayList<Articulo> model;
+    View viewClass;
 
     private View.OnClickListener listener;
 
@@ -33,6 +35,7 @@ public class AdapterArticulos extends RecyclerView.Adapter<AdapterArticulos.View
     public AdapterArticulos.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.lista_articulo, parent, false);
         view.setOnClickListener(this);
+        viewClass = inflater.inflate(R.layout.lista_articulo, parent, false);
         return new AdapterArticulos.ViewHolder(view);
     }
 
@@ -48,7 +51,10 @@ public class AdapterArticulos extends RecyclerView.Adapter<AdapterArticulos.View
         //int    imageid = model.get(position).getImagenid();
         holder.descripcion.setText      (descripcion);
         holder.estado.setText           ("Estado: " + estado);
-        holder.imagen.setImageResource  (R.drawable.generic_article);
+
+        Glide.with(viewClass).load(model.get(position).getImagen()).into(holder.imagen);
+
+        //holder.imagen.setImageResource  (R.drawable.generic_article);
     }
 
     @Override

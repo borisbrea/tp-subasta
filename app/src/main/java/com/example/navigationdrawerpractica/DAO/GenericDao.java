@@ -128,8 +128,8 @@ public class GenericDao {
 
     public void getArticulos(List<Articulo> articulos){
 
-        articulos.add(new Articulo("1", "15/06/1990", "Y", "Playstation 4", "Consola de videojuegos de la compañia Sony Interactive Etertaiment", "Hideo Kojima", "Boris Brea", "Pendiente de Venta"));
-        articulos.add(new Articulo("2", "15/06/1990", "Y", "Casco VR", "Casco de realidad virtual para la consola PS4", "Yoshitaka Amano", "Boris Brea", "Pendiente de Subastar"));
+        articulos.add(new Articulo("1", "15/06/1990", "Y", "Playstation 4", "Consola de videojuegos de la compañia Sony Interactive Etertaiment", "Hideo Kojima", "Boris Brea", "Pendiente de Venta", "https://blog.latam.playstation.com/tachyon/sites/3/2013/08/ps41.jpg"));
+        articulos.add(new Articulo("2", "15/06/1990", "Y", "Casco VR", "Casco de realidad virtual para la consola PS4", "Yoshitaka Amano", "Boris Brea", "Pendiente de Subastar", "https://http2.mlstatic.com/D_NQ_NP_600075-MLA41074180964_032020-O.jpg"));
 
         /*apiService = RetrofitClient.getApiService();
         apiService.getSubastas(code, password).enqueue(new Callback<Subasta>() {

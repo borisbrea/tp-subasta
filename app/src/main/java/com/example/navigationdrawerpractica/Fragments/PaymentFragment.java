@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterMetodoPago;
@@ -27,6 +28,7 @@ import com.example.navigationdrawerpractica.DAO.getPaymentMethodsDao;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ResponseGetPaymentMethods;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.Interfaces.CallbackItemtouch;
 import com.example.navigationdrawerpractica.Interfaces.MainActivity;
 import com.example.navigationdrawerpractica.Interfaces.iComunicaFragments;
@@ -102,20 +104,27 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
 
         getActivity().setTitle(Utils.TITLE_METODO_PAGO);
 
-        txtnombre = view.findViewById(R.id.txtnombre);
+        String userId = (String) getArguments().getSerializable("userId");
+
+        //((TextView)((View) inflater.inflate(R.layout.drawer_header2,container,false)).findViewById(R.id.tv_user_id_hf)).getText();
+
+        //String userId          = (String) ((TextView) view.findViewById(R.id.tv_user_id_hf)).getText();
+
+        txtnombre              = view.findViewById(R.id.txtnombre);
         recyclerViewMetodoPago = view.findViewById(R.id.recyclerView_pf);
-        layout = view.findViewById(R.id.layout_items_mp);
-        listaMetodoPago = new ArrayList<>();
-        cargarLista();
+        layout                 = view.findViewById(R.id.layout_items_mp);
+        listaMetodoPago        = new ArrayList<>();
+        cargarLista(userId);
         mostrarData();
+
         return view;
     }
 
-    public void cargarLista(){
+    public void cargarLista(String userId){
         List<MetodoPago> metodosPago = new ArrayList<>();
 
         try {
-            Response response = new getPaymentMethodsDao().execute(Integer.valueOf("1")).get();
+            Response response = new getPaymentMethodsDao().execute(Integer.valueOf(userId)).get();
 
             if(response != null){
                 ResponseGetPaymentMethods responseBody = (ResponseGetPaymentMethods) response.body();
@@ -128,7 +137,6 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
             e.printStackTrace();
         }
 
-        //dao.getMetodosPago(metodosPago);
         listaMetodoPago.addAll(metodosPago);
     }
 

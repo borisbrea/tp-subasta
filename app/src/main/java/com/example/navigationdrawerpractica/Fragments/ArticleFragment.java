@@ -1,6 +1,7 @@
 package com.example.navigationdrawerpractica.Fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -114,9 +115,9 @@ public class ArticleFragment extends Fragment {
         adapterArticulos.setOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String descripcion = String.valueOf(listaArticulos.get(recyclerViewArticulos.getChildAdapterPosition(view)).getDescripcionCatalogo());
-                txtnombre.setText(descripcion);
-                Toast.makeText(getContext(), "Seleccionó: "+listaArticulos.get(recyclerViewArticulos.getChildAdapterPosition(view)).getDescripcionCatalogo(), Toast.LENGTH_SHORT).show();
+                //String descripcion = String.valueOf(listaArticulos.get(recyclerViewArticulos.getChildAdapterPosition(view)).getDescripcionCatalogo());
+                //txtnombre.setText(descripcion);
+                //Toast.makeText(getContext(), "Seleccionó: "+listaArticulos.get(recyclerViewArticulos.getChildAdapterPosition(view)).getDescripcionCatalogo(), Toast.LENGTH_SHORT).show();
                 //enviar mediante la interface el objeto seleccionado al detalle
                 //se envia el objeto completo
                 //se utiliza la interface como puente para enviar el objeto seleccionado
@@ -124,5 +125,19 @@ public class ArticleFragment extends Fragment {
                 //luego en el mainactivity se hace la implementacion de la interface para implementar el metodo enviarpersona
             }
         });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //esto es necesario para establecer la comunicacion entre la lista y el detalle
+        //si el contexto que le esta llegando es una instancia de un activity:
+        if (context instanceof Activity) {
+            //voy a decirle a mi actividad que sea igual a dicho contesto. castin correspondiente:
+            this.actividad = (Activity) context;
+            ////que la interface icomunicafragments sea igual ese contexto de la actividad:
+            interfaceComunicaFragments = (iComunicaFragments) this.actividad;
+            //esto es necesario para establecer la comunicacion entre la lista y el detalle
+        }
     }
 }

@@ -32,16 +32,19 @@ import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.home.AuctionDetail;
 import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.AccountRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.CreditCardRequest;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
+import com.example.navigationdrawerpractica.Fragments.ArticleDetailFragment;
 import com.example.navigationdrawerpractica.Fragments.ArticleFragment;
 import com.example.navigationdrawerpractica.Fragments.AuctionFragment;
 import com.example.navigationdrawerpractica.Fragments.BidFragment;
 import com.example.navigationdrawerpractica.Fragments.DetallePersonaFragment;
+import com.example.navigationdrawerpractica.Fragments.DetalleSubastaFragment;
 import com.example.navigationdrawerpractica.Fragments.GeneratePasswordFragment;
 import com.example.navigationdrawerpractica.Fragments.PaymentFragment;
 import com.example.navigationdrawerpractica.Fragments.PersonasFragment;
@@ -108,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.add(R.id.container_fragment,new PersonasFragment());
         fragmentTransaction.commit();
 
-        managerMenuOption(true);
+        managerMenuOption(false);
     }
 
 
@@ -136,9 +139,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.payment){
+
+            PaymentFragment paymentFragment = new PaymentFragment();
+
+            NavigationView navigationView = findViewById(R.id.navigationView);
+            TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userId",(String) tv_user_id.getText());
+            paymentFragment.setArguments(bundle);
+
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new PaymentFragment());
+            fragmentTransaction.replace(R.id.container_fragment,paymentFragment);
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.article){
@@ -265,14 +278,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Bundle bundleEnvio = new Bundle();
         //se manda el objeto que le esta llegando:
         bundleEnvio.putSerializable("objeto",subasta);
-        detallePersonaFragment.setArguments(bundleEnvio);
+        detallePersonaFragment.setArguments(bundleEnvio);*/
+
+        ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
 
         //Cargar fragment en el activity
         fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_fragment, detallePersonaFragment);
+        fragmentTransaction.replace(R.id.container_fragment, articleDetailFragment);
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();*/
+        fragmentTransaction.commit();
 
         /*
          getSupportFragmentManager().beginTransaction()
@@ -455,9 +470,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(tipo.contains("Tarjeta")){
 
-            tipo = "bank";
+            tipo = "credit_card";
             String compania  = ((Spinner) findViewById(R.id.spinner2)).getSelectedItem().toString();
-            String numero  = ((TextView) findViewById(R.id.et_numero_tarjeta_apf)).getText().toString();
+            String numero    = ((TextView) findViewById(R.id.et_numero_tarjeta_apf)).getText().toString();
+
+            if (numero.matches("")) {
+                ((TextView) findViewById(R.id.et_numero_tarjeta_apf)).setError(Utils.OBLIGATORY_FIELD);
+                return;
+            }
 
             CreditCardRequest creditCardRequest = new CreditCardRequest(tipo, compania, numero);
 
@@ -469,8 +489,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String compania  = ((Spinner) findViewById(R.id.spinner3)).getSelectedItem().toString();
             String numero  = ((TextView) findViewById(R.id.et_numero_cuenta_apf)).getText().toString();
 
-            AccountRequest accountRequest = new AccountRequest(tipo, compania, numero);
+            if (numero.matches("")) {
+                ((TextView) findViewById(R.id.et_numero_cuenta_apf)).setError(Utils.OBLIGATORY_FIELD);
+                return;
+            }
 
+            AccountRequest accountRequest = new AccountRequest(tipo, compania, numero);
             response = new PutPaymentMethodAccountDao().execute(accountRequest).get();
 
         }
@@ -478,7 +502,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (response.code()){
             case   0:
                 break;
-            case 201: registerPasswordDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_CONFIRM_REGISTER, 200);
+            case 201: registerPaymentMethodDialogAlert(Utils.CONFIRMATION_MESSAGE, Utils.ALERT_CONFIRM_PAYMENT_METHOD, 200);
                 break;
             case 400: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_400);
                 break;
@@ -518,31 +542,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 responseValidate = 440;
             }
         });
-
-       // return responseValidate;
-
-       /* RetrofitApiService taskService = RetrofitClient.createService(RetrofitApiService.class);
-        Call<PersonaPrueba> call = taskService.validate(email);
-
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Response<PersonaPrueba> response = call.execute();
-                    responseValidate = response.code();
-                } catch (Exception e){
-                    String str = e.getMessage();
-                }
-            }
-        });
-        thread.start();
-
-        return 0;*/
-       // Call<List<Task>> call = taskService.getTasks(); List<Task>> tasks = call.execute().body();
-
     }
 
     private void validates(String email){
@@ -640,6 +639,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public void registerPaymentMethodDialogAlert(String title, String message, int code){
+        AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+        alerta.setMessage(message);
+        if(code == 200){
+            alerta.setPositiveButton(Utils.BTN_ACCEPT, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    showPaymentMethodFragment();
+                }
+            });
+        }
+        if(code == 201){
+            alerta.setPositiveButton(Utils.BTN_ACCEPT, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+        }
+
+        AlertDialog titulo = alerta.create();
+        titulo.setTitle(title);
+        titulo.show();
+    }
+
     public void showGeneratePasswordFragment(String email){
 
         Bundle bundleEnvio = new Bundle();
@@ -661,6 +685,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new PersonasFragment());
+        fragmentTransaction.commit();
+    }
+
+    public void showPaymentMethodFragment(){
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,new PaymentFragment());
         fragmentTransaction.commit();
     }
 
@@ -689,6 +722,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
     }
 
+    public void showAuctionDetailFragment(View view){
+
+        TextView id = findViewById(R.id.tv_id_df);
+        DetalleSubastaFragment detalleSubastaDetalle = new DetalleSubastaFragment();
+
+        /*Bundle bundleEnvio = new Bundle();
+        bundleEnvio.putSerializable("idSubasta",(String) id.getText());
+        auctionFragment.setArguments(bundleEnvio);*/
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,detalleSubastaDetalle);
+        fragmentTransaction.commit();
+    }
+
     public void managerMenuOption(boolean option){
 
         NavigationView navigationView = findViewById(R.id.navigationView);
@@ -709,6 +758,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                  username.setText(user.getFirstName() + " " + user.getLastName());
         TextView email    = navigationView.getHeaderView(0).findViewById(R.id.tv_email_hf);
                  email.setText(user.getEmail());
+        TextView userId   = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+        userId.setText(String.valueOf(user.getUserId()));
         ImageView photo   = navigationView.getHeaderView(0).findViewById(R.id.iv_photo_hf);
                   photo.setImageResource(R.drawable.perfil_caetano);
 

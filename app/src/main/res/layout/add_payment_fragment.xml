@@ -13,18 +13,15 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-
-
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:gravity="center"
             android:text="Ingresar Nuevo Método de Pago"
-            android:textSize="14sp"
-            android:textStyle="bold"></TextView>
-
-
+            android:textSize="17sp"
+            android:textStyle="bold"/>
 
         <Spinner
             android:id="@+id/spinner1"

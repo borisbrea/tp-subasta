@@ -35,6 +35,6 @@
             android:text="Cerrar"
             android:background="#703DFB"
             android:textColor="#fff"
-            android:onClick="registerAction"/>
+            android:onClick="showAuctionDetailFragment"/>
     </LinearLayout>
 </LinearLayout>

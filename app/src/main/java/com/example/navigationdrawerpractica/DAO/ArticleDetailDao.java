@@ -3,29 +3,24 @@ package com.example.navigationdrawerpractica.DAO;
 import android.os.AsyncTask;
 
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
-import com.example.navigationdrawerpractica.Entidades.Subasta;
-import com.example.navigationdrawerpractica.Entidades.home.Home;
-import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
+import com.example.navigationdrawerpractica.Entidades.home.Auction;
 import com.example.navigationdrawerpractica.Service.RetrofitApiService;
 
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Response;
 
-public class AuctionHomeDao extends AsyncTask<Void, Void, Response> {
+public class ArticleDetailDao extends AsyncTask<String, Void, Response> {
 
     private RetrofitApiService apiService = RetrofitClient.getApiService();
 
-
-
     @Override
-    protected Response doInBackground(Void... voids) {
-        Response<Home> response = null;
+    protected Response doInBackground(String... strings) {
+        Response<Auction> response = null;
 
         apiService = RetrofitClient.getApiService();
         try {
-            response = apiService.getSubastas().execute();
+            response = apiService.getAuction("https://auction-api-rest.herokuapp.com/auctions/" + strings[0]).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }

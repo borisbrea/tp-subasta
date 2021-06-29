@@ -54,7 +54,7 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
         if (company.contains("Santander"))
             holder.imagen.setImageResource(R.drawable.profile);
         if (company.contains("Galicia"))
-            holder.imagen.setImageResource(R.drawable.cuenta_corriente_logo);
+            holder.imagen.setImageResource(R.drawable.galicia_logo);
         if (company.contains("BBVA"))
             holder.imagen.setImageResource(R.drawable.bbva_logo);
 

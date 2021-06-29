@@ -14,7 +14,7 @@
         android:layout_marginTop="60dp" >
 
         <com.synnapps.carouselview.CarouselView
-            android:id="@+id/auction_carousel"
+            android:id="@+id/cv_article_images_adv"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="55dp"
@@ -26,8 +26,8 @@
             app:strokeWidth="1dp" />
 
         <TextView
-            android:id="@+id/tv_item_title_af"
-            android:text="Título de Artículo"
+            android:id="@+id/tv_item_title_adf"
+            android:text="Título de Producto"
             android:gravity="center"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -49,45 +49,6 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="172dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:text="1 de 6 >" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/tv_state_af"
-                    android:layout_width="fill_parent"
-                    android:layout_height="46dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="Estado"
-                    android:textAlignment="center"
-                    android:paddingTop="10dp"
-                    android:inputType="textPersonName"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:textSize="20dp" />
-
-                <Button
-                    android:id="@+id/btn_ver_detalle_af"
-                    android:layout_width="172dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:background="#00B1B0B0"
-                    android:text="Ver detalle"
-                    android:textColor="#673AB7"
-                    android:onClick="showAuctionDetailFragment"/>
-            </LinearLayout>
-
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -105,7 +66,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/tv_description_af"
+                    android:id="@+id/tv_description_adf"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="#E4E3E3"
@@ -115,80 +76,124 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_precio_comision_adf"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="168dp"
+                    android:id="@+id/tv_precio_base_adf"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
                     android:layout_marginTop="5dp"
-                    android:text="Dueño"
+                    android:text="Precio base: "
+                    android:singleLine="true"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
-                    android:layout_width="109dp"
+                    android:id="@+id/tv_comision_adf"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
                     android:layout_marginTop="5dp"
-                    android:text="Precio Base"
+                    android:text="Comisión: "
+                    android:singleLine="true"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_botones_adf"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center"
                 android:padding="10dp">
 
-            <TextView
-                    android:id="@+id/tv_duenio_af"
-                    android:layout_width="174dp"
-                    android:layout_height="35dp"
-                    android:layout_alignParentRight="true"
-                android:layout_marginRight="2dp"
-                    android:layout_weight="1"
-                    android:background="#E4E3E3"
-                    android:ems="10"
-                    android:hint="Dueño"
-                    android:inputType="textPersonName"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:textSize="20dp" />
+                <Button
+                    android:id="@+id/btn_cancelar_adf"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="#703DFB"
+                    android:text="Rechazar"
+                    android:layout_marginRight="5dp"
+                    android:textColor="#E6E4EA" />
 
-                <TextView
-                    android:id="@+id/tv_precio_base_af"
-                    android:layout_width="175dp"
-                    android:layout_height="35dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_weight="1"
-                    android:background="#E4E3E3"
-                    android:ems="10"
-                    android:hint="$1000"
-                    android:inputType="textPersonName"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:textSize="20dp" />
+                <Button
+                    android:id="@+id/btn_aceptar_adf"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="#703DFB"
+                    android:text="Aceptar"
+                    android:textColor="#E6E4EA" />
             </LinearLayout>
 
-                <EditText
-                    android:id="@+id/et_precio_base_af"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Introducir Precio"
-                    android:inputType="number" />
 
-            <Button
-                android:id="@+id/btn_pujar_af"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/ll_estado_adf"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="#703DFB"
-                android:text="Pujar"
-                android:textColor="#E6E4EA" />
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/tv_estado_adf"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="Estado"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_datos_adf"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_fecha_adf"
+                    android:layout_width="174dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Fecha: "
+                    android:inputType="textPersonName"
+                    android:selectAllOnFocus="true"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_monto_vendido_adf"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:text="Monto Vendido: "
+                    android:inputType="textPersonName"
+                    android:textSize="15dp" />
+                <TextView
+                    android:id="@+id/tv_ganancia_adf"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:text="Ganancia: "
+                    android:inputType="textPersonName"
+                    android:textSize="15dp"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+</LinearLayout>

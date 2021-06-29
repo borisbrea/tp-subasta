@@ -13,10 +13,12 @@ public class Articulo implements Serializable {
     private String duenio;
     private String estado;
 
+    private String imagen;
+
     public Articulo() {
     }
 
-    public Articulo(String id, String fecha, String disponible, String descripcionCatalogo, String descripcionCompleta, String revisor, String duenio, String estado) {
+    public Articulo(String id, String fecha, String disponible, String descripcionCatalogo, String descripcionCompleta, String revisor, String duenio, String estado, String imagen) {
         this.id                     = id;
         this.fecha                  = fecha;
         this.disponible             = disponible;
@@ -25,6 +27,7 @@ public class Articulo implements Serializable {
         this.revisor                = revisor;
         this.duenio                 = duenio;
         this.estado                 = estado;
+        this.imagen                 = imagen;
     }
 
     public String getId() {
@@ -89,5 +92,13 @@ public class Articulo implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

@@ -17,13 +17,13 @@ public class ItemSubasta implements Serializable {
     }
 
     public ItemSubasta(String title, String status, boolean canBid, String description, String owner, String basePrice, List<ImagenItem> pictures) {
-        this.title = title;
-        this.status = status;
-        this.canBid = canBid;
+        this.title       = title;
+        this.status      = status;
+        this.canBid      = canBid;
         this.description = description;
-        this.owner = owner;
-        this.basePrice = basePrice;
-        this.pictures = pictures;
+        this.owner       = owner;
+        this.basePrice   = basePrice;
+        this.pictures    = pictures;
     }
 
     public String getTitle() {
