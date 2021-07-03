@@ -72,7 +72,8 @@ public class PersonasFragment<Glide> extends Fragment {
 
         try {
             Response response = new AuctionHomeDao().execute().get();
-            auctions.addAll(((Home) response.body()).getAuctions());
+            List<AuctionHome> auctionHomeList = ((Home) response.body()).getAuctions();
+            auctions.addAll(auctionHomeList);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

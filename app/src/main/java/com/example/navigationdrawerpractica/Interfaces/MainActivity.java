@@ -1,6 +1,7 @@
 package com.example.navigationdrawerpractica.Interfaces;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,19 +10,31 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.cloudinary.android.MediaManager;
+import com.example.navigationdrawerpractica.Adaptadores.PhotoAdapter;
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
+import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
 import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.DAO.PutPaymentMethodAccountDao;
@@ -32,6 +45,7 @@ import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
+import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.Entidades.home.AuctionDetail;
 import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.AccountRequest;
@@ -46,6 +60,7 @@ import com.example.navigationdrawerpractica.Fragments.BidFragment;
 import com.example.navigationdrawerpractica.Fragments.DetallePersonaFragment;
 import com.example.navigationdrawerpractica.Fragments.DetalleSubastaFragment;
 import com.example.navigationdrawerpractica.Fragments.GeneratePasswordFragment;
+import com.example.navigationdrawerpractica.Fragments.NewArticleFragment;
 import com.example.navigationdrawerpractica.Fragments.PaymentFragment;
 import com.example.navigationdrawerpractica.Fragments.PersonasFragment;
 import com.example.navigationdrawerpractica.Fragments.StatisticFragment;
@@ -54,11 +69,20 @@ import com.example.navigationdrawerpractica.R;
 import com.example.navigationdrawerpractica.Service.RetrofitApiService;
 import com.example.navigationdrawerpractica.Utils.Utils;
 import com.google.android.material.navigation.NavigationView;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
+import com.synnapps.carouselview.ViewListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import gun0912.tedbottompicker.TedBottomPicker;
+import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private TableLayout           tableLayout;
     private TextView              name, lastName;
+    private ImageView             imageArticle;
 
     FragmentManager               fragmentManager;
     FragmentTransaction           fragmentTransaction;
@@ -85,12 +110,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RetrofitApiService    apiService = RetrofitClient.getApiService();
     public static int             responseValidate = 0;
     public GenericDao             dao = new GenericDao();
+    Button btnSelectedImage;
+    RecyclerView rcvPhoto;
+    PhotoAdapter photoAdapter;
     public int indiceSubasta   = 0;
 
     private String global_email = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Map config = new HashMap();
+        config.put("cloud_name", "dnvwej6kg");
+        config.put("secure", true);
+        MediaManager.init(this, config);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
@@ -113,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         managerMenuOption(false);
     }
-
 
 
     @Override
@@ -176,69 +209,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
+    /************************************************************************************************
+     *                                      SEND INFORMATION
+     ***********************************************************************************************/
 
     @Override
     public void enviarPersona(Persona persona) {
-        //gracias a hbaer implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
-        //o mejor dicho este metodo.
-        //Aqui se realiza toda la logica necesaria para poder realizar el envio
+
         detallePersonaFragment = new DetallePersonaFragment();
-        //objeto bundle para transportar la informacion
+
         Bundle bundleEnvio = new Bundle();
-        //se manda el objeto que le esta llegando:
-        bundleEnvio.putSerializable("objeto",persona);
+               bundleEnvio.putSerializable("objeto",persona);
         detallePersonaFragment.setArguments(bundleEnvio);
 
-        //CArgar fragment en el activity
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment, detallePersonaFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
-        /*
-         getSupportFragmentManager().beginTransaction()
-                 .replace(R.id.container_fragment, detallePersonaFragment)
-                 .addToBackStack(null).commit();
-        */
-        //***Luego pasar a programar al fragmentdetalle
-    }
-
-    private ArrayList<String[]> getClientes(){
-        ArrayList<String[]> rows = new ArrayList<>();
-
-        rows.add(new String[]{"1","Boris", "Brea"});
-        rows.add(new String[]{"2","Ezequiel", "Viacava"});
-        rows.add(new String[]{"3","Emanuel", "Odstrcil"});
-
-        return rows;
     }
 
     @Override
     public void enviarSubasta(AuctionHome subasta) {
-        //gracias a haber implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
-        //o mejor dicho este metodo.
-        //Aqui se realiza toda la logica necesaria para poder realizar el envio
+
         detallePersonaFragment = new DetallePersonaFragment();
-        //objeto bundle para transportar la informacion
+
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
         Bundle bundleEnvio = new Bundle();
-        //se manda el objeto que le esta llegando:
-        bundleEnvio.putSerializable("objeto",subasta);
+               bundleEnvio.putSerializable("auction",subasta);
+               bundleEnvio.putSerializable("userId",(String) tv_user_id.getText());
+
         detallePersonaFragment.setArguments(bundleEnvio);
 
-        //Cargar fragment en el activity
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment, detallePersonaFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
-        /*
-         getSupportFragmentManager().beginTransaction()
-                 .replace(R.id.container_fragment, detallePersonaFragment)
-                 .addToBackStack(null).commit();
-        */
-        //***Luego pasar a programar al fragmentdetalle
     }
 
     @Override
@@ -270,41 +279,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void enviarArticulo(Articulo articulo) {
-        //gracias a hbaer implementado de la interface "iComunicaFragments" se tiene la implementacion del metodo enviarPersona
-        //o mejor dicho este metodo.
-        //Aqui se realiza toda la logica necesaria para poder realizar el envio
-       /* detallePersonaFragment = new DetallePersonaFragment();
-        //objeto bundle para transportar la informacion
-        Bundle bundleEnvio = new Bundle();
-        //se manda el objeto que le esta llegando:
-        bundleEnvio.putSerializable("objeto",subasta);
-        detallePersonaFragment.setArguments(bundleEnvio);*/
 
         ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
 
-        //Cargar fragment en el activity
         fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment, articleDetailFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
-        /*
-         getSupportFragmentManager().beginTransaction()
-                 .replace(R.id.container_fragment, detallePersonaFragment)
-                 .addToBackStack(null).commit();
-        */
-        //***Luego pasar a programar al fragmentdetalle
     }
 
-    public void showValidateFragment(View view) {
-        drawerLayout.closeDrawer(GravityCompat.START);
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
-        fragmentTransaction.commit();
-    }
-//------------------------------------ ACTIONS ---------------------------------------
+    /************************************************************************************************
+     *                                      ACTIONS
+     ***********************************************************************************************/
+
     public void loginAction(View view) {
 
         String email      = ((TextView) findViewById(R.id.lgUsername)).getText().toString();
@@ -512,7 +500,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // ---------------------------------  DAO  -------------------------------------------
+    /************************************************************************************************
+     *                                      DAO CONNECTIONS
+     ***********************************************************************************************/
 
     public void validate(String email){
          global_email = email;
@@ -585,7 +575,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
                 }
             }
-
             @Override
             public void onFailure(Call<PersonaPrueba> call, Throwable t) {
                 responseValidate = 440;
@@ -593,7 +582,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    //---------------------------------------------------------------------------------------
+    /************************************************************************************************
+     *                                      SHOW DIALOG ALERTS
+     ***********************************************************************************************/
 
     public void simpleDialogAlert(String title, String message){
         AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
@@ -664,16 +655,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         titulo.show();
     }
 
+    /************************************************************************************************
+     *                                          SHOW FRAGMENTS
+     ***********************************************************************************************/
+
+    public void showValidateFragment(View view) {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager     = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,new ValidateMailFragment());
+        fragmentTransaction.commit();
+    }
+
     public void showGeneratePasswordFragment(String email){
 
         Bundle bundleEnvio = new Bundle();
-        bundleEnvio.putSerializable("objeto", email);
+               bundleEnvio.putSerializable("objeto", email);
 
         GeneratePasswordFragment generatePasswordFragment = new GeneratePasswordFragment();
                                  generatePasswordFragment.setArguments(bundleEnvio);
 
         drawerLayout.closeDrawer(GravityCompat.START);
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,generatePasswordFragment);
         fragmentTransaction.commit();
@@ -682,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void showMainMenuFragment(){
 
         drawerLayout.closeDrawer(GravityCompat.START);
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new PersonasFragment());
         fragmentTransaction.commit();
@@ -691,7 +694,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void showPaymentMethodFragment(){
 
         drawerLayout.closeDrawer(GravityCompat.START);
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new PaymentFragment());
         fragmentTransaction.commit();
@@ -700,7 +703,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void showAddPaymentFragment(View view){
 
         drawerLayout.closeDrawer(GravityCompat.START);
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new AddPaymentFragment());
         fragmentTransaction.commit();
@@ -708,15 +711,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void showAuctionFragment(View view){
 
-        TextView id = findViewById(R.id.tv_id_df);
         AuctionFragment auctionFragment = new AuctionFragment();
 
-        Bundle bundleEnvio = new Bundle();
-        bundleEnvio.putSerializable("idSubasta",(String) id.getText());
-        auctionFragment.setArguments(bundleEnvio);
+        TextView id     = findViewById(R.id.tv_id_df);
+        TextView userId = findViewById(R.id.tv_user_id_df);
+
+        Bundle bundle = new Bundle();
+               bundle.putSerializable("idSubasta",(String) id.getText());
+               bundle.putSerializable("userId",   (String) userId.getText());
+        auctionFragment.setArguments(bundle);
 
         drawerLayout.closeDrawer(GravityCompat.START);
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,auctionFragment);
         fragmentTransaction.commit();
@@ -736,6 +742,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,detalleSubastaDetalle);
         fragmentTransaction.commit();
+    }
+
+    public void showNewArticleFragment(View view){
+
+        //Bundle bundleEnvio = new Bundle();
+        //bundleEnvio.putSerializable("objeto", email);
+
+        NewArticleFragment newArticleFragment = new NewArticleFragment();
+        //newArticleFragment.setArguments(bundleEnvio);
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment, newArticleFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void cargarImagen(View view){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/");
+        startActivityForResult(Intent.createChooser(intent, "Seleccione la aplicación"), 10);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            Uri path= data.getData();
+            imageArticle.setImageURI(path);
+        }
+
     }
 
     public void managerMenuOption(boolean option){
@@ -763,6 +800,176 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView photo   = navigationView.getHeaderView(0).findViewById(R.id.iv_photo_hf);
                   photo.setImageResource(R.drawable.perfil_caetano);
 
+    }
+
+    public void nextAuctionCatalogItem(View view){
+
+        String auctionId     = ((TextView) findViewById(R.id.tv_auction_id_af)).getText().toString();
+
+        try {
+            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(auctionId)).get();
+
+            SubastaConArticulos auctionComplete = (SubastaConArticulos) response.body();
+
+            Integer catalogIndex     = Integer.valueOf(((TextView) findViewById(R.id.tv_catalog_index_af)).getText().toString()) + 1;
+
+            if(auctionComplete.getArticles().size() - 1 >= catalogIndex){
+
+                TextView catalogIndexTv   = findViewById(R.id.tv_catalog_index_af);
+                         catalogIndexTv.setText(String.valueOf(catalogIndex));
+                TextView tituloArticulo   = findViewById(R.id.tv_item_title_af);
+
+                TextView status           = findViewById(R.id.tv_state_af);
+                         status.setText(auctionComplete.getArticles().get(catalogIndex).getStatus());
+
+                TextView description      = findViewById(R.id.tv_description_af);
+                         description.setText(auctionComplete.getArticles().get(catalogIndex).getDescription());
+
+                TextView owner            = findViewById(R.id.tv_duenio_af);
+                         owner.setText(auctionComplete.getArticles().get(catalogIndex).getOwner());
+
+                TextView basePrice       = findViewById(R.id.tv_precio_base_af);
+                         basePrice.setText(auctionComplete.getArticles().get(catalogIndex).getBasePrice());
+
+                Button  btnCatalogIndex  = findViewById(R.id.btn_catalog_index_af);
+                        btnCatalogIndex.setText( (catalogIndex + 1) +" DE " + auctionComplete.getArticles().size());
+
+                CarouselView carouselView = findViewById(R.id.auction_carousel);
+                carouselView.setPageCount(auctionComplete.getArticles().get(catalogIndex).getPictures().size());
+                carouselView.setImageListener(new ImageListener() {
+                    @Override
+                    public void setImageForPosition(int position, ImageView imageView) {
+                        if(position < auctionComplete.getArticles().get(catalogIndex).getPictures().size())
+                            Glide.with(view).load(auctionComplete.getArticles().get(catalogIndex).getPictures().get(position).getUrl()).into(imageView);
+                    }
+                });
+                /*carouselView.setViewListener(new ViewListener() {
+                    @Override
+                    public View setViewForPosition(int position) {
+                        ImageView imageView = new ImageView(getActivity());
+                        imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        Picasso.with(getActivity())
+                                .load("http://url.to/image.jpg")
+                                .fit()
+                                .centerInside()
+                                .into(imageView);
+                        return imageView;
+                    }
+                });*/
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void previousAuctionCatalogItem(View view){
+
+        String auctionId     = ((TextView) findViewById(R.id.tv_auction_id_af)).getText().toString();
+
+        try {
+            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(auctionId)).get();
+
+            SubastaConArticulos auctionComplete = (SubastaConArticulos) response.body();
+
+            Integer catalogIndex     = Integer.valueOf(((TextView) findViewById(R.id.tv_catalog_index_af)).getText().toString()) - 1;
+
+            if(catalogIndex >= 0){
+
+                TextView catalogIndexTv   = findViewById(R.id.tv_catalog_index_af);
+                catalogIndexTv.setText(String.valueOf(catalogIndex));
+                TextView tituloArticulo   = findViewById(R.id.tv_item_title_af);
+
+                TextView status           = findViewById(R.id.tv_state_af);
+                status.setText(auctionComplete.getArticles().get(catalogIndex).getStatus());
+
+                TextView description      = findViewById(R.id.tv_description_af);
+                description.setText(auctionComplete.getArticles().get(catalogIndex).getDescription());
+
+                TextView owner            = findViewById(R.id.tv_duenio_af);
+                owner.setText(auctionComplete.getArticles().get(catalogIndex).getOwner());
+
+                TextView basePrice       = findViewById(R.id.tv_precio_base_af);
+                basePrice.setText(auctionComplete.getArticles().get(catalogIndex).getBasePrice());
+
+                Button  btnCatalogIndex  = findViewById(R.id.btn_catalog_index_af);
+                        btnCatalogIndex.setText( (catalogIndex + 1) +" DE " + auctionComplete.getArticles().size());
+
+                CarouselView carouselView = findViewById(R.id.auction_carousel);
+                carouselView.setPageCount(auctionComplete.getArticles().get(catalogIndex).getPictures().size());
+                carouselView.setImageListener(new ImageListener() {
+                    @Override
+                    public void setImageForPosition(int position, ImageView imageView) {
+                        if(position < auctionComplete.getArticles().get(catalogIndex).getPictures().size())
+                            Glide.with(view).load(auctionComplete.getArticles().get(catalogIndex).getPictures().get(position).getUrl()).into(imageView);
+                    }
+                });
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void initiatePhotoRequest(View view){
+
+        btnSelectedImage = findViewById(R.id.btn_aceptar_adf);
+        rcvPhoto         = findViewById(R.id.rcv_photo);
+        photoAdapter     = new PhotoAdapter(this);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        rcvPhoto.setLayoutManager(gridLayoutManager);
+        rcvPhoto.setAdapter(photoAdapter);
+        btnSelectedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                requestPermissions();
+            }
+        });
+    }
+
+    private void requestPermissions() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                selectImageFromGallery();
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+
+        };
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .check();
+    }
+
+    private void selectImageFromGallery() {
+        TedBottomPicker.with(MainActivity.this)
+                .setPeekHeight(1600)
+                .showTitle(false)
+                .setCompleteButtonText("Done")
+                .setEmptySelectionText("No Select")
+                .showMultiImage(new TedBottomSheetDialogFragment.OnMultiImageSelectedListener() {
+                    @Override
+                    public void onImagesSelected(List<Uri> uriList) {
+                        if(uriList != null && !uriList.isEmpty()){
+                            photoAdapter.setData(uriList);
+                        }
+                    }
+                });
     }
 
 }

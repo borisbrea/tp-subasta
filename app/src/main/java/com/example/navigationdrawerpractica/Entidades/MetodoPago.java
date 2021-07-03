@@ -4,21 +4,23 @@ import java.io.Serializable;
 
 public class MetodoPago implements Serializable {
 
-    private int  id;
+    private int     id;
     private String  type;
     private String  company;
     private String  name;
     private String  number;
+    private Boolean approved;
 
     public MetodoPago() {
     }
 
-    public MetodoPago(int id, String type, String company, String name, String number) {
+    public MetodoPago(int id, String type, String company, String name, String number, Boolean approved) {
         this.id = id;
         this.type = type;
         this.company = company;
         this.name = name;
         this.number = number;
+        this.approved = approved;
     }
 
     public int getId() {
@@ -59,5 +61,13 @@ public class MetodoPago implements Serializable {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
     }
 }

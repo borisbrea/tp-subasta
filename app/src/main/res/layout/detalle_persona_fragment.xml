@@ -129,6 +129,16 @@
             android:textSize="20sp"
             android:textStyle="bold" />
         <TextView
+            android:id="@+id/tv_user_id_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text=""
+            android:visibility="gone"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
             android:id="@+id/tv_id_df"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

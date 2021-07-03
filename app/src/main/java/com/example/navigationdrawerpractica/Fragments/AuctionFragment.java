@@ -8,20 +8,28 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
 import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
+import com.example.navigationdrawerpractica.DAO.getPaymentMethodsDao;
+import com.example.navigationdrawerpractica.Entidades.MetodoPago;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ResponseGetPaymentMethods;
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.R;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import retrofit2.Response;
@@ -58,8 +66,10 @@ public class AuctionFragment extends Fragment {
             "Gohan", "Goku", "Goten"
     };
 
-    private TextView estado, descripcion, duenio, precioBase, tituloArticulo;
-    private Button   btnPujar;
+    private TextView estado, descripcion, duenio, precioBase, tituloArticulo, auctionId;
+    private EditText precioPuja;
+    private Spinner  metodosPago;
+    private Button   btnCatalogIndex, btnPujar;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -100,18 +110,20 @@ public class AuctionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        View view = inflater.inflate(R.layout.auction_fragment, container, false);
 
+       auctionId        = view.findViewById(R.id.tv_auction_id_af);
        tituloArticulo   = view.findViewById(R.id.tv_item_title_af);
        estado           = view.findViewById(R.id.tv_state_af);
        descripcion      = view.findViewById(R.id.tv_description_af);
        duenio           = view.findViewById(R.id.tv_duenio_af);
        precioBase       = view.findViewById(R.id.tv_precio_base_af);
+       precioPuja       = view.findViewById(R.id.et_precio_puja_af);
+       metodosPago      = view.findViewById(R.id.sp_payment_methods_af);
+
+       btnCatalogIndex  = view.findViewById(R.id.btn_catalog_index_af);
        btnPujar         = view.findViewById(R.id.btn_pujar_af);
 
-        Bundle objeto = getArguments();
-        String idSubasta = "";
-        if (objeto != null){
-            idSubasta = (String) objeto.getSerializable("idSubasta");
-        }
+        String idSubasta = (String) getArguments().getSerializable("idSubasta");;
+        String userId    = (String) getArguments().getSerializable("userId");
 
         try {
             Response response = new AuctionWithItemsDao().execute(Integer.valueOf(idSubasta)).get();
@@ -119,6 +131,10 @@ public class AuctionFragment extends Fragment {
             SubastaConArticulos subastaCompleta = (SubastaConArticulos) response.body();
 
             if(subastaCompleta!= null){
+
+                auctionId.setText(String.valueOf(subastaCompleta.getAuctionId()));
+
+                btnCatalogIndex.setText("1 DE " + subastaCompleta.getArticles().size());
 
                 CarouselView carouselView = view.findViewById(R.id.auction_carousel);
                 carouselView.setPageCount(subastaCompleta.getArticles().get(0).getPictures().size());
@@ -155,6 +171,32 @@ public class AuctionFragment extends Fragment {
                 else
                     btnPujar.setEnabled(false);
 
+            }
+
+            if(!userId.equals("User Id")){
+                List<MetodoPago> paymentMethodsList = new ArrayList<>();
+
+                Response responsePaymentMethods = new getPaymentMethodsDao().execute(Integer.valueOf(userId)).get();
+
+                if(responsePaymentMethods != null){
+                    ResponseGetPaymentMethods responseBody = (ResponseGetPaymentMethods) responsePaymentMethods.body();
+                    paymentMethodsList = responseBody.getPaymentMethods();
+                }
+
+                ArrayList<String> validPaymentMethodsList = new ArrayList<>();
+
+                for(MetodoPago metodoPago: paymentMethodsList){
+                    if(metodoPago.getApproved())
+                        validPaymentMethodsList.add(metodoPago.getName());
+                }
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),android.R.layout. simple_spinner_item, validPaymentMethodsList);
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                metodosPago.setAdapter(arrayAdapter);
+            } else {
+                precioPuja.setVisibility(View.GONE);
+                metodosPago.setVisibility(View.GONE);
+                btnPujar.setVisibility(View.GONE);
             }
 
             /*CarouselView carouselView = view.findViewById(R.id.auction_carousel);

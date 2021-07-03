@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.RegisterFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.AuctionFragment"
     android:orientation="vertical"
     android:gravity="center">
     <RelativeLayout
@@ -49,18 +50,40 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="172dp"
+            <LinearLayout
+                android:layout_width="376dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:text="1 de 6 >" />
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:padding="10dp">
+
+                <Button
+                    android:id="@+id/btn_back_catalog_af"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="previousAuctionCatalogItem"
+                    android:drawableStart="@drawable/ic_baseline_arrow_back_ios_24"/>
+
+                <Button
+                    android:id="@+id/btn_catalog_index_af"
+                    android:layout_width="172dp"
+                    android:layout_height="wrap_content"
+                    android:text="- de -" />
+
+                <Button
+                    android:id="@+id/btn_next_catalog_af"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="nextAuctionCatalogItem"
+                    android:drawableStart="@drawable/ic_baseline_arrow_forward_ios_24" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="2dp">
 
                 <TextView
                     android:id="@+id/tv_state_af"
@@ -92,14 +115,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginTop="5dp"
-                    android:text="Descripción"
+                    android:layout_marginTop="0dp"
+                    android:text="@string/description"
                     android:singleLine="true"
                     android:textSize="14sp"
                     android:textStyle="bold"/>
@@ -118,7 +141,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="168dp"
@@ -141,7 +164,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="5dp">
 
             <TextView
                     android:id="@+id/tv_duenio_af"
@@ -173,22 +196,67 @@
                     android:textSize="20dp" />
             </LinearLayout>
 
-                <EditText
-                    android:id="@+id/et_precio_base_af"
-                    android:layout_marginTop="10dp"
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <Spinner
+                    android:id="@+id/sp_payment_methods_af"
+                    android:layout_width="168dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.298" />
+
+                    <EditText
+                        android:id="@+id/et_precio_puja_af"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Introducir Precio"
+                        android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_auction_id_af"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Introducir Precio"
-                    android:inputType="number" />
+                    android:visibility="gone"/>
 
-            <Button
-                android:id="@+id/btn_pujar_af"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#703DFB"
-                android:text="Pujar"
-                android:textColor="#E6E4EA" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_catalog_index_af"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+                <Button
+                    android:id="@+id/btn_pujar_af"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#703DFB"
+                    android:text="Pujar"
+                    android:textColor="#E6E4EA" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+</LinearLayout>

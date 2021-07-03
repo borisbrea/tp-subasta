@@ -26,32 +26,10 @@ import retrofit2.Response;
 
 public class DetallePersonaFragment extends Fragment {
 
-    TextView  idSubasta;
-    TextView  title;
-    TextView  date;
-    TextView  category;
-    TextView  auctioneer;
-    TextView  itemAmout;
-    TextView  description;
-    ImageView imagen;
+    TextView  idSubasta, title, date, category, auctioneer;
+    TextView  itemAmount, description, userId;
 
-    /*@Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.detalle_persona_fragment,container,false);
-        nombre = view.findViewById(R.id.nombre_detalle);
-        imagen = view.findViewById(R.id.imagen_detalleid);
-        //Crear bundle para recibir el objeto enviado por parametro.
-        Bundle objetoPersona = getArguments();
-        Persona persona = null;;
-        //validacion para verificar si existen argumentos para mostrar
-        if(objetoPersona !=null){
-            persona = (Persona) objetoPersona.getSerializable("objeto");
-            imagen.setImageResource(persona.getImagenid());
-            nombre.setText(persona.getNombre());
-        }
-        return view;
-    }*/
+    ImageView image;
 
     @Nullable
     @Override
@@ -60,15 +38,17 @@ public class DetallePersonaFragment extends Fragment {
         Auction auction = new Auction();
 
         idSubasta   = view.findViewById(R.id.tv_id_df);
+        userId      = view.findViewById(R.id.tv_user_id_df);
         title       = view.findViewById(R.id.tv_title_df);
         date        = view.findViewById(R.id.tv_date_df);
         category    = view.findViewById(R.id.tv_category_df);
         auctioneer  = view.findViewById(R.id.tv_auctioneer_df);
-        itemAmout   = view.findViewById(R.id.tv_items_amount_df);
+        itemAmount   = view.findViewById(R.id.tv_items_amount_df);
         description = view.findViewById(R.id.tv_description_df);
-        imagen      = view.findViewById(R.id.imagen_detalleid);
+        image       = view.findViewById(R.id.imagen_detalleid);
 
-        AuctionHome subasta = (AuctionHome) getArguments().getSerializable("objeto");
+        AuctionHome subasta = (AuctionHome) getArguments().getSerializable("auction");
+        String      idUser  = (String)      getArguments().getSerializable("userId");
 
         try {
             Response response = new AuctionDao().execute(subasta.getId()).get();
@@ -81,14 +61,14 @@ public class DetallePersonaFragment extends Fragment {
 
         if(auction !=null){
             idSubasta.setText      (String.valueOf(auction.getId()));
+            userId.setText         (idUser);
             title.setText          (auction.getTitle());
             date.setText           (auction.getDetail().getStartDate());
             category.setText       (auction.getDetail().getCategory());
             auctioneer.setText     (auction.getDetail().getOwner());
-            itemAmout.setText      (String.valueOf(auction.getDetail().getArticleAmount()));
+            itemAmount.setText     (String.valueOf(auction.getDetail().getArticleAmount()));
             description.setText    (auction.getDetail().getDescription());
-            //description.setText    ("Exclusiva subasta de artículos electronicos llegados de Japon, entre ellos se podrá encontrar una importante consola de última generación, varios juegos, casco de realidad virtual y muchas cosas mas.");
-            Glide.with(view).load(subasta.getImage()).into(imagen);
+            Glide.with(view).load(subasta.getImage()).into(image);
 
             //imagen.setImageResource(R.drawable.martillo_small);
         }
