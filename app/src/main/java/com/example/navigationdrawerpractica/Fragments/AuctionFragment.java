@@ -20,13 +20,16 @@ import com.bumptech.glide.Glide;
 import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
 import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
 import com.example.navigationdrawerpractica.DAO.getPaymentMethodsDao;
+import com.example.navigationdrawerpractica.Entidades.Bundle.AuctionBundle;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ResponseGetPaymentMethods;
+import com.example.navigationdrawerpractica.Entidades.SubastaClases.ImagenItem;
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.R;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
+import com.synnapps.carouselview.ViewListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +69,7 @@ public class AuctionFragment extends Fragment {
             "Gohan", "Goku", "Goten"
     };
 
-    private TextView estado, descripcion, duenio, precioBase, tituloArticulo, auctionId;
+    private TextView estado, descripcion, duenio, precioBase, tituloArticulo, userIdTv, auctionId, catalogId, catalogDescription;
     private EditText precioPuja;
     private Spinner  metodosPago;
     private Button   btnCatalogIndex, btnPujar;
@@ -110,20 +113,30 @@ public class AuctionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        View view = inflater.inflate(R.layout.auction_fragment, container, false);
 
-       auctionId        = view.findViewById(R.id.tv_auction_id_af);
-       tituloArticulo   = view.findViewById(R.id.tv_item_title_af);
-       estado           = view.findViewById(R.id.tv_state_af);
-       descripcion      = view.findViewById(R.id.tv_description_af);
-       duenio           = view.findViewById(R.id.tv_duenio_af);
-       precioBase       = view.findViewById(R.id.tv_precio_base_af);
-       precioPuja       = view.findViewById(R.id.et_precio_puja_af);
-       metodosPago      = view.findViewById(R.id.sp_payment_methods_af);
+       userIdTv             = view.findViewById(R.id.tv_user_id_af);
+       auctionId            = view.findViewById(R.id.tv_auction_id_af);
+       catalogId            = view.findViewById(R.id.tv_catalog_id_af);
+       catalogDescription   = view.findViewById(R.id.tv_catalog_description_af);
+
+       tituloArticulo       = view.findViewById(R.id.tv_item_title_af);
+       estado               = view.findViewById(R.id.tv_state_af);
+       descripcion          = view.findViewById(R.id.tv_description_af);
+       duenio               = view.findViewById(R.id.tv_duenio_af);
+       precioBase           = view.findViewById(R.id.tv_precio_base_af);
+       precioPuja           = view.findViewById(R.id.et_precio_puja_af);
+       metodosPago          = view.findViewById(R.id.sp_payment_methods_af);
 
        btnCatalogIndex  = view.findViewById(R.id.btn_catalog_index_af);
        btnPujar         = view.findViewById(R.id.btn_pujar_af);
 
-        String idSubasta = (String) getArguments().getSerializable("idSubasta");;
-        String userId    = (String) getArguments().getSerializable("userId");
+        AuctionBundle auctionBundle = (AuctionBundle) getArguments().getSerializable("auctionBundle");
+
+        /*String idSubasta = (String) getArguments().getSerializable("idSubasta");
+        String userId    = (String) getArguments().getSerializable("userId");*/
+
+        String userId       = auctionBundle.getUserId();
+        String idSubasta    = auctionBundle.getAuctionId();
+        int    catalogIndex = Integer.valueOf(auctionBundle.getIndexCatalog());
 
         try {
             Response response = new AuctionWithItemsDao().execute(Integer.valueOf(idSubasta)).get();
@@ -132,44 +145,71 @@ public class AuctionFragment extends Fragment {
 
             if(subastaCompleta!= null){
 
-                auctionId.setText(String.valueOf(subastaCompleta.getAuctionId()));
-
-                btnCatalogIndex.setText("1 DE " + subastaCompleta.getArticles().size());
+                userIdTv.           setText(String.valueOf(userId));
+                auctionId.          setText(String.valueOf(subastaCompleta.getAuctionId()));
+                catalogId.          setText(String.valueOf(subastaCompleta.getArticles().get(catalogIndex).getCatalogId()));
+                catalogDescription. setText(subastaCompleta.getArticles().get(catalogIndex).getCatalogDescription());
+                btnCatalogIndex.    setText((catalogIndex + 1) + " DE " + subastaCompleta.getArticles().size());
 
                 CarouselView carouselView = view.findViewById(R.id.auction_carousel);
-                carouselView.setPageCount(subastaCompleta.getArticles().get(0).getPictures().size());
-                carouselView.setImageListener(new ImageListener() {
-                    @Override
-                    public void setImageForPosition(int position, ImageView imageView) {
-                        //imageView.setImageResource(mImages[position]);
-                        if(position < subastaCompleta.getArticles().get(0).getPictures().size())
-                            Glide.with(view).load(subastaCompleta.getArticles().get(0).getPictures().get(position).getUrl()).into(imageView);
-                        //Glide.with(view).load(sampleImages[position]).into(imageView);
+                             carouselView.setPageCount(subastaCompleta.getArticles().get(catalogIndex).getPictures().size());
+                             /*carouselView.setImageListener(new ImageListener() {
+                            @Override
+                            public void setImageForPosition(int position, ImageView imageView) {
+                                //imageView.setImageResource(mImages[position]);
+                                if(position < subastaCompleta.getArticles().get(catalogIndex).getPictures().size())
+                                    Glide.with(view).load(subastaCompleta.getArticles().get(catalogIndex).getPictures().get(position).getUrl()).into(imageView);
+                                //Glide.with(view).load(sampleImages[position]).into(imageView);
 
+                            }
+                        });*/
+
+                carouselView.setViewListener(new ViewListener() {
+                    @Override
+                    public View setViewForPosition(int position) {
+                        ImageView imageView = new ImageView(view.getContext());
+                        imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        Glide.with(view)
+                                .load(subastaCompleta.getArticles().get(catalogIndex).getPictures().get(position).getUrl())
+                                .fitCenter()
+                                .centerInside()
+                                .into(imageView);
+                        return imageView;
                     }
                 });
-                carouselView.setImageClickListener(new ImageClickListener() {
-                    @Override
-                    public void onClick(int position) {
-                        //Toast.makeText(getContext(), mImagesTitle[position], Toast.LENGTH_SHORT).show();
-                    }
-                });
 
-                estado.setText(subastaCompleta.getArticles().get(0).getStatus());
+                /*ImageView imageView = new ImageView(view.getContext());
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                for(ImagenItem imagen : subastaCompleta.getArticles().get(catalogIndex).getPictures()){
+                    Glide.with(view).load(imagen.getUrl())
+                            .fitCenter()
+                            .centerInside()
+                            .into(imageView);
+                }*/
 
-                if(subastaCompleta.getArticles().get(0).getStatus().equals("Subastandose")){
+
+                        carouselView.setImageClickListener(new ImageClickListener() {
+                            @Override
+                            public void onClick(int position) {
+                                //Toast.makeText(getContext(), mImagesTitle[position], Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                estado.setText(subastaCompleta.getArticles().get(catalogIndex).getStatus());
+
+                if(subastaCompleta.getArticles().get(catalogIndex).getStatus().equals("Subastandose")){
                     estado.setTextColor(Color.GREEN);
                 }
 
-                tituloArticulo. setText(subastaCompleta.getArticles().get(0).getTitle());
-                descripcion.    setText(subastaCompleta.getArticles().get(0).getDescription());
-                duenio.         setText(subastaCompleta.getArticles().get(0).getOwner());
-                precioBase.     setText(subastaCompleta.getArticles().get(0).getBasePrice());
+                tituloArticulo. setText(subastaCompleta.getArticles().get(catalogIndex).getTitle());
+                descripcion.    setText(subastaCompleta.getArticles().get(catalogIndex).getDescription());
+                duenio.         setText(subastaCompleta.getArticles().get(catalogIndex).getOwner());
+                precioBase.     setText(subastaCompleta.getArticles().get(catalogIndex).getBasePrice());
 
-                if(subastaCompleta.getArticles().get(0).isCanBid())
+                /*if(subastaCompleta.getArticles().get(0).isCanBid())
                     btnPujar.setEnabled(true);
                 else
-                    btnPujar.setEnabled(false);
+                    btnPujar.setEnabled(false);*/
 
             }
 
@@ -191,7 +231,7 @@ public class AuctionFragment extends Fragment {
                 }
 
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),android.R.layout. simple_spinner_item, validPaymentMethodsList);
-                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                     arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 metodosPago.setAdapter(arrayAdapter);
             } else {
                 precioPuja.setVisibility(View.GONE);

@@ -240,11 +240,41 @@
                     android:visibility="gone"/>
 
                 <TextView
+                    android:id="@+id/tv_user_id_af"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tv_catalog_id_af"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+                <TextView
                     android:id="@+id/tv_catalog_index_af"
                     android:text="0"
                     android:gravity="center"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:paddingBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/tv_catalog_description_af"
+                    android:text="0"
+                    android:gravity="center"
                     android:paddingBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -255,7 +285,8 @@
                     android:layout_height="wrap_content"
                     android:background="#703DFB"
                     android:text="Pujar"
-                    android:textColor="#E6E4EA" />
+                    android:textColor="#E6E4EA"
+                    android:onClick="bidAction"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

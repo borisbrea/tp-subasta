@@ -8,6 +8,7 @@ import com.example.navigationdrawerpractica.Entidades.ResponseEntities.AccountRe
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.Entidades.home.Auction;
 import com.example.navigationdrawerpractica.Entidades.home.Home;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.BidRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.RegisterRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.AccountRequest;
@@ -68,4 +69,9 @@ public interface RetrofitApiService {
     @PUT
     @Headers({"Content-Type: application/json"})
     Call<Void> putPaymentMethodCreditCard(@Url String fullUrl, @Body CreditCardRequest request);
+
+    @PUT
+    @Headers({"Content-Type: application/json"})
+    Call<Void> bidAction(@Url String fullUrl, @Body BidRequest request);
+
 }

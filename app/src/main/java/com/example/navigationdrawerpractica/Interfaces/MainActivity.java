@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -39,8 +40,10 @@ import com.example.navigationdrawerpractica.DAO.GeneratePasswordDao;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.DAO.PutPaymentMethodAccountDao;
 import com.example.navigationdrawerpractica.DAO.PutPaymentMethodCreditCardDao;
+import com.example.navigationdrawerpractica.DAO.RegisterBidDao;
 import com.example.navigationdrawerpractica.DAO.RegisterDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
+import com.example.navigationdrawerpractica.Entidades.Bundle.AuctionBundle;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
@@ -57,6 +60,7 @@ import com.example.navigationdrawerpractica.Fragments.ArticleDetailFragment;
 import com.example.navigationdrawerpractica.Fragments.ArticleFragment;
 import com.example.navigationdrawerpractica.Fragments.AuctionFragment;
 import com.example.navigationdrawerpractica.Fragments.BidFragment;
+import com.example.navigationdrawerpractica.Fragments.CatalogDetailFragment;
 import com.example.navigationdrawerpractica.Fragments.DetallePersonaFragment;
 import com.example.navigationdrawerpractica.Fragments.DetalleSubastaFragment;
 import com.example.navigationdrawerpractica.Fragments.GeneratePasswordFragment;
@@ -500,6 +504,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void bidAction(View view){
+
+        String catalogId = (String) ((TextView) findViewById(R.id.tv_catalog_id_af)).getText().toString();
+        String amount    = (String) ((TextView) findViewById(R.id.et_precio_puja_af)).getText().toString();
+        String userId    = (String) ((TextView) findViewById(R.id.tv_user_id_af)).getText().toString();
+
+        try {
+            Response response = new RegisterBidDao().execute(catalogId, amount, userId).get();
+            String var = "";
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /************************************************************************************************
      *                                      DAO CONNECTIONS
      ***********************************************************************************************/
@@ -717,8 +738,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView userId = findViewById(R.id.tv_user_id_df);
 
         Bundle bundle = new Bundle();
-               bundle.putSerializable("idSubasta",(String) id.getText());
-               bundle.putSerializable("userId",   (String) userId.getText());
+
+        AuctionBundle auctionBundle = new AuctionBundle((String) userId.getText(), (String) id.getText(), "0");
+        bundle.putSerializable("auctionBundle",auctionBundle);
+
+               /*bundle.putSerializable("idSubasta",(String) id.getText());
+               bundle.putSerializable("userId",   (String) userId.getText());*/
+
+        auctionFragment.setArguments(bundle);
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        fragmentManager     = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment,auctionFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void showAuctionFromCatalogFragment(View view){
+
+        AuctionFragment auctionFragment = new AuctionFragment();
+
+        TextView userId         = findViewById(R.id.tv_user_id_cdf);
+        TextView auctionId      = findViewById(R.id.tv_auction_id_cdf);
+        TextView catalogIndex   = findViewById(R.id.tv_catalog_index_cdf);
+
+        Bundle bundle = new Bundle();
+
+        AuctionBundle auctionBundle = new AuctionBundle((String) userId.getText(), (String) auctionId.getText(), (String) catalogIndex.getText());
+        bundle.putSerializable("auctionBundle",auctionBundle);
+
         auctionFragment.setArguments(bundle);
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -730,17 +778,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void showAuctionDetailFragment(View view){
 
-        TextView id = findViewById(R.id.tv_id_df);
-        DetalleSubastaFragment detalleSubastaDetalle = new DetalleSubastaFragment();
+        AuctionBundle auctionBundle = new AuctionBundle();
 
-        /*Bundle bundleEnvio = new Bundle();
-        bundleEnvio.putSerializable("idSubasta",(String) id.getText());
-        auctionFragment.setArguments(bundleEnvio);*/
+        String userId             = ((TextView) findViewById(R.id.tv_user_id_af)).getText().toString();
+        String auctionId          = ((TextView) findViewById(R.id.tv_auction_id_af)).getText().toString();
+        String catalogId          = ((TextView) findViewById(R.id.tv_catalog_id_af)).getText().toString();
+        String catalogDescription = ((TextView) findViewById(R.id.tv_catalog_description_af)).getText().toString();
+        String catalogIndex       = ((TextView) findViewById(R.id.tv_catalog_index_af)).getText().toString();
+
+        auctionBundle.setUserId(userId);
+        auctionBundle.setAuctionId(auctionId);
+        auctionBundle.setCatalogId(catalogId);
+        auctionBundle.setCatalogDescription(catalogDescription);
+        auctionBundle.setIndexCatalog(catalogIndex);
+
+        CatalogDetailFragment catalogDetailFragment = new CatalogDetailFragment();
+
+        Bundle bundle = new Bundle();
+               bundle.putSerializable("auctionBundle", auctionBundle);
+        catalogDetailFragment.setArguments(bundle);
 
         drawerLayout.closeDrawer(GravityCompat.START);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_fragment,detalleSubastaDetalle);
+        fragmentTransaction.replace(R.id.container_fragment,catalogDetailFragment);
         fragmentTransaction.commit();
     }
 
@@ -817,6 +878,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 TextView catalogIndexTv   = findViewById(R.id.tv_catalog_index_af);
                          catalogIndexTv.setText(String.valueOf(catalogIndex));
+
                 TextView tituloArticulo   = findViewById(R.id.tv_item_title_af);
 
                 TextView status           = findViewById(R.id.tv_state_af);
@@ -831,31 +893,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView basePrice       = findViewById(R.id.tv_precio_base_af);
                          basePrice.setText(auctionComplete.getArticles().get(catalogIndex).getBasePrice());
 
+                TextView catalogDescription = findViewById(R.id.tv_catalog_description_af);
+                         catalogDescription.setText(auctionComplete.getArticles().get(catalogIndex).getCatalogDescription());
+
                 Button  btnCatalogIndex  = findViewById(R.id.btn_catalog_index_af);
-                        btnCatalogIndex.setText( (catalogIndex + 1) +" DE " + auctionComplete.getArticles().size());
+                        btnCatalogIndex.setText((catalogIndex + 1) +" DE " + auctionComplete.getArticles().size());
 
                 CarouselView carouselView = findViewById(R.id.auction_carousel);
                 carouselView.setPageCount(auctionComplete.getArticles().get(catalogIndex).getPictures().size());
-                carouselView.setImageListener(new ImageListener() {
+                /*carouselView.setImageListener(new ImageListener() {
                     @Override
                     public void setImageForPosition(int position, ImageView imageView) {
                         if(position < auctionComplete.getArticles().get(catalogIndex).getPictures().size())
                             Glide.with(view).load(auctionComplete.getArticles().get(catalogIndex).getPictures().get(position).getUrl()).into(imageView);
                     }
-                });
-                /*carouselView.setViewListener(new ViewListener() {
+                });*/
+                carouselView.setViewListener(new ViewListener() {
                     @Override
                     public View setViewForPosition(int position) {
-                        ImageView imageView = new ImageView(getActivity());
+                        ImageView imageView = new ImageView(view.getContext());
                         imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        Picasso.with(getActivity())
-                                .load("http://url.to/image.jpg")
-                                .fit()
+                        Glide.with(view)
+                                .load(auctionComplete.getArticles().get(catalogIndex).getPictures().get(position).getUrl())
+                                .fitCenter()
                                 .centerInside()
                                 .into(imageView);
                         return imageView;
                     }
-                });*/
+                });
             }
 
         } catch (ExecutionException e) {
@@ -880,20 +945,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(catalogIndex >= 0){
 
                 TextView catalogIndexTv   = findViewById(R.id.tv_catalog_index_af);
-                catalogIndexTv.setText(String.valueOf(catalogIndex));
+                         catalogIndexTv.setText(String.valueOf(catalogIndex));
+
                 TextView tituloArticulo   = findViewById(R.id.tv_item_title_af);
 
                 TextView status           = findViewById(R.id.tv_state_af);
-                status.setText(auctionComplete.getArticles().get(catalogIndex).getStatus());
+                         status.setText(auctionComplete.getArticles().get(catalogIndex).getStatus());
 
                 TextView description      = findViewById(R.id.tv_description_af);
-                description.setText(auctionComplete.getArticles().get(catalogIndex).getDescription());
+                         description.setText(auctionComplete.getArticles().get(catalogIndex).getDescription());
 
                 TextView owner            = findViewById(R.id.tv_duenio_af);
-                owner.setText(auctionComplete.getArticles().get(catalogIndex).getOwner());
+                         owner.setText(auctionComplete.getArticles().get(catalogIndex).getOwner());
 
                 TextView basePrice       = findViewById(R.id.tv_precio_base_af);
-                basePrice.setText(auctionComplete.getArticles().get(catalogIndex).getBasePrice());
+                         basePrice.setText(auctionComplete.getArticles().get(catalogIndex).getBasePrice());
+
+                TextView catalogDescription = findViewById(R.id.tv_catalog_description_af);
+                         catalogDescription.setText(auctionComplete.getArticles().get(catalogIndex).getCatalogDescription());
 
                 Button  btnCatalogIndex  = findViewById(R.id.btn_catalog_index_af);
                         btnCatalogIndex.setText( (catalogIndex + 1) +" DE " + auctionComplete.getArticles().size());
