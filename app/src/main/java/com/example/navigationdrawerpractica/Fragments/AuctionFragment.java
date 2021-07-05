@@ -69,7 +69,7 @@ public class AuctionFragment extends Fragment {
             "Gohan", "Goku", "Goten"
     };
 
-    private TextView estado, descripcion, duenio, precioBase, tituloArticulo, userIdTv, auctionId, catalogId, catalogDescription;
+    private TextView estado, descripcion, duenio, precioBase, tituloArticulo, userIdTv, auctionId, catalogId, catalogDescription, catalogIndexTv;
     private EditText precioPuja;
     private Spinner  metodosPago;
     private Button   btnCatalogIndex, btnPujar;
@@ -117,6 +117,7 @@ public class AuctionFragment extends Fragment {
        auctionId            = view.findViewById(R.id.tv_auction_id_af);
        catalogId            = view.findViewById(R.id.tv_catalog_id_af);
        catalogDescription   = view.findViewById(R.id.tv_catalog_description_af);
+       catalogIndexTv       = view.findViewById(R.id.tv_catalog_index_af);
 
        tituloArticulo       = view.findViewById(R.id.tv_item_title_af);
        estado               = view.findViewById(R.id.tv_state_af);
@@ -149,6 +150,7 @@ public class AuctionFragment extends Fragment {
                 auctionId.          setText(String.valueOf(subastaCompleta.getAuctionId()));
                 catalogId.          setText(String.valueOf(subastaCompleta.getArticles().get(catalogIndex).getCatalogId()));
                 catalogDescription. setText(subastaCompleta.getArticles().get(catalogIndex).getCatalogDescription());
+                catalogIndexTv.     setText(String.valueOf(catalogIndex));
                 btnCatalogIndex.    setText((catalogIndex + 1) + " DE " + subastaCompleta.getArticles().size());
 
                 CarouselView carouselView = view.findViewById(R.id.auction_carousel);
@@ -167,10 +169,16 @@ public class AuctionFragment extends Fragment {
                 carouselView.setViewListener(new ViewListener() {
                     @Override
                     public View setViewForPosition(int position) {
+                        Integer index = 0;
+                        try {
+                            index = Integer.valueOf((((TextView) view.findViewById(R.id.tv_catalog_index_af)).getText().toString()));
+                        } catch(Exception e) {
+                            index = catalogIndex;
+                        }
                         ImageView imageView = new ImageView(view.getContext());
                         imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         Glide.with(view)
-                                .load(subastaCompleta.getArticles().get(catalogIndex).getPictures().get(position).getUrl())
+                                .load(subastaCompleta.getArticles().get(index).getPictures().get(position).getUrl())
                                 .fitCenter()
                                 .centerInside()
                                 .into(imageView);

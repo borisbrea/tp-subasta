@@ -52,15 +52,33 @@
             android:layout_toRightOf="@+id/img_metodoPago"
             android:orientation="vertical"
             android:padding="3dp">
-            <TextView
-                android:id="@+id/tv_nombre_lmp"
-                android:layout_width="fill_parent"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:paddingRight="16dp"
-                android:text="Nombres.."
-                android:textColor="#222222"
-                />
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/tv_nombre_lmp"
+                    android:layout_width="230dp"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:text="Nombres.."
+                    android:textColor="#222222"
+                    />
+                <TextView
+                    android:id="@+id/tv_estado_lmp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:text="Estado"
+                    android:textColor="#222222"
+                    />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_numero_lmp"
                 android:layout_width="fill_parent"

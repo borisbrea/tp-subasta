@@ -8,6 +8,7 @@ import com.example.navigationdrawerpractica.Entidades.ResponseEntities.AccountRe
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.Entidades.home.Auction;
 import com.example.navigationdrawerpractica.Entidades.home.Home;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.ArticleRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.BidRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePasswordRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.RegisterRequest;
@@ -73,5 +74,9 @@ public interface RetrofitApiService {
     @PUT
     @Headers({"Content-Type: application/json"})
     Call<Void> bidAction(@Url String fullUrl, @Body BidRequest request);
+
+    @PUT
+    @Headers({"Content-Type: application/json"})
+    Call<Void> newArticle(@Url String fullUrl, @Body ArticleRequest request);
 
 }

@@ -75,16 +75,15 @@ public class BidFragment extends Fragment {
 
         getActivity().setTitle(Utils.TITLE_MIS_PUJAS);
 
-        String[] header = {"Fecha", "Artículo", "Monto", "Resultado"};
-
+        String[] header = {"Fecha", "Item", "Monto", "Resultado"};
 
         View view = inflater.inflate(R.layout.bid_fragment,container,false);
         tableLayout = (TableLayout) view.findViewById(R.id.table);
 
         AdapterPujasTable adapterPujasTable = new AdapterPujasTable(tableLayout, getActivity().getApplicationContext());
-        adapterPujasTable.addHeader(header);
-        adapterPujasTable.addData(getClientes());
-        adapterPujasTable.backGroundHeader(Color.BLUE);
+                          adapterPujasTable.addHeader(header);
+                          adapterPujasTable.addData(getClientes());
+                          adapterPujasTable.backGroundHeader(Color.BLUE);
 
         return view;
     }

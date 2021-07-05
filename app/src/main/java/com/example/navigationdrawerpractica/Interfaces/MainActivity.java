@@ -6,6 +6,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -14,12 +16,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +40,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
 import com.example.navigationdrawerpractica.Adaptadores.PhotoAdapter;
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
 import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
@@ -42,6 +51,7 @@ import com.example.navigationdrawerpractica.DAO.PutPaymentMethodAccountDao;
 import com.example.navigationdrawerpractica.DAO.PutPaymentMethodCreditCardDao;
 import com.example.navigationdrawerpractica.DAO.RegisterBidDao;
 import com.example.navigationdrawerpractica.DAO.RegisterDao;
+import com.example.navigationdrawerpractica.DAO.RegisterNewArticleDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.Bundle.AuctionBundle;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
@@ -52,6 +62,7 @@ import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConAr
 import com.example.navigationdrawerpractica.Entidades.home.AuctionDetail;
 import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.AccountRequest;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.ArticleRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.CreditCardRequest;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
@@ -79,6 +90,7 @@ import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
 import com.synnapps.carouselview.ViewListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,6 +105,9 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, iComunicaFragments {
 
+    private static final int PERMISSION_CODE =1;
+    private static final int PICK_IMAGE=1;
+
     DrawerLayout          drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar               toolbar;
@@ -103,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean               mToolBarNavigationListenerIsRegistered = false;
 
     private TableLayout           tableLayout;
-    private TextView              name, lastName;
-    private ImageView             imageArticle;
+    private TextView              name, lastName, uploadNaf;
+    private ImageView             imageArticle, image1, image2, image3, image4;
 
     FragmentManager               fragmentManager;
     FragmentTransaction           fragmentTransaction;
@@ -119,15 +134,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     PhotoAdapter photoAdapter;
     public int indiceSubasta   = 0;
 
+    private List<String> localPhotoList = new ArrayList<>();
+    private List<String> photoUrls      = new ArrayList<>();
+
     private String global_email = "";
+
+    String filePath;
+    Map  config = new HashMap();
+
+    private void configCloudinary() {
+        config.put("cloud_name", "dyfd65fcm");
+        config.put("api_key", "683413195193611");
+        config.put("api_secret", "BpFT75Mlw_zSGe5VmYLxn_HMPaU");
+        MediaManager.init(MainActivity.this, config);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Map config = new HashMap();
-        config.put("cloud_name", "dnvwej6kg");
-        config.put("secure", true);
-        MediaManager.init(this, config);
+        configCloudinary();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -149,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.add(R.id.container_fragment,new PersonasFragment());
         fragmentTransaction.commit();
 
-        managerMenuOption(false);
+        managerMenuOption(true);
     }
 
 
@@ -820,22 +845,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
     }
 
-    private void cargarImagen(View view){
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/");
-        startActivityForResult(Intent.createChooser(intent, "Seleccione la aplicación"), 10);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            Uri path= data.getData();
-            imageArticle.setImageURI(path);
-        }
-
-    }
-
     public void managerMenuOption(boolean option){
 
         NavigationView navigationView = findViewById(R.id.navigationView);
@@ -855,12 +864,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView username = navigationView.getHeaderView(0).findViewById(R.id.tv_username_hf);
                  username.setText(user.getFirstName() + " " + user.getLastName());
         TextView email    = navigationView.getHeaderView(0).findViewById(R.id.tv_email_hf);
-                 email.setText(user.getEmail());
+                 email.setText("Categoría: " + user.getCategory());
         TextView userId   = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
         userId.setText(String.valueOf(user.getUserId()));
         ImageView photo   = navigationView.getHeaderView(0).findViewById(R.id.iv_photo_hf);
                   photo.setImageResource(R.drawable.perfil_caetano);
-
     }
 
     public void nextAuctionCatalogItem(View view){
@@ -901,26 +909,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 CarouselView carouselView = findViewById(R.id.auction_carousel);
                 carouselView.setPageCount(auctionComplete.getArticles().get(catalogIndex).getPictures().size());
-                /*carouselView.setImageListener(new ImageListener() {
-                    @Override
-                    public void setImageForPosition(int position, ImageView imageView) {
-                        if(position < auctionComplete.getArticles().get(catalogIndex).getPictures().size())
-                            Glide.with(view).load(auctionComplete.getArticles().get(catalogIndex).getPictures().get(position).getUrl()).into(imageView);
-                    }
-                });*/
-                carouselView.setViewListener(new ViewListener() {
-                    @Override
-                    public View setViewForPosition(int position) {
-                        ImageView imageView = new ImageView(view.getContext());
-                        imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        Glide.with(view)
-                                .load(auctionComplete.getArticles().get(catalogIndex).getPictures().get(position).getUrl())
-                                .fitCenter()
-                                .centerInside()
-                                .into(imageView);
-                        return imageView;
-                    }
-                });
+
             }
 
         } catch (ExecutionException e) {
@@ -969,13 +958,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 CarouselView carouselView = findViewById(R.id.auction_carousel);
                 carouselView.setPageCount(auctionComplete.getArticles().get(catalogIndex).getPictures().size());
-                carouselView.setImageListener(new ImageListener() {
-                    @Override
-                    public void setImageForPosition(int position, ImageView imageView) {
-                        if(position < auctionComplete.getArticles().get(catalogIndex).getPictures().size())
-                            Glide.with(view).load(auctionComplete.getArticles().get(catalogIndex).getPictures().get(position).getUrl()).into(imageView);
-                    }
-                });
+
             }
 
         } catch (ExecutionException e) {
@@ -986,43 +969,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void saveNewArticleAction(View view){
+
+        String title        = ((TextView) findViewById(R.id.tv_titulo_naf)).     getText().toString();
+        String description  = ((TextView) findViewById(R.id.tv_description_naf)).getText().toString();
+        TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
+        uploadNaf = (TextView) findViewById(R.id.tv_upload_naf);
+
+        // REALIZAR LAS VALIDACIONES
+
+        ArticleRequest request = new ArticleRequest();
+        request.setUserId(tv_user_id.getText().toString());
+        request.setTitle(title);
+        request.setDescription(description);
+        request.setFullDescription("");
+        request.setImages(photoUrls);
+
+        try {
+            /*
+            Response response = new RegisterNewArticleDao().execute(request).get();
+            switch (response.code()){
+                case 200: break;
+                default:  break;
+            }
+            */
+        } catch (Exception e) {
+            e.printStackTrace();
+        };
+    }
+
+
     public void initiatePhotoRequest(View view){
 
-        btnSelectedImage = findViewById(R.id.btn_aceptar_adf);
-        rcvPhoto         = findViewById(R.id.rcv_photo);
-        photoAdapter     = new PhotoAdapter(this);
+        //btnSelectedImage = findViewById(R.id.btn_load_adf);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        rcvPhoto.setLayoutManager(gridLayoutManager);
-        rcvPhoto.setAdapter(photoAdapter);
-        btnSelectedImage.setOnClickListener(new View.OnClickListener() {
+        image1    = findViewById(R.id.iv_image_1_naf);
+        photoUrls = new ArrayList<>();
+
+        requestPermission();
+
+
+        /*btnSelectedImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                requestPermissions();
+                requestPermission();
             }
-        });
+        });*/
     }
 
-    private void requestPermissions() {
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                selectImageFromGallery();
-            }
 
-            @Override
-            public void onPermissionDenied(List<String> deniedPermissions) {
-                Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
+    private void requestPermission(){
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            accessTheGallery();
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_CODE);
+        }
+    }
 
-
-        };
-        TedPermission.with(this)
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .check();
+    public void accessTheGallery(){
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        i.setType("image/*");
+        startActivityForResult(i, PICK_IMAGE);
     }
 
     private void selectImageFromGallery() {
@@ -1035,10 +1044,90 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onImagesSelected(List<Uri> uriList) {
                         if(uriList != null && !uriList.isEmpty()){
+                            for(int i = 0; i < uriList.size(); i++)
+                                localPhotoList.add(uriList.get(i).toString());
+                                  //localPhotoList.add("/document/msf:38");
                             photoAdapter.setData(uriList);
                         }
                     }
                 });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //get the image's file location
+        filePath = getRealPathFromUri(data.getData(), MainActivity.this);
+        //lista.add(filePath);
+        if(requestCode==PICK_IMAGE && resultCode==RESULT_OK){
+            try {
+                //set picked image to the mProfile
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                image1.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode== PERMISSION_CODE){
+            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                accessTheGallery();
+            }else {
+                Toast.makeText(MainActivity.this, "permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private String getRealPathFromUri(Uri imageUri, Activity activity){
+        Cursor cursor = activity.getContentResolver().query(imageUri, null, null, null, null);
+        if(cursor==null) {
+            return imageUri.getPath();
+        }else{
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
+    }
+
+    public void saveImageCloudinaryAction(View view) {
+        uploadNaf = findViewById(R.id.tv_upload_naf);
+        //for(int i = 0; i < localPhotoList.size(); i++){
+            uploadToCloudinary(filePath);
+        //}
+    }
+
+    private void uploadToCloudinary(String filePath) {
+        Log.d("A", "sign up uploadToCloudinary- ");
+        MediaManager.get().upload(filePath).callback(new UploadCallback() {
+            @Override
+            public void onStart(String requestId) {
+                uploadNaf.setText("start");
+            }
+
+            @Override
+            public void onProgress(String requestId, long bytes, long totalBytes) {
+                uploadNaf.setText("Uploading... " );
+            }
+
+            @Override
+            public void onSuccess(String requestId, Map resultData) {
+                uploadNaf.setText("image URL: "+resultData.get("url").toString());
+                //photoUrls.add(resultData.get("url").toString());
+            }
+
+            @Override
+            public void onError(String requestId, ErrorInfo error) {
+                uploadNaf.setText("error "+ error.getDescription());
+            }
+
+            @Override
+            public void onReschedule(String requestId, ErrorInfo error) {
+                uploadNaf.setText("Reshedule "+error.getDescription());
+            }
+        }).dispatch();
     }
 
 }

@@ -38,6 +38,7 @@ public class AdapterPujasTable {
 
     private void newRow(){
         row = new TableRow(context);
+        row.setWeightSum(10);
     }
 
     private void newCell(){

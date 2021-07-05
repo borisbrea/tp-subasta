@@ -12,28 +12,26 @@ public class PersonaPrueba implements Serializable {
     private String  email;
     private String  phone;
     private Integer code;
-    private String password;
+    private String  category;
+    private String  password;
+    private String  status;
 
-    public PersonaPrueba(Integer userId, String dni, String firstName, String lastName, String address, String email, String phone, Integer code, String password, String status) {
-        this.userId = userId;
-        this.dni = dni;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.email = email;
-        this.phone = phone;
-        this.code = code;
-        this.password = password;
-        this.status = status;
+    public PersonaPrueba(Integer userId, String dni, String firstName, String lastName, String address, String email, String phone, Integer code, String category, String password, String status) {
+        this.userId     = userId;
+        this.dni        = dni;
+        this.firstName  = firstName;
+        this.lastName   = lastName;
+        this.address    = address;
+        this.email      = email;
+        this.phone      = phone;
+        this.code       = code;
+        this.category   = category;
+        this.password   = password;
+        this.status     = status;
     }
-
-    private String status;
-
 
     public PersonaPrueba() {
     }
-
-
 
     public Integer getUserId() {
         return userId;
@@ -97,6 +95,14 @@ public class PersonaPrueba implements Serializable {
 
     public void setCode(Integer code) {
         this.code = code;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getPassword() {

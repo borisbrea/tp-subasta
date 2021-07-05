@@ -1,6 +1,7 @@
 package com.example.navigationdrawerpractica.Adaptadores;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
     @Override
     public AdapterMetodoPago.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.lista_metodo_pago, parent, false);
-        view.setOnClickListener(this);
+             view.setOnClickListener(this);
         return new AdapterMetodoPago.ViewHolder(view);
     }
 
@@ -41,12 +42,23 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
 
     @Override
     public void onBindViewHolder(@NonNull AdapterMetodoPago.ViewHolder holder, int position) {
-        String type    = model.get(position).getType();
-        String numero  = model.get(position).getNumber();
-        String company = model.get(position).getCompany();
+
+        String type         = model.get(position).getType();
+        String numero       = model.get(position).getNumber();
+        String company      = model.get(position).getCompany();
+        Boolean approved    = model.get(position).getApproved();
 
         holder.nombres.setText(model.get(position).getName());
         holder.numero.setText(numero);
+
+        if(approved){
+            holder.state.setText("Aceptada");
+            holder.state.setTextColor(Color.parseColor("#008F39"));
+        } else {
+            holder.state.setText("Pendiente");
+            holder.state.setTextColor(Color.parseColor("#E5BE01"));
+        }
+
         if (company.contains("Visa"))
             holder.imagen.setImageResource(R.drawable.visa_logo);
         if (company.contains("Master"))
@@ -73,7 +85,7 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView nombres, numero;
+        TextView nombres, numero, state;
         ImageView imagen;
         public RelativeLayout viewF, viewB;
         public ViewHolder(@NonNull final View itemView) {
@@ -81,10 +93,10 @@ public class AdapterMetodoPago extends RecyclerView.Adapter<AdapterMetodoPago.Vi
             nombres  = itemView.findViewById(R.id.tv_nombre_lmp);
             numero   = itemView.findViewById(R.id.tv_numero_lmp);
             imagen   = itemView.findViewById(R.id.img_metodoPago);
+            state    = itemView.findViewById(R.id.tv_estado_lmp);
             viewF    = itemView.findViewById(R.id.rl);
             viewB    = itemView.findViewById(R.id.view_background);
         }
-
     }
 
     public void removeItem(int position){
