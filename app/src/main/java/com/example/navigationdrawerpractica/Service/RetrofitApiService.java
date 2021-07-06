@@ -60,8 +60,9 @@ public interface RetrofitApiService {
     @GET
     Call<ResponseGetPaymentMethods> getPaymentMethods(@Url String fullUrl);
 
-    @DELETE("/home")
-    Call<PersonaPrueba> deletePaymentMethod(@Query(encoded = true, value = "id") @NonNull String idItemSelected);
+    @DELETE
+    @Headers({"Content-Type: application/json"})
+    Call<Void> deletePaymentMethod(@Url String fullUrl);
 
     @PUT
     @Headers({"Content-Type: application/json"})

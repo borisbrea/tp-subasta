@@ -16,21 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterMetodoPago;
-import com.example.navigationdrawerpractica.Adaptadores.AdapterSubastas;
 import com.example.navigationdrawerpractica.Callbacks.MyItemTouchHelperCallback;
-import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
+import com.example.navigationdrawerpractica.DAO.DeletePaymentMethodDao;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.DAO.getPaymentMethodsDao;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ResponseGetPaymentMethods;
-import com.example.navigationdrawerpractica.Entidades.Subasta;
-import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.Interfaces.CallbackItemtouch;
-import com.example.navigationdrawerpractica.Interfaces.MainActivity;
 import com.example.navigationdrawerpractica.Interfaces.iComunicaFragments;
 import com.example.navigationdrawerpractica.R;
 import com.example.navigationdrawerpractica.Utils.Utils;
@@ -53,18 +48,22 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    AdapterMetodoPago adapterMetodoPago;
-    RecyclerView recyclerViewMetodoPago;
-    ArrayList<MetodoPago> listaMetodoPago;
-    RelativeLayout layout;
-    EditText txtnombre;
-    GenericDao dao = new GenericDao();
-    //Crear referencias para poder realizar la comunicacion entre el fragment detalle
+
+    AdapterMetodoPago       adapterMetodoPago;
+    RecyclerView            recyclerViewMetodoPago;
+    ArrayList<MetodoPago>   listaMetodoPago;
+    RelativeLayout          layout;
+    EditText                txtnombre;
+    GenericDao              dao = new GenericDao();
+
     Activity actividad;
     iComunicaFragments interfaceComunicaFragments;
-    // TODO: Rename and change types of parameters
+
+    private String userId;
     private String mParam1;
     private String mParam2;
+
+
     public PaymentFragment() {
         // Required empty public constructor
     }
@@ -104,7 +103,7 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
 
         getActivity().setTitle(Utils.TITLE_METODO_PAGO);
 
-        String userId = (String) getArguments().getSerializable("userId");
+        userId = (String) getArguments().getSerializable("userId");
 
         //((TextView)((View) inflater.inflate(R.layout.drawer_header2,container,false)).findViewById(R.id.tv_user_id_hf)).getText();
 
@@ -173,8 +172,8 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int position) {
         String metodo = listaMetodoPago.get(viewHolder.getAdapterPosition()).getType();
         //backup del item que se elimina para luego hacer cancelar
-        final MetodoPago deletedItem = listaMetodoPago.get(viewHolder.getAdapterPosition());
-        final int deletedIndex = viewHolder.getAdapterPosition();
+        final MetodoPago deletedItem  = listaMetodoPago.get(viewHolder.getAdapterPosition());
+        final int        deletedIndex = viewHolder.getAdapterPosition();
 
         String idItemSelected = String.valueOf(deletedItem.getId());
 
@@ -200,9 +199,14 @@ public class PaymentFragment extends Fragment implements CallbackItemtouch {
             alerta.setPositiveButton(Utils.BTN_ACCEPT, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    dao.deletePaymentMethod(idItemSelected);
-                    //remover el item del recycleView
-                    adapterMetodoPago.removeItem(position);
+                    try {
+                        Response response = new DeletePaymentMethodDao().execute(userId, idItemSelected).get();
+                        adapterMetodoPago.removeItem(position);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             alerta.setNegativeButton(Utils.BTN_CANCEL, new DialogInterface.OnClickListener() {

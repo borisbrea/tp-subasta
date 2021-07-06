@@ -1,5 +1,6 @@
 package com.example.navigationdrawerpractica.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,9 +8,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 
+import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
 import com.example.navigationdrawerpractica.R;
 import com.example.navigationdrawerpractica.Utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +36,9 @@ public class StatisticFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    PieChartView pieChartView;
+    TableLayout tableLayout;
 
     public StatisticFragment() {
         // Required empty public constructor
@@ -64,7 +77,47 @@ public class StatisticFragment extends Fragment {
 
         getActivity().setTitle(Utils.TITLE_MIS_ESTADISTICAS);
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.statistic_fragment, container, false);
+        View view = inflater.inflate(R.layout.statistic_fragment, container, false);
+
+        PieChartView pieChartView = view.findViewById(R.id.chart);
+
+        //pieChartView = view.findViewById(R.id.chart);
+
+        List pieData = new ArrayList<>();
+        pieData.add(new SliceValue(15, Color.BLUE).setLabel("Q1: $10"));
+        pieData.add(new SliceValue(25, Color.GRAY).setLabel("Q2: $4"));
+        pieData.add(new SliceValue(10, Color.RED).setLabel("Q3: $18"));
+        pieData.add(new SliceValue(60, Color.MAGENTA).setLabel("Q4: $28"));
+
+        PieChartData pieChartData = new PieChartData(pieData);
+        pieChartData.setHasLabels(true).setValueLabelTextSize(14);
+        pieChartData.setHasCenterCircle(true).setCenterText1("Sales in million").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#0097A7"));
+        pieChartView.setPieChartData(pieChartData);
+
+
+        String[] header = {"Categoría", "Cantidad"};
+
+        tableLayout = (TableLayout) view.findViewById(R.id.statistic_table);
+
+        AdapterPujasTable adapterPujasTable = new AdapterPujasTable(tableLayout, getActivity().getApplicationContext());
+        adapterPujasTable.addHeader(header);
+        adapterPujasTable.addData(getBids());
+        adapterPujasTable.backGroundHeader(Color.BLUE);
+
+        return view;
     }
+
+
+    private ArrayList<String[]> getBids(){
+        ArrayList<String[]> rows = new ArrayList<>();
+
+        rows.add(new String[]{"Común", "3"});
+        rows.add(new String[]{"Especial","2"});
+        rows.add(new String[]{"Plata","4"});
+        rows.add(new String[]{"Oro","1"});
+        rows.add(new String[]{"Platino","0"});
+
+        return rows;
+    }
+
 }

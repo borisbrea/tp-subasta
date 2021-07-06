@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class AdapterPujasTable {
+public class AdapterStatisticsTable {
 
     private TableLayout tableLayout;
     private Context context;
@@ -21,7 +21,7 @@ public class AdapterPujasTable {
     private boolean multicolor = false;
     private int firstColor, secondColor;
 
-    public AdapterPujasTable(TableLayout tableLayout, Context context) {
+    public AdapterStatisticsTable(TableLayout tableLayout, Context context) {
         this.tableLayout = tableLayout;
         this.context = context;
     }
@@ -60,7 +60,6 @@ public class AdapterPujasTable {
 
     private void createDataTable(){
         String info;
-        //for(indexR=1;indexR<=header.length;indexR++){
         for(indexR=1;indexR<=data.size();indexR++){
             newRow();
             for(indexC=0;indexC<header.length;indexC++){

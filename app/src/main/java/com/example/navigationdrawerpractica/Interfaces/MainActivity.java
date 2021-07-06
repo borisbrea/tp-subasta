@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
-        //lo sgt se implementa luego de haber implementado NavigationView.OnNavigationItemSelectedListener
+
         navigationView.setNavigationItemSelectedListener(this);
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
 
-        //cargar fragment principal en la actividad
+        //Cargar el fragment principal en la actividad
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container_fragment,new PersonasFragment());
@@ -1046,7 +1046,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if(uriList != null && !uriList.isEmpty()){
                             for(int i = 0; i < uriList.size(); i++)
                                 localPhotoList.add(uriList.get(i).toString());
-                                  //localPhotoList.add("/document/msf:38");
                             photoAdapter.setData(uriList);
                         }
                     }
