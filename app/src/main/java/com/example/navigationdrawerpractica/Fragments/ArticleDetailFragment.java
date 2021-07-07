@@ -1,5 +1,6 @@
 package com.example.navigationdrawerpractica.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,10 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.navigationdrawerpractica.DAO.ArticleDetailDao;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ArticleResponse;
 import com.example.navigationdrawerpractica.R;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ViewListener;
 
 import java.util.concurrent.ExecutionException;
 
@@ -29,17 +35,10 @@ public class ArticleDetailFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    TextView  idArticulo;
-    TextView  title;
-    TextView  description;
-    TextView  precioBase;
-    TextView  comision;
-    TextView  estado;
-    TextView  date;
-    TextView  montoVendido;
-    TextView  ganancia;
-
+    TextView  idArticulo, title, description, precioBase, comision;
+    TextView  estado, date, subasta, montoVendido, ganancia;
     ImageView imagen;
+    LinearLayout precioComision, botones, datos;
 
 
     // TODO: Rename and change types of parameters
@@ -95,9 +94,87 @@ public class ArticleDetailFragment extends Fragment {
         comision     = view.findViewById(R.id.tv_comision_adf);
         estado       = view.findViewById(R.id.tv_estado_adf);
         date         = view.findViewById(R.id.tv_fecha_adf);
+        subasta      = view.findViewById(R.id.tv_auction_assigned_adf);
         montoVendido = view.findViewById(R.id.tv_monto_vendido_adf);
         ganancia     = view.findViewById(R.id.tv_ganancia_adf);
 
+        precioComision = view.findViewById(R.id.ll_precio_comision_adf);
+        botones        = view.findViewById(R.id.ll_botones_adf);
+        datos          = view.findViewById(R.id.ll_datos_adf);
+
+        ArticleResponse article = (ArticleResponse) getArguments().getSerializable("article");
+
+        if(article!= null){
+
+            //title.setText(article.);
+            CarouselView carouselView = view.findViewById(R.id.cv_article_images_adv);
+            carouselView.setPageCount(article.getImages().size());
+            carouselView.setViewListener(new ViewListener() {
+                                             @Override
+                                             public View setViewForPosition(int position) {
+                                                 ImageView imageView = new ImageView(view.getContext());
+                                                 imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                 Glide.with(view)
+                                                         .load(article.getImages().get(position))
+                                                         .fitCenter()
+                                                         .centerInside()
+                                                         .into(imageView);
+                                                 return imageView;
+                                             }
+            });
+
+
+
+            description.setText(article.getDescription());
+
+            if(article.getProductStatus().equals("pending_approval")){
+                estado.setText("Pendiente de aprobación");
+                estado.setTextColor(Color.parseColor("#D0312D"));
+            }
+            if(article.getProductStatus().equals("pending_confirmation")){
+                estado.setText("Pendiente de Confirmación");
+                estado.setTextColor(Color.parseColor("#E5BE01"));
+
+                precioComision.setVisibility(View.VISIBLE);
+                precioBase.setText("Precio base: " + article.getBasePrice());
+                comision.setText("Comisión: " + article.getCommission());
+
+                botones.setVisibility(View.VISIBLE);
+
+                datos.setVisibility(View.GONE);
+
+            }
+            if(article.getProductStatus().equals("assigned_auction")){
+                estado.setText("Asignado a Subasta");
+                estado.setTextColor(Color.parseColor("#ED7014"));
+
+                precioComision.setVisibility(View.VISIBLE);
+                precioBase.setText("Precio base: " + article.getBasePrice());
+                comision.setText("Comisión: " + article.getCommission());
+
+                botones.setVisibility(View.GONE);
+
+                datos.setVisibility(View.VISIBLE);
+                date.setText("Fecha: " + article.getAssignedDate());
+                subasta.setText("Subasta: " + article.getAssignedAuction());
+
+            }
+            if(article.getProductStatus().equals("sold")){
+                estado.setText("Vendido");
+                estado.setTextColor(Color.parseColor("#3C8C3F"));
+
+                precioComision.setVisibility(View.VISIBLE);
+                precioBase.setText("Precio base: " + article.getBasePrice());
+                comision.setText("Comisión: " + article.getCommission());
+
+                botones.setVisibility(View.GONE);
+
+                datos.setVisibility(View.VISIBLE);
+                date.setText("Fecha: " + article.getSoldDate());
+                montoVendido.setText("Monto Vendido: " + article.getSoldAmount());
+                ganancia.setText("Ganancia: "+ article.getEarnigs());
+            }
+        }
 
         try {
             Response response = new ArticleDetailDao().execute(idArticulo).get();

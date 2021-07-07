@@ -3,33 +3,29 @@ package com.example.navigationdrawerpractica.DAO;
 import android.os.AsyncTask;
 
 import com.example.navigationdrawerpractica.Cliente.RetrofitClient;
-import com.example.navigationdrawerpractica.Entidades.requestEntities.BidRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.RegisterRequest;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.UserUpdateRequest;
 import com.example.navigationdrawerpractica.Service.RetrofitApiService;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 
 import retrofit2.Response;
 
-public class RegisterBidDao extends AsyncTask<String, Void, Response> {
+public class UserUpdateDao extends AsyncTask<UserUpdateRequest, Void, Response> {
 
     private RetrofitApiService apiService = RetrofitClient.getApiService();
 
     @Override
-    protected Response doInBackground(String... strings) {
-        BidRequest request = new BidRequest(Integer.valueOf(strings[0]),Integer.valueOf(strings[1]));
-
+    protected Response doInBackground(UserUpdateRequest... userUpdateRequests) {
         Response<Void> response = null;
 
         apiService = RetrofitClient.getApiService();
         try {
-            response = apiService.bidAction("https://auction-api-rest.herokuapp.com/users/" + strings[2] + "/bids", request).execute();
+            response = apiService.updateUser("https://auction-api-rest.herokuapp.com/users/" + userUpdateRequests[0].getUserId(), userUpdateRequests[0]).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
-//response.errorBody().string().contains("user_is_owner");  new JSONObject(response.errorBody().string().toString());
+
         return response;
     }
 }

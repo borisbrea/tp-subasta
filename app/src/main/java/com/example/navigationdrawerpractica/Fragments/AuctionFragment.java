@@ -155,16 +155,6 @@ public class AuctionFragment extends Fragment {
 
                 CarouselView carouselView = view.findViewById(R.id.auction_carousel);
                              carouselView.setPageCount(subastaCompleta.getArticles().get(catalogIndex).getPictures().size());
-                             /*carouselView.setImageListener(new ImageListener() {
-                            @Override
-                            public void setImageForPosition(int position, ImageView imageView) {
-                                //imageView.setImageResource(mImages[position]);
-                                if(position < subastaCompleta.getArticles().get(catalogIndex).getPictures().size())
-                                    Glide.with(view).load(subastaCompleta.getArticles().get(catalogIndex).getPictures().get(position).getUrl()).into(imageView);
-                                //Glide.with(view).load(sampleImages[position]).into(imageView);
-
-                            }
-                        });*/
 
                 carouselView.setViewListener(new ViewListener() {
                     @Override

@@ -3,6 +3,7 @@ package com.example.navigationdrawerpractica.Interfaces;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ArticleResponse;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 
@@ -14,5 +15,5 @@ public interface iComunicaFragments {
     public void enviarPersona   (Persona persona);
     public void enviarSubasta   (AuctionHome subasta);
     public void enviarMetodoPago(MetodoPago metodoPago);
-    public void enviarArticulo  (Articulo articulo);
+    public void enviarArticulo  (ArticleResponse articulo);
 }

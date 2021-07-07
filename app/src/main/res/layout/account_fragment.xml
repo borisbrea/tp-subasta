@@ -17,14 +17,14 @@
             android:layout_marginTop="45dp"
             android:text="Mis Datos"
             android:textSize="20dp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="@string/email"
             android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/edit_email"
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_marginTop="25dp"
             android:text="@string/name"
             android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/edit_name"
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             android:layout_marginTop="25dp"
             android:text="@string/surname"
             android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/edit_surname"
             android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             android:layout_marginTop="25dp"
             android:text="@string/dni"
             android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/edit_document"
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
             android:layout_marginTop="25dp"
             android:text="@string/address"
             android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/edit_address"
             android:layout_width="match_parent"
@@ -95,7 +95,7 @@
             android:layout_marginTop="25dp"
             android:text="@string/phone"
             android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/edit_phone"
             android:layout_width="match_parent"
@@ -109,7 +109,7 @@
             android:layout_marginTop="25dp"
             android:text="Clave"
             android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/edit_password"
             android:layout_width="match_parent"
@@ -122,7 +122,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tv_user_id_acf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="User Id"
+            android:textSize="14sp"
+            android:visibility="gone"/>
         <Button
             android:id="@+id/btn_save"
             android:layout_width="match_parent"
@@ -131,6 +139,6 @@
             android:text="Guardar"
             android:background="#703DFB"
             android:textColor="#fff"
-            android:onClick="registerAction"/>
+            android:onClick="userUpdateAction"/>
     </LinearLayout>
 </LinearLayout>

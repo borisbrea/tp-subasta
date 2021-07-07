@@ -34,13 +34,8 @@ public class AccountFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private TextView nombre;
-    private TextView apellido;
-    private TextView email;
-    private TextView telefono;
-    private TextView direccion;
-    private TextView documento;
-    private TextView clave;
+    private TextView nombre, apellido, email, telefono;
+    private TextView direccion, documento, clave, userId;
 
 
     public AccountFragment() {
@@ -80,6 +75,9 @@ public class AccountFragment extends Fragment {
         View view = inflater.inflate(R.layout.account_fragment, container, false);
         getActivity().setTitle(Utils.TITLE_MI_CUENTA);
 
+        String user = (String) getArguments().getSerializable("userId");
+
+        userId     = view.findViewById(R.id.tv_user_id_acf);
         nombre     = view.findViewById(R.id.edit_name);
         apellido   = view.findViewById(R.id.edit_surname);
         email      = view.findViewById(R.id.edit_email);
@@ -90,14 +88,15 @@ public class AccountFragment extends Fragment {
 
 
         try {
-            Response response = new AccountDao().execute(Integer.valueOf("1")).get();
+            Response response = new AccountDao().execute(Integer.valueOf(user)).get();
 
             AccountResponse accountResponse = (AccountResponse) response.body();
 
             if(accountResponse != null){
-                nombre.setText(accountResponse.getFirstName());
+                userId. setText(user);
+                nombre. setText(accountResponse.getFirstName());
                 apellido.setText(accountResponse.getLastName());
-                email.setText(accountResponse.getEmail());
+                email.  setText(accountResponse.getEmail());
                 telefono.setText(accountResponse.getPhone());
                 direccion.setText(accountResponse.getAddress());
                 documento.setText(accountResponse.getDni());

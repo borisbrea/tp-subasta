@@ -16,15 +16,23 @@ import android.widget.Toast;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterArticulos;
 import com.example.navigationdrawerpractica.Adaptadores.AdapterMetodoPago;
+import com.example.navigationdrawerpractica.DAO.ArticleDao;
+import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
 import com.example.navigationdrawerpractica.DAO.GenericDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
+import com.example.navigationdrawerpractica.Entidades.Bundle.AuctionBundle;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ArticleResponse;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.ArticleRequest;
 import com.example.navigationdrawerpractica.Interfaces.iComunicaFragments;
 import com.example.navigationdrawerpractica.R;
 import com.example.navigationdrawerpractica.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,10 +50,10 @@ public class ArticleFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-
+    String userId;
     AdapterArticulos adapterArticulos;
     RecyclerView      recyclerViewArticulos;
-    ArrayList<Articulo> listaArticulos;
+    ArrayList<ArticleResponse> articleList;
 
     EditText txtnombre;
 
@@ -86,30 +94,55 @@ public class ArticleFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.article_fragment,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().setTitle(Utils.TITLE_MIS_ARTICULOS);
 
+        View view = inflater.inflate(R.layout.article_fragment,container,false);
+
+        userId = (String) getArguments().getSerializable("userId");
+
         txtnombre = view.findViewById(R.id.txtnombre);
         recyclerViewArticulos = view.findViewById(R.id.recyclerView_af);
-        listaArticulos = new ArrayList<>();
+        articleList = new ArrayList<>();
         cargarLista();
         mostrarData();
         return view;
     }
 
     public void cargarLista(){
-        List<Articulo> articulos = new ArrayList<>();
-        dao.getArticulos(articulos);
-        listaArticulos.addAll(articulos);
+
+        ArticleResponse articleResponse = new ArticleResponse();
+
+        articleResponse.setDescription("Casco Virtual");
+        articleResponse.setProductStatus("pending_approval");
+        List<String> images = new ArrayList<>();
+        images.add("https://http2.mlstatic.com/D_NQ_NP_600075-MLA41074180964_032020-O.jpg");
+        articleResponse.setImages(images);
+
+        articleList.add(articleResponse);
+
+        /*try {
+            //Response response = new ArticleDao().execute(userId).get();
+
+
+
+
+           // if(response.body() != null){
+                //articleList.addAll((List<ArticleResponse>) response.body());
+
+            //}
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
     }
 
     private void mostrarData(){
         recyclerViewArticulos.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterArticulos = new AdapterArticulos(getContext(), listaArticulos);
+        adapterArticulos = new AdapterArticulos(getContext(), articleList);
         recyclerViewArticulos.setAdapter(adapterArticulos);
 
         adapterArticulos.setOnclickListener(new View.OnClickListener() {
@@ -121,7 +154,7 @@ public class ArticleFragment extends Fragment {
                 //enviar mediante la interface el objeto seleccionado al detalle
                 //se envia el objeto completo
                 //se utiliza la interface como puente para enviar el objeto seleccionado
-                interfaceComunicaFragments.enviarArticulo(listaArticulos.get(recyclerViewArticulos.getChildAdapterPosition(view)));
+                interfaceComunicaFragments.enviarArticulo(articleList.get(recyclerViewArticulos.getChildAdapterPosition(view)));
                 //luego en el mainactivity se hace la implementacion de la interface para implementar el metodo enviarpersona
             }
         });

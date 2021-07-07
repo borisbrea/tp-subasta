@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ArticleResponse;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.R;
 
@@ -20,12 +21,12 @@ import java.util.ArrayList;
 public class AdapterArticulos extends RecyclerView.Adapter<AdapterArticulos.ViewHolder> implements View.OnClickListener{
 
     LayoutInflater inflater;
-    ArrayList<Articulo> model;
+    ArrayList<ArticleResponse> model;
     View viewClass;
 
     private View.OnClickListener listener;
 
-    public AdapterArticulos(Context context, ArrayList<Articulo> model){
+    public AdapterArticulos(Context context, ArrayList<ArticleResponse> model){
         this.inflater = LayoutInflater.from(context);
         this.model = model;
     }
@@ -45,16 +46,22 @@ public class AdapterArticulos extends RecyclerView.Adapter<AdapterArticulos.View
 
     @Override
     public void onBindViewHolder(@NonNull AdapterArticulos.ViewHolder holder, int position) {
-        String descripcion = String.valueOf(model.get(position).getDescripcionCatalogo());
-        String estado       = model.get(position).getEstado();
+        String descripcion = String.valueOf(model.get(position).getDescription());
+        String estado       = model.get(position).getProductStatus();
 
-        //int    imageid = model.get(position).getImagenid();
-        holder.descripcion.setText      (descripcion);
-        holder.estado.setText           ("Estado: " + estado);
+        holder.descripcion.setText(descripcion);
 
-        Glide.with(viewClass).load(model.get(position).getImagen()).into(holder.imagen);
+        if(estado.equals("pending_approval"))
+            holder.estado.setText("Estado: Pendiente de aprobación");
+        if(estado.equals("pending_confirmation"))
+            holder.estado.setText("Estado: Pendiente de confirmación");
+        if(estado.equals("assigned_auction"))
+            holder.estado.setText("Estado: Asignado a subasta");
+        if(estado.equals("sold"))
+            holder.estado.setText("Estado: Vendido");
 
-        //holder.imagen.setImageResource  (R.drawable.generic_article);
+        Glide.with(viewClass).load(model.get(position).getImages().get(0)).into(holder.imagen);
+
     }
 
     @Override

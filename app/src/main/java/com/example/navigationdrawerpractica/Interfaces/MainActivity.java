@@ -52,11 +52,13 @@ import com.example.navigationdrawerpractica.DAO.PutPaymentMethodCreditCardDao;
 import com.example.navigationdrawerpractica.DAO.RegisterBidDao;
 import com.example.navigationdrawerpractica.DAO.RegisterDao;
 import com.example.navigationdrawerpractica.DAO.RegisterNewArticleDao;
+import com.example.navigationdrawerpractica.DAO.UserUpdateDao;
 import com.example.navigationdrawerpractica.Entidades.Articulo;
 import com.example.navigationdrawerpractica.Entidades.Bundle.AuctionBundle;
 import com.example.navigationdrawerpractica.Entidades.MetodoPago;
 import com.example.navigationdrawerpractica.Entidades.Persona;
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ArticleResponse;
 import com.example.navigationdrawerpractica.Entidades.Subasta;
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.Entidades.home.AuctionDetail;
@@ -64,6 +66,7 @@ import com.example.navigationdrawerpractica.Entidades.home.AuctionHome;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.AccountRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.ArticleRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.CreditCardRequest;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.UserUpdateRequest;
 import com.example.navigationdrawerpractica.Fragments.AccessMenuFragment;
 import com.example.navigationdrawerpractica.Fragments.AccountFragment;
 import com.example.navigationdrawerpractica.Fragments.AddPaymentFragment;
@@ -195,9 +198,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.account){
+
+            AccountFragment accountFragment = new AccountFragment();
+
+            NavigationView navigationView = findViewById(R.id.navigationView);
+            TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userId",(String) tv_user_id.getText());
+            accountFragment.setArguments(bundle);
+
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new AccountFragment());
+            fragmentTransaction.replace(R.id.container_fragment,accountFragment);
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.payment){
@@ -217,9 +230,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.article){
+
+            ArticleFragment articleFragment = new ArticleFragment();
+
+            NavigationView navigationView = findViewById(R.id.navigationView);
+            TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userId",(String) tv_user_id.getText());
+            articleFragment.setArguments(bundle);
+
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new ArticleFragment());
+            fragmentTransaction.replace(R.id.container_fragment,articleFragment);
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.bid){
@@ -266,11 +289,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.navigationView);
         TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
 
-        Bundle bundleEnvio = new Bundle();
-               bundleEnvio.putSerializable("auction",subasta);
-               bundleEnvio.putSerializable("userId",(String) tv_user_id.getText());
+        Bundle bundle = new Bundle();
+               bundle.putSerializable("auction",subasta);
+               bundle.putSerializable("userId",(String) tv_user_id.getText());
 
-        detallePersonaFragment.setArguments(bundleEnvio);
+        detallePersonaFragment.setArguments(bundle);
 
         fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -307,9 +330,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void enviarArticulo(Articulo articulo) {
+    public void enviarArticulo(ArticleResponse article) {
 
         ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
+
+        Bundle bundle = new Bundle();
+               bundle.putSerializable("article",article);
+
+        articleDetailFragment.setArguments(bundle);
 
         fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -338,18 +366,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
          login(email, password);
-
-        /*switch(responseLogin){
-            case  0:
-                break;
-            case 200: managerMenuOption(true); showMainMenuFragment();
-                break;
-            case 400:simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_LOGIN_400);
-                break;
-            default: simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_DEFAULT);
-                break;
-        }*/
-
     }
 
     public void validateUserAction(View view){
@@ -537,7 +553,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         try {
             Response response = new RegisterBidDao().execute(catalogId, amount, userId).get();
-            String var = "";
+
+            if(response.code() == 400){
+                switch (response.message()){
+                    case "alredy_auctioned":
+                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_ALREADY_AUCTIONED); break;
+                    case "user_has_active_bid":
+                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_ACTIVE_BID); break;
+                    case "max_time_elapsed":
+                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_MAX_TIME); break;
+                    case "invalid_amount":
+                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_INVALID_AMOUNT); break;
+                    case "user_already_has_winning_bid":
+                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_WINNING_BID); break;
+                    case "user_is_owner":
+                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_OWN_BID); break;
+                    default:
+                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_UNKNOW); break;
+                }
+            } else{
+                simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_CORRECT_BID);
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void userUpdateAction(View view){
+
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
+
+        String userId     = ((TextView) view.findViewById(R.id.tv_user_id_acf)).getText().toString();
+        String nombre     = ((TextView) view.findViewById(R.id.edit_name)).getText().toString();
+        String apellido   = ((TextView) view.findViewById(R.id.edit_surname)).getText().toString();
+        String email      = ((TextView) view.findViewById(R.id.edit_email)).getText().toString();
+        String telefono   = ((TextView) view.findViewById(R.id.edit_phone)).getText().toString();
+        String direccion  = ((TextView) view.findViewById(R.id.edit_address)).getText().toString();
+        String documento  = ((TextView) view.findViewById(R.id.edit_document)).getText().toString();
+        String clave      = ((TextView) view.findViewById(R.id.edit_password)).getText().toString();
+
+        userUpdateRequest.setUserId(userId);
+        userUpdateRequest.setEmail(email);
+        userUpdateRequest.setFirstName(nombre);
+        userUpdateRequest.setLastName(apellido);
+        userUpdateRequest.setPhone(telefono);
+        userUpdateRequest.setAddress(direccion);
+        userUpdateRequest.setPassword(clave);
+
+        try {
+            Response response = new UserUpdateDao().execute(userUpdateRequest).get();
+            String sdr = "";
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -1097,6 +1164,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             uploadToCloudinary(filePath);
         //}
     }
+
+
+    /*******************************************************************************************
+     *                          UPLOAD CLOUDINARY
+     ******************************************************************************************/
 
     private void uploadToCloudinary(String filePath) {
         Log.d("A", "sign up uploadToCloudinary- ");

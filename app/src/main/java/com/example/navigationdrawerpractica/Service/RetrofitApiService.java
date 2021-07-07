@@ -3,6 +3,7 @@ package com.example.navigationdrawerpractica.Service;
 import androidx.annotation.NonNull;
 
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ArticleResponse;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ResponseGetPaymentMethods;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.AccountResponse;
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
@@ -14,6 +15,7 @@ import com.example.navigationdrawerpractica.Entidades.requestEntities.GeneratePa
 import com.example.navigationdrawerpractica.Entidades.requestEntities.RegisterRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.AccountRequest;
 import com.example.navigationdrawerpractica.Entidades.requestEntities.CreditCardRequest;
+import com.example.navigationdrawerpractica.Entidades.requestEntities.UserUpdateRequest;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -52,6 +55,9 @@ public interface RetrofitApiService {
     Call<Auction> getAuction(@Url String fullUrl);
 
     @GET
+    Call<ArticleResponse> getArticles(@Url String fullUrl);
+
+    @GET
     Call<AccountResponse> getAAccountData(@Url String fullUrl);
 
     @GET
@@ -79,5 +85,9 @@ public interface RetrofitApiService {
     @PUT
     @Headers({"Content-Type: application/json"})
     Call<Void> newArticle(@Url String fullUrl, @Body ArticleRequest request);
+
+    @PATCH
+    @Headers({"Content-Type: application/json"})
+    Call<Void> updateUser(@Url String fullUrl, @Body UserUpdateRequest request);
 
 }
