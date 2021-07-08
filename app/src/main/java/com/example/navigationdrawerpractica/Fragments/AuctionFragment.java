@@ -141,7 +141,7 @@ public class AuctionFragment extends Fragment {
         int    catalogIndex = Integer.valueOf(auctionBundle.getIndexCatalog());
 
         try {
-            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(idSubasta), Integer.valueOf(userId)).get();
+            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(idSubasta), userId.equals("User Id")? null: Integer.valueOf(userId)).get();
 
             SubastaConArticulos subastaCompleta = (SubastaConArticulos) response.body();
 

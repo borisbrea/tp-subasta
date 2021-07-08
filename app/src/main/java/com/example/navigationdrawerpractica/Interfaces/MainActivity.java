@@ -265,9 +265,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.statistic){
+
+            StatisticFragment statisticFragment = new StatisticFragment();
+
+            NavigationView navigationView = findViewById(R.id.navigationView);
+            TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userId",(String) tv_user_id.getText());
+            statisticFragment.setArguments(bundle);
+
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new StatisticFragment());
+            fragmentTransaction.replace(R.id.container_fragment, statisticFragment);
             fragmentTransaction.commit();
         }
 
@@ -362,6 +372,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /************************************************************************************************
      *                                      ACTIONS
      ***********************************************************************************************/
+
+    public void approveArticle(View view) {
+
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        String userId = ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf)).getText().toString();
+
+        String articleCode = ((TextView) findViewById(R.id.lgUsername)).getText().toString();
+
+
+    }
 
     public void loginAction(View view) {
 
@@ -563,6 +583,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String catalogId = (String) ((TextView) findViewById(R.id.tv_catalog_id_af)).getText().toString();
         String amount    = (String) ((TextView) findViewById(R.id.et_precio_puja_af)).getText().toString();
         String userId    = (String) ((TextView) findViewById(R.id.tv_user_id_af)).getText().toString();
+
+        if (amount.trim().matches("")) {
+            ((TextView) findViewById(R.id.et_precio_puja_af)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
 
         try {
             Response response = new RegisterBidDao().execute(catalogId, amount, userId).get();
@@ -830,10 +855,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void showPaymentMethodFragment(){
 
+        PaymentFragment paymentFragment = new PaymentFragment();
+
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
+        Bundle bundle = new Bundle();
+               bundle.putSerializable("userId",(String) tv_user_id.getText());
+        paymentFragment.setArguments(bundle);
+
         drawerLayout.closeDrawer(GravityCompat.START);
         fragmentManager     = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_fragment,new PaymentFragment());
+        fragmentTransaction.replace(R.id.container_fragment,paymentFragment);
         fragmentTransaction.commit();
     }
 
@@ -984,8 +1018,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String auctionId     = ((TextView) findViewById(R.id.tv_auction_id_af)).getText().toString();
 
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        String userId = ((TextView)navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf)).getText().toString();
+
         try {
-            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(auctionId)).get();
+            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(auctionId), userId.equals("User Id")? null: Integer.valueOf(userId)).get();
 
             SubastaConArticulos auctionComplete = (SubastaConArticulos) response.body();
 
@@ -1034,8 +1071,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String auctionId     = ((TextView) findViewById(R.id.tv_auction_id_af)).getText().toString();
 
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        String userId = ((TextView)navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf)).getText().toString();
+
         try {
-            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(auctionId)).get();
+            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(auctionId), userId.equals("User Id")? null: Integer.valueOf(userId)).get();
 
             SubastaConArticulos auctionComplete = (SubastaConArticulos) response.body();
 

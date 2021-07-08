@@ -11,15 +11,22 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
+import com.example.navigationdrawerpractica.DAO.BidsDao;
+import com.example.navigationdrawerpractica.DAO.StaticsDao;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.BidResponse;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.StaticsResponse;
+import com.example.navigationdrawerpractica.Entidades.Statics.CategoryParticipation;
 import com.example.navigationdrawerpractica.R;
 import com.example.navigationdrawerpractica.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,50 +79,60 @@ public class StatisticFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().setTitle(Utils.TITLE_MIS_ESTADISTICAS);
 
         View view = inflater.inflate(R.layout.statistic_fragment, container, false);
 
-        PieChartView pieChartView = view.findViewById(R.id.chart);
+        String userId = (String) getArguments().getSerializable("userId");
 
-        //pieChartView = view.findViewById(R.id.chart);
+        Response response = null;
+        try {
+            response = new StaticsDao().execute(userId).get();
+            StaticsResponse statistic = (StaticsResponse) response.body();
 
-        List pieData = new ArrayList<>();
-        pieData.add(new SliceValue(15, Color.BLUE).setLabel("Q1: $10"));
-        pieData.add(new SliceValue(25, Color.GRAY).setLabel("Q2: $4"));
-        pieData.add(new SliceValue(10, Color.RED).setLabel("Q3: $18"));
-        pieData.add(new SliceValue(60, Color.MAGENTA).setLabel("Q4: $28"));
+            PieChartView pieChartView = view.findViewById(R.id.chart);
 
-        PieChartData pieChartData = new PieChartData(pieData);
-        pieChartData.setHasLabels(true).setValueLabelTextSize(14);
-        pieChartData.setHasCenterCircle(true).setCenterText1("Sales in million").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#0097A7"));
-        pieChartView.setPieChartData(pieChartData);
+            List pieData = new ArrayList<>();
 
+            Long won  = statistic.getAuctionRatio().getWon();
+            Long lost = statistic.getAuctionRatio().getLost();
+            Long total = won + lost == 0? 1: won + lost;
 
-        String[] header = {"Categoría", "Cantidad"};
+            pieData.add(new SliceValue(won, Color.BLUE).setLabel((won  / total) * 100 + "%"));
+            pieData.add(new SliceValue(lost, Color.RED).setLabel((lost / total) * 100 + "%"));
 
-        tableLayout = (TableLayout) view.findViewById(R.id.statistic_table);
+            PieChartData pieChartData = new PieChartData(pieData);
+            pieChartData.setHasLabels(true).setValueLabelTextSize(14);
+            pieChartData.setHasCenterCircle(true).setCenterText1("").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#0097A7"));
+            pieChartView.setPieChartData(pieChartData);
 
-        AdapterPujasTable adapterPujasTable = new AdapterPujasTable(tableLayout, getActivity().getApplicationContext());
-        adapterPujasTable.addHeader(header);
-        adapterPujasTable.addData(getBids());
-        adapterPujasTable.backGroundHeader(Color.BLUE);
+            String[] header = {"Categoría", "Cantidad"};
+
+            tableLayout = (TableLayout) view.findViewById(R.id.statistic_table);
+
+            AdapterPujasTable adapterPujasTable = new AdapterPujasTable(tableLayout, getActivity().getApplicationContext());
+            adapterPujasTable.addHeader(header);
+            adapterPujasTable.addData(getBids(statistic));
+            adapterPujasTable.backGroundHeader(Color.BLUE);
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         return view;
     }
 
 
-    private ArrayList<String[]> getBids(){
+    private ArrayList<String[]> getBids(StaticsResponse statics){
         ArrayList<String[]> rows = new ArrayList<>();
 
-        rows.add(new String[]{"Común", "3"});
-        rows.add(new String[]{"Especial","2"});
-        rows.add(new String[]{"Plata","4"});
-        rows.add(new String[]{"Oro","1"});
-        rows.add(new String[]{"Platino","0"});
+       for(CategoryParticipation participation :statics.getCategoryParticipation())
+           rows.add(new String[]{participation.getCategory(), String.valueOf(participation.getValue())});
 
         return rows;
     }

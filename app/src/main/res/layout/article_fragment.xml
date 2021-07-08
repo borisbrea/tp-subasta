@@ -11,28 +11,41 @@
         android:hint="Valor">
     </EditText>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_af"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:textSize="14sp"
-        android:textStyle="bold"/>
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_af"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_agregar_af"
-        android:layout_width="300dp"
-        android:gravity="center"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#703DFB"
-        android:onClick="showNewArticleFragment"
-        android:textColor="#E6E4EA"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="138dp"
-        android:layout_marginLeft="55dp"
-        android:text="@string/agregar_nuevo"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/btn_agregar_af"
+            android:layout_width="300dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:background="#703DFB"
+            android:onClick="showNewArticleFragment"
+            android:textColor="#E6E4EA"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="138dp"
+            android:layout_marginLeft="55dp"
+            android:text="@string/agregar_nuevo"/>
+    </LinearLayout>
 
 </LinearLayout>

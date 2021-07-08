@@ -7,6 +7,7 @@ import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ArticleRe
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.BidResponse;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ResponseGetPaymentMethods;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.AccountResponse;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.StaticsResponse;
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.Entidades.home.Auction;
 import com.example.navigationdrawerpractica.Entidades.home.Home;
@@ -70,6 +71,14 @@ public interface RetrofitApiService {
     @GET
     @Headers({"Content-Type: application/json"})
     Call<List<BidResponse>> getBids(@Url String fullUrl);
+
+    @GET
+    @Headers({"Content-Type: application/json"})
+    Call<StaticsResponse> getStatics(@Url String fullUrl);
+
+    @PUT
+    @Headers({"Content-Type: application/json"})
+    Call<Void> approveArticle(@Url String fullUrl);
 
     @DELETE
     @Headers({"Content-Type: application/json"})
