@@ -44,7 +44,7 @@ public class AdapterPujasTable {
     private void newCell(){
         txtCell = new TextView(context);
         txtCell.setGravity(Gravity.CENTER);
-        txtCell.setTextSize(20);
+        txtCell.setTextSize(17);
     }
 
     private void createHeader(){

@@ -36,7 +36,7 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -60,26 +60,50 @@
                     android:hint="Título del Artículo"
                     android:ems="10"
                     android:inputType="textPersonName" />
-            </LinearLayout>
+            </LinearLayout> -->
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="5dp"
-                android:text="Descripción"
+                android:text="@string/description"
                 android:singleLine="true"
-                android:textSize="14sp"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_description_naf"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#E4E3E3"
-                android:hint="Descripcion prueba"
+                android:background="@drawable/textview_border"
+                android:hint=""
+                android:paddingLeft="10dp"
                 android:ems="10"
                 android:inputType="textPersonName" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="5dp"
+                android:text="Descripción Completa"
+                android:singleLine="true"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/tv_full_description_naf"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:gravity="top"
+                android:paddingLeft="10dp"
+                android:paddingTop="3dp"
+                android:hint=""
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:background="@drawable/textview_border"/>
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +123,7 @@
                     android:scaleType="fitXY"
                     android:layout_weight="1"
                     android:background="@drawable/textview_border"
-                    android:onClick="initiatePhotoRequest"/>
+                    android:onClick="initiatePhotoRequest1"/>
                 <ImageView
                     android:id="@+id/iv_image_2_naf"
                     android:layout_width="match_parent"
@@ -108,7 +132,8 @@
                     android:layout_marginLeft="3dip"
                     android:scaleType="fitXY"
                     android:layout_weight="1"
-                    android:background="@drawable/textview_border" />
+                    android:background="@drawable/textview_border"
+                    android:onClick="initiatePhotoRequest2"/>
                 <ImageView
                     android:id="@+id/iv_image_3_naf"
                     android:layout_width="match_parent"
@@ -117,7 +142,8 @@
                     android:layout_marginLeft="3dip"
                     android:scaleType="fitXY"
                     android:layout_weight="1"
-                    android:background="@drawable/textview_border"/>
+                    android:background="@drawable/textview_border"
+                    android:onClick="initiatePhotoRequest3"/>
                 <ImageView
                     android:id="@+id/iv_image_4_naf"
                     android:layout_width="match_parent"
@@ -126,7 +152,8 @@
                     android:layout_marginLeft="3dip"
                     android:scaleType="fitXY"
                     android:layout_weight="1"
-                    android:background="@drawable/textview_border"/>
+                    android:background="@drawable/textview_border"
+                    android:onClick="initiatePhotoRequest4"/>
             </LinearLayout>
 
 
@@ -178,7 +205,8 @@
                 android:background="#703DFB"
                 android:text="Cargar"
                 android:textColor="#E6E4EA"
-                android:onClick="initiatePhotoRequest"/>
+                android:onClick="initiatePhotoRequest"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_save_image_adf"
@@ -188,7 +216,8 @@
                 android:background="#703DFB"
                 android:text="Cloudinary"
                 android:textColor="#E6E4EA"
-                android:onClick="saveImageCloudinaryAction"/>
+                android:onClick="saveImageCloudinaryAction"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_save_adf"

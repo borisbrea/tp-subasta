@@ -29,7 +29,7 @@ public class RegisterBidDao extends AsyncTask<String, Void, Response> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//response.errorBody().string().contains("user_is_owner");  new JSONObject(response.errorBody().string().toString());
+
         return response;
     }
 }

@@ -21,7 +21,7 @@ public class AuctionWithItemsDao extends AsyncTask<Integer, Void, Response> {
 
         apiService = RetrofitClient.getApiService();
         try {
-            response = apiService.getAuctionWithItems("https://auction-api-rest.herokuapp.com/auctions/" + ints[0] + "/catalog").execute();
+            response = apiService.getAuctionWithItems("https://auction-api-rest.herokuapp.com/auctions/" + ints[0] + "/catalog", ints[1]).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }

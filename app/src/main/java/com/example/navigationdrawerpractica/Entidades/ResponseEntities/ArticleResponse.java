@@ -1,6 +1,8 @@
 package com.example.navigationdrawerpractica.Entidades.ResponseEntities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class ArticleResponse implements Serializable {
@@ -8,19 +10,20 @@ public class ArticleResponse implements Serializable {
     private List<String>    images;
     private String          description;
     private String          fullDescription;
+
     private String          productStatus;
-    private int             basePrice;
-    private int             commission;
-    private String          assignedDate;
-    private int             assignedAuction;
-    private String          soldDate;
-    private String          soldAmount;
-    private String          earnings;
+    private BigDecimal      basePrice;
+    private BigDecimal      commission;
+    private Date            assignedDate;
+    private Integer         assignedAuction;
+    private Date            soldDate;
+    private BigDecimal      soldAmount;
+    private BigDecimal      earnings;
 
     public ArticleResponse() {
     }
 
-    public ArticleResponse(List<String> images, String description, String fullDescription, String productStatus, int basePrice, int commission, String assignedDate, int assignedAuction, String soldDate, String soldAmount, String earnings) {
+    public ArticleResponse(List<String> images, String description, String fullDescription, String productStatus, BigDecimal basePrice, BigDecimal commission, Date assignedDate, Integer assignedAuction, Date soldDate, BigDecimal soldAmount, BigDecimal earnings) {
         this.images = images;
         this.description = description;
         this.fullDescription = fullDescription;
@@ -66,59 +69,59 @@ public class ArticleResponse implements Serializable {
         this.productStatus = productStatus;
     }
 
-    public int getBasePrice() {
+    public BigDecimal getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(int basePrice) {
+    public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
 
-    public int getCommission() {
+    public BigDecimal getCommission() {
         return commission;
     }
 
-    public void setCommission(int commission) {
+    public void setCommission(BigDecimal commission) {
         this.commission = commission;
     }
 
-    public String getAssignedDate() {
+    public Date getAssignedDate() {
         return assignedDate;
     }
 
-    public void setAssignedDate(String assignedDate) {
+    public void setAssignedDate(Date assignedDate) {
         this.assignedDate = assignedDate;
     }
 
-    public int getAssignedAuction() {
+    public Integer getAssignedAuction() {
         return assignedAuction;
     }
 
-    public void setAssignedAuction(int assignedAuction) {
+    public void setAssignedAuction(Integer assignedAuction) {
         this.assignedAuction = assignedAuction;
     }
 
-    public String getSoldDate() {
+    public Date getSoldDate() {
         return soldDate;
     }
 
-    public void setSoldDate(String soldDate) {
+    public void setSoldDate(Date soldDate) {
         this.soldDate = soldDate;
     }
 
-    public String getSoldAmount() {
+    public BigDecimal getSoldAmount() {
         return soldAmount;
     }
 
-    public void setSoldAmount(String soldAmount) {
+    public void setSoldAmount(BigDecimal soldAmount) {
         this.soldAmount = soldAmount;
     }
 
-    public String getEarnigs() {
+    public BigDecimal getEarnings() {
         return earnings;
     }
 
-    public void setEarnigs(String earnigs) {
-        this.earnings = earnigs;
+    public void setEarnings(BigDecimal earnings) {
+        this.earnings = earnings;
     }
 }

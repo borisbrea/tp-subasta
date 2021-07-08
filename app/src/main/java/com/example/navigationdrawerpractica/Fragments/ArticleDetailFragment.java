@@ -137,7 +137,7 @@ public class ArticleDetailFragment extends Fragment {
 
                 precioComision.setVisibility(View.VISIBLE);
                 precioBase.setText("Precio base: " + article.getBasePrice());
-                comision.setText("Comisión: " + article.getCommission());
+                comision.  setText("Comisión: "    + article.getCommission());
 
                 botones.setVisibility(View.VISIBLE);
 
@@ -150,12 +150,12 @@ public class ArticleDetailFragment extends Fragment {
 
                 precioComision.setVisibility(View.VISIBLE);
                 precioBase.setText("Precio base: " + article.getBasePrice());
-                comision.setText("Comisión: " + article.getCommission());
+                comision.  setText("Comisión: "    + article.getCommission());
 
                 botones.setVisibility(View.GONE);
 
                 datos.setVisibility(View.VISIBLE);
-                date.setText("Fecha: " + article.getAssignedDate());
+                date.setText   ("Fecha: "   + article.getAssignedDate());
                 subasta.setText("Subasta: " + article.getAssignedAuction());
 
             }
@@ -165,14 +165,14 @@ public class ArticleDetailFragment extends Fragment {
 
                 precioComision.setVisibility(View.VISIBLE);
                 precioBase.setText("Precio base: " + article.getBasePrice());
-                comision.setText("Comisión: " + article.getCommission());
+                comision.  setText("Comisión: "    + article.getCommission());
 
                 botones.setVisibility(View.GONE);
 
                 datos.setVisibility(View.VISIBLE);
-                date.setText("Fecha: " + article.getSoldDate());
+                date.        setText("Fecha: "         + article.getSoldDate());
                 montoVendido.setText("Monto Vendido: " + article.getSoldAmount());
-                ganancia.setText("Ganancia: "+ article.getEarnigs());
+                ganancia.    setText("Ganancia: "      + article.getEarnings());
             }
         }
 

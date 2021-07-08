@@ -122,21 +122,17 @@ public class ArticleFragment extends Fragment {
 
         articleList.add(articleResponse);
 
-        /*try {
-            //Response response = new ArticleDao().execute(userId).get();
+        try {
+            Response response = new ArticleDao().execute(userId).get();
 
-
-
-
-           // if(response.body() != null){
-                //articleList.addAll((List<ArticleResponse>) response.body());
-
-            //}
+            if(response.body() != null){
+                articleList.addAll((List<ArticleResponse>) response.body());
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
 
     }
 

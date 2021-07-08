@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.navigationdrawerpractica.Entidades.PersonaPrueba;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ArticleResponse;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.BidResponse;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.ResponseGetPaymentMethods;
 import com.example.navigationdrawerpractica.Entidades.ResponseEntities.AccountResponse;
 import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
@@ -55,16 +56,20 @@ public interface RetrofitApiService {
     Call<Auction> getAuction(@Url String fullUrl);
 
     @GET
-    Call<ArticleResponse> getArticles(@Url String fullUrl);
+    Call<List<ArticleResponse>> getArticles(@Url String fullUrl);
 
     @GET
     Call<AccountResponse> getAAccountData(@Url String fullUrl);
 
     @GET
-    Call<SubastaConArticulos> getAuctionWithItems(@Url String fullUrl);
+    Call<SubastaConArticulos> getAuctionWithItems(@Url String fullUrl, @Query(encoded = true, value = "userId") @NonNull Integer userId);
 
     @GET
     Call<ResponseGetPaymentMethods> getPaymentMethods(@Url String fullUrl);
+
+    @GET
+    @Headers({"Content-Type: application/json"})
+    Call<List<BidResponse>> getBids(@Url String fullUrl);
 
     @DELETE
     @Headers({"Content-Type: application/json"})

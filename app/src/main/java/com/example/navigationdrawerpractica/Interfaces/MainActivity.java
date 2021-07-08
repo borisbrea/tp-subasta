@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private TableLayout           tableLayout;
     private TextView              name, lastName, uploadNaf;
-    private ImageView             imageArticle, image1, image2, image3, image4;
+    private ImageView             imageArticle, image, image1, image2, image3, image4;
 
     FragmentManager               fragmentManager;
     FragmentTransaction           fragmentTransaction;
@@ -142,7 +142,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private String global_email = "";
 
-    String filePath;
+    String       filePath;
+    List<String> filePathList       = new ArrayList<>();
+    List<String> cloudinaryUrlsList = new ArrayList<>();
+
     Map  config = new HashMap();
 
     private void configCloudinary() {
@@ -246,9 +249,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.bid){
+
+            BidFragment bidFragment = new BidFragment();
+
+            NavigationView navigationView = findViewById(R.id.navigationView);
+            TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userId",(String) tv_user_id.getText());
+            bidFragment.setArguments(bundle);
+
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment,new BidFragment());
+            fragmentTransaction.replace(R.id.container_fragment,bidFragment);
             fragmentTransaction.commit();
         }
         if(menuItem.getItemId() == R.id.statistic){
@@ -554,26 +567,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             Response response = new RegisterBidDao().execute(catalogId, amount, userId).get();
 
-            if(response.code() == 400){
-                switch (response.message()){
-                    case "alredy_auctioned":
-                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_ALREADY_AUCTIONED); break;
-                    case "user_has_active_bid":
-                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_ACTIVE_BID); break;
-                    case "max_time_elapsed":
-                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_MAX_TIME); break;
-                    case "invalid_amount":
-                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_INVALID_AMOUNT); break;
-                    case "user_already_has_winning_bid":
-                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_WINNING_BID); break;
-                    case "user_is_owner":
-                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_OWN_BID); break;
-                    default:
-                        simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_UNKNOW); break;
+            if(response.errorBody()!= null){
+                try {
+                    String res = response.errorBody().string().split("message\":\"")[1].split("\"")[0];
+
+                    switch (res){
+                        case "alredy_auctioned":
+                            simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_ALREADY_AUCTIONED); break;
+                        case "user_has_active_bid":
+                            simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_ACTIVE_BID); break;
+                        case "max_time_elapsed":
+                            simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_MAX_TIME); break;
+                        case "invalid_amount":
+                            simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_INVALID_AMOUNT); break;
+                        case "user_already_has_winning_bid":
+                            simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_WINNING_BID); break;
+                        case "user_is_owner":
+                            simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_OWN_BID); break;
+                        default:
+                            simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_UNKNOW); break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } else{
-                simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_CORRECT_BID);
+            } else {
+                    simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.BID_ALERT_CORRECT_BID);
             }
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -585,14 +605,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
 
-        String userId     = ((TextView) view.findViewById(R.id.tv_user_id_acf)).getText().toString();
-        String nombre     = ((TextView) view.findViewById(R.id.edit_name)).getText().toString();
-        String apellido   = ((TextView) view.findViewById(R.id.edit_surname)).getText().toString();
-        String email      = ((TextView) view.findViewById(R.id.edit_email)).getText().toString();
-        String telefono   = ((TextView) view.findViewById(R.id.edit_phone)).getText().toString();
-        String direccion  = ((TextView) view.findViewById(R.id.edit_address)).getText().toString();
-        String documento  = ((TextView) view.findViewById(R.id.edit_document)).getText().toString();
-        String clave      = ((TextView) view.findViewById(R.id.edit_password)).getText().toString();
+
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        String userId = ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf)).getText().toString();
+
+        String nombre     = ((TextView) findViewById(R.id.edit_name)).getText().toString();
+        String apellido   = ((TextView) findViewById(R.id.edit_surname)).getText().toString();
+        String email      = ((TextView) findViewById(R.id.edit_email)).getText().toString();
+        String telefono   = ((TextView) findViewById(R.id.edit_phone)).getText().toString();
+        String direccion  = ((TextView) findViewById(R.id.edit_address)).getText().toString();
+        String documento  = ((TextView) findViewById(R.id.edit_document)).getText().toString();
+        String clave      = ((TextView) findViewById(R.id.edit_password)).getText().toString();
 
         userUpdateRequest.setUserId(userId);
         userUpdateRequest.setEmail(email);
@@ -707,6 +730,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setPositiveButton(Utils.BTN_ACCEPT, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
                         dialogInterface.cancel();
                     }
                 });
@@ -811,6 +835,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment,new PaymentFragment());
         fragmentTransaction.commit();
+    }
+
+    public void showArticleFragment() {
+
+        ArticleFragment articleFragment = new ArticleFragment();
+
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userId", (String) tv_user_id.getText());
+        articleFragment.setArguments(bundle);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment, articleFragment);
+        fragmentTransaction.commit();
+
     }
 
     public void showAddPaymentFragment(View view){
@@ -954,7 +996,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView catalogIndexTv   = findViewById(R.id.tv_catalog_index_af);
                          catalogIndexTv.setText(String.valueOf(catalogIndex));
 
-                TextView tituloArticulo   = findViewById(R.id.tv_item_title_af);
+                TextView articleTitle   = findViewById(R.id.tv_item_title_af);
+                         articleTitle.setText(auctionComplete.getArticles().get(catalogIndex).getTitle());
 
                 TextView status           = findViewById(R.id.tv_state_af);
                          status.setText(auctionComplete.getArticles().get(catalogIndex).getStatus());
@@ -1003,7 +1046,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView catalogIndexTv   = findViewById(R.id.tv_catalog_index_af);
                          catalogIndexTv.setText(String.valueOf(catalogIndex));
 
-                TextView tituloArticulo   = findViewById(R.id.tv_item_title_af);
+                TextView articleTitle   = findViewById(R.id.tv_item_title_af);
+                         articleTitle.setText(auctionComplete.getArticles().get(catalogIndex).getTitle());
 
                 TextView status           = findViewById(R.id.tv_state_af);
                          status.setText(auctionComplete.getArticles().get(catalogIndex).getStatus());
@@ -1038,54 +1082,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void saveNewArticleAction(View view){
 
-        String title        = ((TextView) findViewById(R.id.tv_titulo_naf)).     getText().toString();
-        String description  = ((TextView) findViewById(R.id.tv_description_naf)).getText().toString();
-        TextView tv_user_id = navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf);
+        String userId           = ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_user_id_hf)).getText().toString();
+        //String title          = ((TextView) findViewById(R.id.tv_titulo_naf)).     getText().toString();
+        String description      = ((TextView) findViewById(R.id.tv_description_naf)).getText().toString();
+        String fullDescription  = ((TextView) findViewById(R.id.tv_description_naf)).getText().toString();
+
 
         uploadNaf = (TextView) findViewById(R.id.tv_upload_naf);
 
-        // REALIZAR LAS VALIDACIONES
+        saveImageCloudinaryAction();
+
+
+        if (description.matches("")) {
+            ((TextView) findViewById(R.id.tv_description_naf)).setError(Utils.OBLIGATORY_FIELD);
+            return;
+        }
+
+        if(cloudinaryUrlsList.size() == 0){
+            simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_ERROR_IMAGE_REQUIRED);
+            return;
+        }
 
         ArticleRequest request = new ArticleRequest();
-        request.setUserId(tv_user_id.getText().toString());
-        request.setTitle(title);
-        request.setDescription(description);
-        request.setFullDescription("");
-        request.setImages(photoUrls);
+                       request.setUserId(userId);
+                       request.setDescription(description);
+                       request.setFullDescription(fullDescription);
+                       request.setImages(cloudinaryUrlsList);
 
         try {
-            /*
+
             Response response = new RegisterNewArticleDao().execute(request).get();
+
             switch (response.code()){
-                case 200: break;
-                default:  break;
+                case 201:
+                    simpleDialogAlert(Utils.ALERT_MESSAGE, Utils.ALERT_NEW_ARTICLE_OK); showArticleFragment(); break;
+                default:
+                    break;
             }
-            */
+
         } catch (Exception e) {
             e.printStackTrace();
         };
     }
 
 
-    public void initiatePhotoRequest(View view){
-
-        //btnSelectedImage = findViewById(R.id.btn_load_adf);
-
-        image1    = findViewById(R.id.iv_image_1_naf);
-        photoUrls = new ArrayList<>();
-
+    public void initiatePhotoRequest1(View view){
+        image     = findViewById(R.id.iv_image_1_naf);
         requestPermission();
-
-
-        /*btnSelectedImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                requestPermission();
-            }
-        });*/
     }
 
+    public void initiatePhotoRequest2(View view){
+        image     = findViewById(R.id.iv_image_2_naf);
+        requestPermission();
+    }
+
+    public void initiatePhotoRequest3(View view){
+        image     = findViewById(R.id.iv_image_3_naf);
+        requestPermission();
+    }
+
+    public void initiatePhotoRequest4(View view){
+        image     = findViewById(R.id.iv_image_4_naf);
+        requestPermission();
+    }
 
     private void requestPermission(){
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
@@ -1122,14 +1181,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //get the image's file location
         filePath = getRealPathFromUri(data.getData(), MainActivity.this);
-        //lista.add(filePath);
+        filePathList.add(filePath);
         if(requestCode==PICK_IMAGE && resultCode==RESULT_OK){
             try {
-                //set picked image to the mProfile
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                image1.setImageBitmap(bitmap);
+                image.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1160,11 +1217,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void saveImageCloudinaryAction(View view) {
         uploadNaf = findViewById(R.id.tv_upload_naf);
-        //for(int i = 0; i < localPhotoList.size(); i++){
+        //uploadToCloudinary(filePath);
+        for(String file : filePathList){
             uploadToCloudinary(filePath);
-        //}
+        }
     }
 
+    public void saveImageCloudinaryAction() {
+        uploadNaf = findViewById(R.id.tv_upload_naf);
+        //uploadToCloudinary(filePath);
+        for(String file : filePathList){
+            uploadToCloudinary(filePath);
+        }
+    }
 
     /*******************************************************************************************
      *                          UPLOAD CLOUDINARY
@@ -1186,7 +1251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onSuccess(String requestId, Map resultData) {
                 uploadNaf.setText("image URL: "+resultData.get("url").toString());
-                //photoUrls.add(resultData.get("url").toString());
+                cloudinaryUrlsList.add(resultData.get("url").toString());
             }
 
             @Override

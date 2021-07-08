@@ -14,10 +14,19 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.example.navigationdrawerpractica.Adaptadores.AdapterPujasTable;
+import com.example.navigationdrawerpractica.DAO.AuctionWithItemsDao;
+import com.example.navigationdrawerpractica.DAO.BidsDao;
+import com.example.navigationdrawerpractica.Entidades.Bundle.AuctionBundle;
+import com.example.navigationdrawerpractica.Entidades.ResponseEntities.BidResponse;
+import com.example.navigationdrawerpractica.Entidades.SubastaClases.SubastaConArticulos;
 import com.example.navigationdrawerpractica.R;
 import com.example.navigationdrawerpractica.Utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,26 +84,43 @@ public class BidFragment extends Fragment {
 
         getActivity().setTitle(Utils.TITLE_MIS_PUJAS);
 
-        String[] header = {"Fecha", "Item", "Monto", "Resultado"};
+        String userId = (String) getArguments().getSerializable("userId");
+
+        String[] header = {"Fecha", " Catálogo ", " Monto ", " Resultado "};
 
         View view = inflater.inflate(R.layout.bid_fragment,container,false);
         tableLayout = (TableLayout) view.findViewById(R.id.table);
 
         AdapterPujasTable adapterPujasTable = new AdapterPujasTable(tableLayout, getActivity().getApplicationContext());
                           adapterPujasTable.addHeader(header);
-                          adapterPujasTable.addData(getClientes());
+                          adapterPujasTable.addData(getBids(userId));
                           adapterPujasTable.backGroundHeader(Color.BLUE);
 
         return view;
     }
 
-    private ArrayList<String[]> getClientes(){
+    private ArrayList<String[]> getBids(String userId){
+
         ArrayList<String[]> rows = new ArrayList<>();
 
-        rows.add(new String[]{"12/6/2021","Cuadro",       "$1550", "Ganó"});
+        try {
+            Response response = new BidsDao().execute(userId).get();
+
+            List<BidResponse> bids = (List<BidResponse>) response.body();
+
+            for(BidResponse bid: bids){
+                rows.add(new String[]{bid.getCreatedDate(), String.valueOf(bid.getCatalogId()), "$ " + String.valueOf(bid.getAmount()), bid.getResult()});
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+/*        rows.add(new String[]{"12/6/2021","Cuadro",       "$1550", "Ganó"});
         rows.add(new String[]{"13/6/2021","Rolex",        "$2000", "Perdió"});
         rows.add(new String[]{"14/6/2021","Enciclopedia", "$8000", "Ganó"});
-
+*/
         return rows;
     }
 }

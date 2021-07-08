@@ -69,7 +69,7 @@ public class AuctionFragment extends Fragment {
             "Gohan", "Goku", "Goten"
     };
 
-    private TextView estado, descripcion, duenio, precioBase, tituloArticulo, userIdTv, auctionId, catalogId, catalogDescription, catalogIndexTv;
+    private TextView estado, descripcion, duenio, precio, precioBase, tituloArticulo, userIdTv, auctionId, catalogId, catalogDescription, catalogIndexTv;
     private EditText precioPuja;
     private Spinner  metodosPago;
     private Button   btnCatalogIndex, btnPujar;
@@ -123,6 +123,7 @@ public class AuctionFragment extends Fragment {
        estado               = view.findViewById(R.id.tv_state_af);
        descripcion          = view.findViewById(R.id.tv_description_af);
        duenio               = view.findViewById(R.id.tv_duenio_af);
+       precio               = view.findViewById(R.id.tv_precio_af);
        precioBase           = view.findViewById(R.id.tv_precio_base_af);
        precioPuja           = view.findViewById(R.id.et_precio_puja_af);
        metodosPago          = view.findViewById(R.id.sp_payment_methods_af);
@@ -140,7 +141,7 @@ public class AuctionFragment extends Fragment {
         int    catalogIndex = Integer.valueOf(auctionBundle.getIndexCatalog());
 
         try {
-            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(idSubasta)).get();
+            Response response = new AuctionWithItemsDao().execute(Integer.valueOf(idSubasta), Integer.valueOf(userId)).get();
 
             SubastaConArticulos subastaCompleta = (SubastaConArticulos) response.body();
 
@@ -204,11 +205,19 @@ public class AuctionFragment extends Fragment {
                 duenio.         setText(subastaCompleta.getArticles().get(catalogIndex).getOwner());
                 precioBase.     setText(subastaCompleta.getArticles().get(catalogIndex).getBasePrice());
 
-                /*if(subastaCompleta.getArticles().get(0).isCanBid())
-                    btnPujar.setEnabled(true);
-                else
-                    btnPujar.setEnabled(false);*/
-
+                if(subastaCompleta.getArticles().get(0).isCanBid()) {
+                    precioBase. setVisibility(View.VISIBLE);
+                    precio.     setVisibility(View.VISIBLE);
+                    precioPuja. setVisibility(View.VISIBLE);
+                    metodosPago.setVisibility(View.VISIBLE);
+                    btnPujar.   setVisibility(View.VISIBLE);
+                }else {
+                    precioBase. setVisibility(View.GONE);
+                    precio.     setVisibility(View.GONE);
+                    precioPuja. setVisibility(View.GONE);
+                    metodosPago.setVisibility(View.GONE);
+                    btnPujar.   setVisibility(View.GONE);
+                }
             }
 
             if(!userId.equals("User Id")){
@@ -232,9 +241,9 @@ public class AuctionFragment extends Fragment {
                                      arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 metodosPago.setAdapter(arrayAdapter);
             } else {
-                precioPuja.setVisibility(View.GONE);
-                metodosPago.setVisibility(View.GONE);
-                btnPujar.setVisibility(View.GONE);
+                //precioPuja.setVisibility(View.GONE);
+                //metodosPago.setVisibility(View.GONE);
+                //btnPujar.setVisibility(View.GONE);
             }
 
             /*CarouselView carouselView = view.findViewById(R.id.auction_carousel);

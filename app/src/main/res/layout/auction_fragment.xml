@@ -155,6 +155,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_precio_af"
                     android:layout_width="109dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -222,7 +223,9 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="Introducir Precio"
-                        android:inputType="number" />
+                        android:editable="true"
+                        android:focusableInTouchMode="true"
+                        />
             </LinearLayout>
 
             <LinearLayout

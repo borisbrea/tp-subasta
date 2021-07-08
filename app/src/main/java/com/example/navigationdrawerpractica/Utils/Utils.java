@@ -34,6 +34,10 @@ public class Utils {
     public final static String ALERT_CONFIRM_PAYMENT_METHOD    = "Su nuevo medio de pago ha sido registrado exitosamente.";
     public final static String ALERT_ERROR_CREATE_PASSWORD_500 = "Su clave y confirmación deben ser iguales";
 
+    public final static String ALERT_ERROR_IMAGE_REQUIRED      = "Para cargar un nuevo artículo es obligatorio incluir como mínimo una imagen";
+    public final static String ALERT_NEW_ARTICLE_OK            = "Felicitaciones, su artículo se ha cargado exitosamente y será evaluado por nuestros especialistas";
+
+
     public final static String ALERT_ERROR_DEFAULT = "Error de sistema, comuniquese con el administrador";
 
     public final static String BTN_ACCEPT = "Aceptar";

@@ -16,12 +16,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="45dp"
             android:text="Mis Datos"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:text="@string/email"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -35,7 +35,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:text="@string/name"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -49,7 +49,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:text="@string/surname"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -63,7 +63,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:text="@string/dni"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -78,7 +78,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:text="@string/address"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -92,7 +92,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:text="@string/phone"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -106,7 +106,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:text="Clave"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -120,14 +120,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:textSize="14sp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/tv_user_id_acf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:text="User Id"
             android:textSize="14sp"
             android:visibility="gone"/>
